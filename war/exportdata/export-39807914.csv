@@ -1,0 +1,87 @@
+AGRN(dist=11554),RNF223(dist=4073)	intergenic	-	-	0.49	
+C1orf159	intronic	-	-	0.8	
+SDF4	synonymous SNV	c.T570C	p.D190D	0.94	
+PUSL1	intronic	-	-	0.96	
+CPSF3L	synonymous SNV	c.C795T	p.F265F	0.38	
+CPSF3L	intronic	-	-	0.88	
+CPSF3L	intronic	-	-	0.75	
+CPSF3L	synonymous SNV	c.G177C	p.G59G	0.75	
+GLTPD1	intronic	-	-	0.75	
+GLTPD1	synonymous SNV	c.C468T	p.R156R	0.78	
+GLTPD1	UTR3	-	-	0.84	
+DVL1	synonymous SNV	c.A366G	p.P122P	0.99	
+MXRA8(dist=2776),AURKAIP1(dist=12419)	intergenic	-	-	0.96	
+ATAD3B	nonsynonymous SNV	c.G1253A	p.R418Q	5.0E-4	
+ATAD3A	intronic	-	-	0.09	
+ATAD3A	UTR3	-	-	0.73	
+MIB2	nonsynonymous SNV	c.G1024A	p.A342T	0	
+CDK11B	intronic	-	-	0.8	
+CDK11B	intronic	-	-	0	
+CDK11B	intronic	-	-	0	
+CDK11B	intronic	-	-	0	
+CDK11B	intronic	-	-	0	
+CDK11B	intronic	-	-	0	
+CDK11B	intronic	-	-	0.86	
+CDK11B	intronic	-	-	0	
+CDK11B	intronic	-	-	0	
+CDK11B	intronic	-	-	0	
+CDK11B	intronic	-	-	0	
+SLC35E2B	nonsynonymous SNV	c.G934A	p.V312I	0.55	
+SLC35E2B	synonymous SNV	c.T858C	p.S286S	0	
+SLC35E2B	UTR5	-	-	0	
+CDK11A	synonymous SNV	c.A1941G	p.K647K	0.54	
+CDK11A,CDK11B	intronic	-	-	0.62	
+CDK11A	synonymous SNV	c.G1569T	p.R523R	0.34	
+CDK11A,CDK11B	intronic	-	-	0.0018	
+CDK11A,CDK11B	intronic	-	-	0.5	
+CDK11A,CDK11B	synonymous SNV	c.A459G	p.E153E	0.5	
+CDK11A,CDK11B	synonymous SNV	c.A402G	p.R134R	0.5	
+CDK11A,CDK11B	intronic	-	-	0.27	
+CDK11A,CDK11B	nonsynonymous SNV	c.A335G	p.H112R	0.5	
+CDK11A,CDK11B	nonsynonymous SNV	c.T325C	p.C109R	0.5	
+CDK11A,CDK11B	synonymous SNV	c.A321G	p.E107E	0.5	
+CDK11A,CDK11B	synonymous SNV	c.A315G	p.R105R	0.46	
+CDK11A,CDK11B	nonsynonymous SNV	c.T290C	p.V97A	0.5	
+CDK11A,CDK11B	nonsynonymous SNV	c.C277T	p.R93W	0.46	
+CDK11A,CDK11B	intronic	-	-	0.38	
+CDK11A,CDK11B	intronic	-	-	0.74	
+CDK11A,CDK11B	intronic	-	-	0.8	
+CDK11A,CDK11B	intronic	-	-	0.65	
+CDK11B	UTR5	-	-	0.61	
+CDK11B	UTR5	-	-	0.63	
+CDK11B	UTR5	-	-	0	
+CDK11B	UTR5	-	-	0	
+SLC35E2	nonsynonymous SNV	c.C610T	p.R204W	0	
+SLC35E2	intronic	-	-	0.33	
+NADK	nonsynonymous SNV	c.C1221A	p.N407K	0.28	
+NADK	intronic	-	-	0.02	
+NADK	intronic	-	-	0.79	
+TMEM52(dist=8391),KIAA1751(dist=25621)	intergenic	-	-	0.22	
+KIAA1751	stoploss SNV	c.T2287C	p.X763Q	0.81	
+KIAA1751	frameshift deletion	c.2214delC	p.G738fs	0	
+KIAA1751	frameshift deletion	c.2194delG	p.A732fs	0	
+KIAA1751	synonymous SNV	c.C2061T	p.A687A	0.22	
+KIAA1751	nonsynonymous SNV	c.G1882T	p.G628C	0.24	
+KIAA1751	nonsynonymous SNV	c.A1087G	p.I363V	0.41	
+KIAA1751	synonymous SNV	c.G435A	p.L145L	0.43	
+KIAA1751	intronic	-	-	0.63	
+GABRD	intronic	-	-	0.8	
+GABRD	synonymous SNV	c.T330C	p.G110G	0.59	
+SKI	nonsynonymous SNV	c.A761C	p.Y254S	0	
+MORN1	intronic	-	-	0.85	
+PLCH2	intronic	-	-	0.69	
+PLCH2	intronic	-	-	0.64	
+PLCH2	intronic	-	-	0.77	
+PLCH2	intronic	-	-	0.45	
+PANK4	nonsynonymous SNV	c.C1640T	p.A547V	0.28	
+PANK4	synonymous SNV	c.A393G	p.K131K	0.84	
+TNFRSF14	nonsynonymous SNV	c.G721A	p.V241I	0.11	
+MMEL1	intronic	-	-	0.57	
+MMEL1	synonymous SNV	c.C42T	p.A14A	0.53	
+MMEL1	synonymous SNV	c.A21C	p.P7P	0.57	
+TTC34	synonymous SNV	c.T1309C	p.L437L	0.92	
+ACTRT2	synonymous SNV	c.C15T	p.H5H	0.25	
+ACTRT2	nonframeshift deletion	c.158_160del	p.53_54del	0	
+ACTRT2	synonymous SNV	c.C319T	p.L107L	0.04	
+ACTRT2	synonymous SNV	c.T447G	p.S149S	0.25	
+ACTRT2	nonsynonymous SNV	c.T674G	p.L225W	0.02	

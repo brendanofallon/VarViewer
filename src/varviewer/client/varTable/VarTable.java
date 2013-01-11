@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
  * @author brendan
  *
  */
-public class VarTable extends FlowPanel {
+public class VarTable extends FlowPanel implements ColumnModelListener {
 	
 	public static final int VISIBLE_ROWS = 25;
 	
@@ -82,19 +82,31 @@ public class VarTable extends FlowPanel {
 	private void initComponents() {
 		header = new VarTableHeader(this);
 		
+		
+		this.add(header);
+		this.add(varPage);
+		
+		//Initialize column model
+		columnStateChanged(colModel);
+		colModel.addListener(this);
+	}
+
+	@Override
+	public void columnStateChanged(ColumnModel model) {
+		varPage.setColumns(colModel);
+		
+		//Set column widths
 		double widthTotal = 0;
 		for(String key : colModel.getKeys()) {
-			varPage.addColumn( colModel.getVarAnnoForKey(key));
 			widthTotal = colModel.getVarAnnoForKey(key).getRelativeWidth();
 		}
 		
 		for(String key: colModel.getKeys()) {
 			varPage.setColumnWidth(colModel.getColumnForKey(key), colModel.getVarAnnoForKey(key).getRelativeWidth() / widthTotal * 100.0, Unit.PCT);
 		}
-		this.add(header);
-		this.add(varPage);
 	}
-
 	
 	ExportServiceAsync exportService = (ExportServiceAsync) GWT.create(ExportService.class);
+
+	
 }

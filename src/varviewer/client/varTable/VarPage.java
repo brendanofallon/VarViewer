@@ -7,7 +7,6 @@ import varviewer.shared.Variant;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
@@ -22,11 +21,9 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class VarPage extends CellTable<Variant> {
 
 	private ListDataProvider<Variant> varData = new ListDataProvider<Variant>();
-	private List<VariantSelectionListener> varListeners = new ArrayList<VariantSelectionListener>();
-	 
+	private List<VariantSelectionListener> varListeners = new ArrayList<VariantSelectionListener>(); 
 	private List<VarAnnotation> displayedAnnotations = new ArrayList<VarAnnotation>();
 	
-	TextColumn<Variant> testCol;
 	
 	public VarPage(Resources resources) {
 		super(VarTable.VISIBLE_ROWS, resources);
@@ -41,19 +38,7 @@ public class VarPage extends CellTable<Variant> {
 			}
 		});
 		
-		
-		testCol = new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant v) {
-				return "" + v.getPos();
-			}
-			
-		};
 	}
-	
-	
-	
 
 	/**
 	 * Called when the user clicks the table somewhere. We usually pop open the gene details
@@ -70,13 +55,20 @@ public class VarPage extends CellTable<Variant> {
 	 */
 	public void setVariants(List<Variant> vars) {
 		varData.setList(vars);		
+		initializeSorters();
+	}
+	
+	/**
+	 * Create and set the sorter for all column types
+	 */
+	private void initializeSorters() {
 		
 		//We must add all column sorting handlers *after* the variants have been supplied
 		ListHandler<Variant> columnSortHandler = new ListHandler<Variant>(varData.getList());
 		for(VarAnnotation varAnno : displayedAnnotations) {
 			columnSortHandler.setComparator(varAnno.col, varAnno.getComparator());
 		}
-		this.addColumnSortHandler(columnSortHandler);	
+		this.addColumnSortHandler(columnSortHandler);
 	}
 	
 	/**
@@ -88,10 +80,36 @@ public class VarPage extends CellTable<Variant> {
 		return varData.getList();
 	}
 	
+	/**
+	 * Add a new column to be displayed. Probably not a great idea to add the same column
+	 * multiple times. 
+	 * @param varAnno
+	 */
 	public void addColumn(VarAnnotation varAnno) {
 		this.addColumn(varAnno.col, varAnno.userText);
 		displayedAnnotations.add(varAnno);
 	}
+	
+	/**
+	 * Remove all displayed columns. The table will not draw any data after this call. 
+	 */
+	public void clearColumns() {
+		for(VarAnnotation varAnno : displayedAnnotations) {
+			this.removeColumn( varAnno.col );
+		}
+		displayedAnnotations.clear();
+	}
+	
+	public void setColumns(ColumnModel model) {
+		clearColumns();
+		for(String key : model.getKeys()) {
+			System.out.println("Adding column : " + key);
+			addColumn(model.getVarAnnoForKey(key));
+		}
+		
+		initializeSorters();
+	}
+	
 	
 	/**
 	 * Register a new listener that will be notified when a new variant is selected

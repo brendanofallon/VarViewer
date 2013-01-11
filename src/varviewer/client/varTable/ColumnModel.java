@@ -21,110 +21,28 @@ public class ColumnModel {
 	//Ordered list of annotation keys and their respective columns
 	List<String> keys = new ArrayList<String>();
 	Map<String, VarAnnotation> colMap = new HashMap<String, VarAnnotation>();
+	List<ColumnModelListener> listeners = new ArrayList<ColumnModelListener>();
 	
 	public ColumnModel() {
-		
-		//A few default annotations...
-		addColumn(new VarAnnotation("gene", "Gene", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotation("gene");
-				return val != null ? val : "-";
-			}
-		}, 3.0, false));
-		
-//		addColumn(new VarAnnotation("contig", "Chr", new TextColumn<Variant>() {
-//
-//			@Override
-//			public String getValue(Variant var) {
-//				return var.getChrom();
-//			}
-//		}, 1.0));
-//		
-//		addColumn(new VarAnnotation("pos", "Start", new TextColumn<Variant>() {
-//
-//			@Override
-//			public String getValue(Variant var) {
-//				return "" + var.getPos();
-//			}
-//		}));
-		
-
-		addColumn(new VarAnnotation("exon.function", "Exon effect", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotation("exon.function");
-				if (val == null || val.equals("-")) {
-					val = var.getAnnotation("variant.type");
-				}
-				return val != null ? val : "-";
-			}
-		}, 3.0, false));
-		
-		addColumn(new VarAnnotation("nm.number", "NM Number", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotation("nm.number");
-				return val != null ? val : "-";
-			}
-		}, 3.0, false));
-		
-		addColumn(new VarAnnotation("cdot", "c.dot", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotation("cdot");
-				return val != null ? val : "-";
-			}
-		}, 2.0, false));
-		
-		addColumn(new VarAnnotation("pdot", "p.dot", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotation("pdot");
-				return val != null ? val : "-";
-			}
-		}, 2.0, false));
-		
-//		addColumn(new VarAnnotation("quality", "Quality", new TextColumn<Variant>() {
-//
-//			@Override
-//			public String getValue(Variant var) {
-//				String val = var.getAnnotation("quality");
-//				return val != null ? val : "-";
-//			}
-//		}, 2.0));
-		
-		addColumn(new VarAnnotation("depth", "Depth", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotation("depth");
-				return val != null ? val : "-";
-			}
-		}, 1.0, true));
-		
-		addColumn(new VarAnnotation("pop.freq", "Pop. Freq.", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotation("pop.freq");
-				if (val.equals("-"))
-					val = "0";
-				return val != null ? val : "0";
-			}
-		}, 1.0, true));
-		
-		
+		addColumn( ColumnStore.getStore().getColumnForID("gene"));
+		addColumn( ColumnStore.getStore().getColumnForID("exon.function"));
+		addColumn( ColumnStore.getStore().getColumnForID("cdot"));
+		addColumn( ColumnStore.getStore().getColumnForID("pdot"));
+//		addColumn( ColumnStore.getStore().getColumnForID("depth"));
+//		addColumn( ColumnStore.getStore().getColumnForID("quality"));
+		addColumn( ColumnStore.getStore().getColumnForID("pop.freq"));
 	}
 	
 	public void addColumn(VarAnnotation varAnno) {
 		keys.add(varAnno.id);
 		colMap.put(varAnno.id, varAnno);
+		fireColumnChange();
+	}
+	
+	public void removeColumn(String id) {
+		keys.remove(id);
+		colMap.remove(id);
+		fireColumnChange();
 	}
 	
 	/**
@@ -160,6 +78,15 @@ public class ColumnModel {
 	}
 
 	/**
+	 * True if this column model contains a column with the given id
+	 * @param key
+	 * @return
+	 */
+	public boolean containsColumn(String key) {
+		return colMap.containsKey(key);
+	}
+	
+	/**
 	 * A user-friendly String describing this annotation
 	 * @param key
 	 * @return
@@ -175,5 +102,23 @@ public class ColumnModel {
 	 */
 	public VarAnnotation getVarAnnoForKey(String key) {
 		return colMap.get(key);
+	}
+
+	/**
+	 * Add a listener that will be notified when this model changes
+	 * @param l
+	 */
+	public void addListener(ColumnModelListener l) {
+		listeners.add(l);
+	}
+	
+	public void removeListener(ColumnModelListener l) {
+		listeners.remove(l);
+	}
+	
+	private void fireColumnChange() {
+		for(ColumnModelListener l : listeners) {
+			l.columnStateChanged(this);
+		}
 	}
 }

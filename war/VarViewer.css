@@ -4,6 +4,7 @@
 	width: 1000px;
 	padding: 0px 50px;
 	background: white;
+	font-family: 'Open Sans', sans-serif;
 }
 
 #topbar {
@@ -29,6 +30,7 @@
 }
 
 .filterbox {
+	font-family: 'Open Sans', sans-serif;
 	outline: 0px;
 	padding: 10px;
 	margin: 5px;
@@ -47,16 +49,46 @@
 }
 
 .vartableheader {
+	font-family: 'Open Sans', sans-serif;
 	height: 30px;
-	width: 800px;
+	width: 100%;
+}
+
+.colmenu {
+	margin: 0px;
+	padding: 0px;
+	width: 24px;
+	height: 24px;
+}
+
+.exportbutton {
+	margin: 0px;
+	padding: 0px;
+	width: 24px;
+	height: 24px;
+	background: transparent;
+	border: 0px;
+}
+
+.exportbutton-hover {
+	margin: 0px;
+	padding: 0px;
+	width: 24px;
+	height: 24px;
+	background: rgb(220, 220, 220);
+	border: 1px solid rgb(170, 170, 170);
+	border-radius: 3px;
 }
 
 .samplelabel {
+	font-family: 'Open Sans', sans-serif;
 	font-size: 14px;
 	font-weight: bold;
+	width: 400px;
 }
 
 .vartable {
+	font-family: 'Open Sans', sans-serif;
 	margin: 10px;
 	padding: 10px;
 	margin-bottom: 2px;
@@ -70,6 +102,7 @@
 }
 
 .detailspanelheader {
+	font-family: 'Open Sans', sans-serif;
 	width: 100%;
 	padding: 5px;
 	height: 20px;
@@ -80,6 +113,7 @@
 }
 
 .detailspanel {
+	font-family: 'Open Sans', sans-serif;
 	margin-left: 20px;
 	margin-top: 2px;
 	padding: 5px;
@@ -105,4 +139,8 @@
 	-moz-box-shadow: 3px 3x 7px rgb(180, 180, 180);
 	-webkit-box-shadow: 3px 3px 7px rgb(180, 180, 180);
 	box-shadow: 3px 3px 7px rgb(180, 180, 180);
+}
+
+.colpopup {
+	width: 100px;
 }
