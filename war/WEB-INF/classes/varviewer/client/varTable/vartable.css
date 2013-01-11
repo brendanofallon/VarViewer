@@ -1,0 +1,60 @@
+/* Fancy modification for VarTable styles */
+
+.cellTableHeader {
+	color: #202020;
+	border: 0px;
+	padding: 4px;
+	margin: 0px;
+	height: 16px;
+	text-align: bottom;
+	vertical-align: bottom;
+	background : -webkit-linear-gradient(bottom, rgb(210, 210, 210) 18%, rgb(255, 255, 255) 70%);
+	background : -moz-linear-gradient(bottom, rgb(210, 210, 210) 18%, rgb(255, 255, 255) 70%);
+	background : -o-linear-gradient(bottom, rgb(210, 210, 210) 18%, rgb(255, 255, 255) 70%);
+	background : -ms-linear-gradient(bottom, rgb(210, 210, 210) 18%, rgb(255, 255, 255) 70%); 
+	background : -linear-gradient(bottom, rgb(210, 210, 200) 18%, rgb(255, 255, 250) 70%);
+	border-bottom: 1px solid rgb(180, 180, 180);
+}
+
+.cellTableCell {
+	outline: 0px;
+	padding: 0px;
+	margin: 0px;
+	overflow: hidden;
+	font-size: 11px;
+	background: transparent;
+}
+
+.cellTableEvenRow {
+	padding: 0px;
+	margin: 0px;
+}
+
+.cellTableOddRow {
+	padding: 0px;
+	margin: 0px;
+}
+
+.cellTableSelectedRow {
+	background: #909090;
+}
+	
+.cellTableSelectedRow {
+	border: none;
+	font-weight: bold;
+}
+
+.cellTableSelectedRowCell {
+	border: none;
+	font-weight: bold;
+}
+
+.cellTableHoveredRow {
+	background: #909090;
+}
+
+.cellTableKeyboardSelectedRow {
+	background: #00CCFF;
+	font-weight: bold;
+}
+

@@ -1,0 +1,2 @@
+serviceClass: varviewer.client.GeneDetailService
+path: BE66F67994D4B59391D2BC053530E1FB.gwt.rpc

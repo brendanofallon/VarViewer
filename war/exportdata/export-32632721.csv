@@ -1,0 +1,87 @@
+AGRN(dist=11554),RNF223(dist=4073)	intergenic	-	-	-	2.0	0.49	
+C1orf159	intronic	-	-	-	3.0	0.8	
+SDF4	synonymous SNV	NM_016176	c.T570C	p.D190D	6.0	0.94	
+PUSL1	intronic	-	-	-	28.0	0.96	
+CPSF3L	synonymous SNV	NM_001256460	c.C795T	p.F265F	7.0	0.38	
+CPSF3L	intronic	-	-	-	2.0	0.88	
+CPSF3L	intronic	-	-	-	1.0	0.75	
+CPSF3L	synonymous SNV	NM_001256460	c.G177C	p.G59G	11.0	0.75	
+GLTPD1	intronic	-	-	-	6.0	0.75	
+GLTPD1	synonymous SNV	NM_001029885	c.C468T	p.R156R	4.0	0.78	
+GLTPD1	UTR3	-	-	-	16.0	0.84	
+DVL1	synonymous SNV	NM_004421	c.A366G	p.P122P	4.0	0.99	
+MXRA8(dist=2776),AURKAIP1(dist=12419)	intergenic	-	-	-	13.0	0.96	
+ATAD3B	nonsynonymous SNV	NM_031921	c.G1253A	p.R418Q	22.0	5.0E-4	
+ATAD3A	intronic	-	-	-	2.0	0.09	
+ATAD3A	UTR3	-	-	-	3.0	0.73	
+MIB2	nonsynonymous SNV	NM_080875	c.G1024A	p.A342T	1.0	0	
+CDK11B	intronic	-	-	-	3.0	0.8	
+CDK11B	intronic	-	-	-	19.0	0	
+CDK11B	intronic	-	-	-	8.0	0	
+CDK11B	intronic	-	-	-	48.0	0	
+CDK11B	intronic	-	-	-	23.0	0	
+CDK11B	intronic	-	-	-	32.0	0	
+CDK11B	intronic	-	-	-	6.0	0.86	
+CDK11B	intronic	-	-	-	37.0	0	
+CDK11B	intronic	-	-	-	46.0	0	
+CDK11B	intronic	-	-	-	48.0	0	
+CDK11B	intronic	-	-	-	52.0	0	
+SLC35E2B	nonsynonymous SNV	NM_001110781	c.G934A	p.V312I	23.0	0.55	
+SLC35E2B	synonymous SNV	NM_001110781	c.T858C	p.S286S	31.0	0	
+SLC35E2B	UTR5	-	-	-	9.0	0	
+CDK11A	synonymous SNV	NM_033529	c.A1941G	p.K647K	7.0	0.54	
+CDK11A,CDK11B	intronic	-	-	-	5.0	0.62	
+CDK11A	synonymous SNV	NM_033529	c.G1569T	p.R523R	4.0	0.34	
+CDK11A,CDK11B	intronic	-	-	-	18.0	0.0018	
+CDK11A,CDK11B	intronic	-	-	-	51.0	0.5	
+CDK11A,CDK11B	synonymous SNV	NM_033486	c.A459G	p.E153E	59.0	0.5	
+CDK11A,CDK11B	synonymous SNV	NM_033486	c.A402G	p.R134R	41.0	0.5	
+CDK11A,CDK11B	intronic	-	-	-	23.0	0.27	
+CDK11A,CDK11B	nonsynonymous SNV	NM_033486	c.A335G	p.H112R	77.0	0.5	
+CDK11A,CDK11B	nonsynonymous SNV	NM_033486	c.T325C	p.C109R	76.0	0.5	
+CDK11A,CDK11B	synonymous SNV	NM_033486	c.A321G	p.E107E	76.0	0.5	
+CDK11A,CDK11B	synonymous SNV	NM_033486	c.A315G	p.R105R	74.0	0.46	
+CDK11A,CDK11B	nonsynonymous SNV	NM_033486	c.T290C	p.V97A	77.0	0.5	
+CDK11A,CDK11B	nonsynonymous SNV	NM_033486	c.C277T	p.R93W	80.0	0.46	
+CDK11A,CDK11B	intronic	-	-	-	65.0	0.38	
+CDK11A,CDK11B	intronic	-	-	-	12.0	0.74	
+CDK11A,CDK11B	intronic	-	-	-	13.0	0.8	
+CDK11A,CDK11B	intronic	-	-	-	7.0	0.65	
+CDK11B	UTR5	-	-	-	8.0	0.61	
+CDK11B	UTR5	-	-	-	8.0	0.63	
+CDK11B	UTR5	-	-	-	9.0	0	
+CDK11B	UTR5	-	-	-	9.0	0	
+SLC35E2	nonsynonymous SNV	NM_001199787	c.C610T	p.R204W	16.0	0	
+SLC35E2	intronic	-	-	-	8.0	0.33	
+NADK	nonsynonymous SNV	NM_001198994	c.C1221A	p.N407K	5.0	0.28	
+NADK	intronic	-	-	-	19.0	0.02	
+NADK	intronic	-	-	-	9.0	0.79	
+TMEM52(dist=8391),KIAA1751(dist=25621)	intergenic	-	-	-	4.0	0.22	
+KIAA1751	stoploss SNV	NM_001080484	c.T2287C	p.X763Q	17.0	0.81	
+KIAA1751	frameshift deletion	NM_001080484	c.2214delC	p.G738fs	11.0	0	
+KIAA1751	frameshift deletion	NM_001080484	c.2194delG	p.A732fs	12.0	0	
+KIAA1751	synonymous SNV	NM_001080484	c.C2061T	p.A687A	10.0	0.22	
+KIAA1751	nonsynonymous SNV	NM_001080484	c.G1882T	p.G628C	1.0	0.24	
+KIAA1751	nonsynonymous SNV	NM_001080484	c.A1087G	p.I363V	7.0	0.41	
+KIAA1751	synonymous SNV	NM_001080484	c.G435A	p.L145L	16.0	0.43	
+KIAA1751	intronic	-	-	-	7.0	0.63	
+GABRD	intronic	-	-	-	4.0	0.8	
+GABRD	synonymous SNV	NM_000815	c.T330C	p.G110G	10.0	0.59	
+SKI	nonsynonymous SNV	NM_003036	c.A761C	p.Y254S	1.0	0	
+MORN1	intronic	-	-	-	6.0	0.85	
+PLCH2	intronic	-	-	-	1.0	0.69	
+PLCH2	intronic	-	-	-	5.0	0.64	
+PLCH2	intronic	-	-	-	4.0	0.77	
+PLCH2	intronic	-	-	-	1.0	0.45	
+PANK4	nonsynonymous SNV	NM_018216	c.C1640T	p.A547V	12.0	0.28	
+PANK4	synonymous SNV	NM_018216	c.A393G	p.K131K	10.0	0.84	
+TNFRSF14	nonsynonymous SNV	NM_003820	c.G721A	p.V241I	9.0	0.11	
+MMEL1	intronic	-	-	-	6.0	0.57	
+MMEL1	synonymous SNV	NM_033467	c.C42T	p.A14A	4.0	0.53	
+MMEL1	synonymous SNV	NM_033467	c.A21C	p.P7P	4.0	0.57	
+TTC34	synonymous SNV	NM_001242672	c.T1309C	p.L437L	2.0	0.92	
+ACTRT2	synonymous SNV	NM_080431	c.C15T	p.H5H	8.0	0.25	
+ACTRT2	nonframeshift deletion	NM_080431	c.158_160del	p.53_54del	11.0	0	
+ACTRT2	synonymous SNV	NM_080431	c.C319T	p.L107L	10.0	0.04	
+ACTRT2	synonymous SNV	NM_080431	c.T447G	p.S149S	11.0	0.25	
+ACTRT2	nonsynonymous SNV	NM_080431	c.T674G	p.L225W	13.0	0.02	

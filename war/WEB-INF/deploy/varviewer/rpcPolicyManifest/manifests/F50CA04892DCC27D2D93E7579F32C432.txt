@@ -1,0 +1,2 @@
+serviceClass: varviewer.client.VarRequestService
+path: EE53BD62B2AF0D1AE4AD869030863A02.gwt.rpc
