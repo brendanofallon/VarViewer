@@ -11,9 +11,9 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -29,11 +29,12 @@ public class VarViewer implements EntryPoint {
 	  }
 	  
 	  private void initComponents() {
-		  VerticalPanel mainPanel = new VerticalPanel();
+		  FlowPanel mainPanel = new FlowPanel();
 		  
 		  HorizontalPanel filtersAndTablePanel = new HorizontalPanel();
 		  FiltersPanel filtersPanel = new FiltersPanel();
 		  filtersAndTablePanel.add(filtersPanel);
+		  filtersAndTablePanel.setStylePrimaryName("filterandtablepanel");
 		  
 		  varTable = new VarTable();
 		  
@@ -52,7 +53,7 @@ public class VarViewer implements EntryPoint {
 		
 		  VariantRequest req = new VariantRequest();
 		  req.addSample("foo");
-		  req.addInterval("1", new Interval(1000000, 3000000));
+		  req.addInterval("1", new Interval(1000000, 5000000));
 		  varRequestService.queryVariant(req, new AsyncCallback<List<Variant>>() {
 
 			@Override

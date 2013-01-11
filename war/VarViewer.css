@@ -1,7 +1,6 @@
 /** Add css rules here for your application. */
 
 #wrapper {
-	width: 1000px;
 	padding: 0px 50px;
 	background: white;
 	font-family: 'Open Sans', sans-serif;
@@ -25,8 +24,9 @@
 }
 .filterspanel {
 	border: 0px;
+	margin: 0px;
 	margin-top: 90px;
-	width: 250px;
+	width: 240px;
 }
 
 .filterbox {
@@ -90,10 +90,10 @@
 .vartable {
 	font-family: 'Open Sans', sans-serif;
 	margin: 10px;
-	padding: 10px;
+	margin-left: 0px;
 	margin-bottom: 2px;
 	padding-bottom: 0px;
-	width: 800px;
+	width: 100%;
 }
 
 .cellTableHeader {
@@ -101,6 +101,9 @@
 	font-size: 20px;
 }
 
+.filterandtablepanel {
+	width: 90%;
+}
 .detailspanelheader {
 	font-family: 'Open Sans', sans-serif;
 	width: 100%;
@@ -109,7 +112,6 @@
 	font-size: 14pt;
 	font-weight: bold;
 	text-shadow: 2px 2px rgb(200, 200, 200); 
-	
 }
 
 .detailspanel {
