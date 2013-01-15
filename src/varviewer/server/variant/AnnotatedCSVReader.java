@@ -36,23 +36,23 @@ public class AnnotatedCSVReader extends AbstractVariantServer {
 		try {
 			reader = new TabixReader(varFile.getAbsolutePath());
 			String header = reader.readLine();
-			header = header.substring(1); //Trim off leading #
-			headerToks = header.split("\t");
-			for(int i=0; i<headerToks.length; i++) {
-				headerToks[i] = headerToks[i].trim();
-			}
+			initializeHeader(header);
 		} catch (IOException e) {
 			throw new IllegalArgumentException("Error opening TGP data at path " + varFile.getAbsolutePath() + " error : " + e.getMessage());
 		}
 	}	
 	
+	private void initializeHeader(String header) {
+		header = header.substring(1); //Trim off leading #
+		headerToks = header.split("\t");
+		for(int i=0; i<headerToks.length; i++) {
+			headerToks[i] = headerToks[i].trim();
+		}
+	}
 	
 	@Override
 	public List<Variant> getVariants(VariantRequest req) {
-		if (reader == null) {
-			initializeReader();
-		}
-
+		initializeReader();
 		List<Variant> vars = new ArrayList<Variant>();
 		try {
 			IntervalList intervals = req.getIntervals();
@@ -101,6 +101,25 @@ public class AnnotatedCSVReader extends AbstractVariantServer {
 		return vars;
 	}
 
+	/**
+	 * Returns all variants in a VariantCollection
+	 * @return
+	 * @throws IOException 
+	 */
+	public VariantCollection toVariantCollection() throws IOException {
+		List<Variant> vars = new ArrayList<Variant>(1024);
+		initializeReader();
+		String line = reader.readLine();
+		while(line != null) {
+			Variant var = variantFromString(line);
+			if (var != null)
+				vars.add(var);
+			line = reader.readLine();
+		}
+		reader.close();
+		return new VariantCollection(vars);
+	}
+	
 	/**
 	 * Parse, create and return a variant from the given string. All items in columns five
 	 * and greater are treated as annotations with key determined by the header 

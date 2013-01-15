@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import varviewer.shared.AllIntervals;
+import varviewer.shared.IntervalList;
 import varviewer.shared.Variant;
 
 /**
@@ -35,7 +37,6 @@ public class VariantCollection {
 	}
 	
 	public VariantCollection(VCFReader reader) throws IOException {
-		int lineNumber = 0;
 		do {
 			Variant rec = reader.toVariant();
 			if (rec == null) {
@@ -44,7 +45,6 @@ public class VariantCollection {
 			else {
 				this.addRecordNoSort(rec);
 			}
-			lineNumber++;
 		} while (reader.advanceLine());
 		sortAllContigs();
 	}
@@ -95,4 +95,55 @@ public class VariantCollection {
 		else 
 			return new ArrayList<Variant>();
 	}
+	
+	/**
+	 * Return all variants in this collection that are in the regions
+	 * defined by the IntervalList. Returns an empty list if no variants
+	 * match the regions
+	 * @param intervals
+	 * @return
+	 */
+	public List<Variant> getVariantsInIntervals(IntervalList intervals) {
+		
+		if (intervals instanceof AllIntervals) {
+			return asList();
+		}
+
+		List<Variant> varsToReturn = new ArrayList<Variant>(128);
+		for(String contig : intervals.getContigs())  {
+			for(Variant var : getVariantsForContig(contig)) {
+				if (intervals.contains(var.getChrom(), var.getPos())) {
+					varsToReturn.add(var);
+				}
+			}
+
+		}
+		
+		return varsToReturn;
+	}
+
+	/**
+	 * Returns the number of variants in this collection
+	 * @return
+	 */
+	public int size() {
+		int size = 0;
+		for(String contig : getContigs()) {
+			size += getVariantsForContig(contig).size();
+		}
+		return size;
+	}
+	
+	/**
+	 * Push all variants into a single list
+	 * @return
+	 */
+	public List<Variant> asList() {
+		List<Variant> allVars = new ArrayList<Variant>( size() );
+		for(String contig : getContigs()) {
+			allVars.addAll( getVariantsForContig(contig));
+		}
+		return allVars;
+	}
+	
 }

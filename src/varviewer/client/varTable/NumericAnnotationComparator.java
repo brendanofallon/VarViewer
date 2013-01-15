@@ -4,6 +4,12 @@ import java.util.Comparator;
 
 import varviewer.shared.Variant;
 
+/**
+ * The comparator used to compare numeric values between two rows in a variant table
+ * 
+ * @author brendan
+ *
+ */
 public class NumericAnnotationComparator implements Comparator<Variant> {
 	public final String key;
 	

@@ -10,7 +10,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
- * A popup menu that allows the user to choose which columns to display
+ * A popup menu that allows the user to choose which columns to display. Choices
+ * a reflected in a ColumnModel, which fires events which are listened to by the VarTable
  * @author brendan
  *
  */
