@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import varviewer.shared.Variant;
 
-import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.cellview.client.Column;
 
 /**
  * A single piece of information about a variant that has a unique id, a user-friendly 
@@ -12,16 +12,16 @@ import com.google.gwt.user.cellview.client.TextColumn;
  * @author brendan
  *
  */
-public class VarAnnotation {
+public class VarAnnotation<T> {
 	
 	final String id;
 	final String userText;
-	final TextColumn<Variant> col;
+	final Column<Variant, T> col;
 	private double relativeWidth = 2.0; //Column width scaling factor
 	private Comparator<Variant> sortComparator = null;
 	private boolean numeric = false;
 	
-	public VarAnnotation(String id, String userText, TextColumn<Variant> col, double relativeWidth, boolean numeric) {
+	public VarAnnotation(String id, String userText, Column<Variant, T> col, double relativeWidth, boolean numeric) {
 		this(id, userText, col);
 		this.relativeWidth = relativeWidth;
 		this.numeric = numeric;
@@ -33,7 +33,7 @@ public class VarAnnotation {
 		}
 	}
 	
-	public VarAnnotation(String id, String userText, TextColumn<Variant> col) {
+	public VarAnnotation(String id, String userText, Column<Variant, T> col) {
 		this.id = id;
 		this.userText = userText;
 		this.col = col;

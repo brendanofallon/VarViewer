@@ -52,6 +52,12 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 			if (summary != null) {
 				info.setSummary(summary);
 			}
+			
+			String hgmdHits = dbInf.hgmdHits;
+			if (hgmdHits != null) {
+				String[] hgmdVars = hgmdHits.split(";");
+				info.setHgmdVars( hgmdVars );
+			}
 		}
 		return info;
 	}

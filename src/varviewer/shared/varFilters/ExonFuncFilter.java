@@ -31,13 +31,10 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 	@Override
 	public boolean variantPasses(Variant var) {
 		String varType = var.getAnnotation("variant.type");
-		String exonFunc = var.getAnnotation("exon.func");
+		String exonFunc = var.getAnnotation("exon.function");
 		
 		if (varType == null)
 			return missingDataPasses;
-		if (exonFunc == null) {
-			return missingDataPasses;
-		}
 		
 		if (excludeIntergenic && varType.contains("intergenic")) {
 			return false;
@@ -49,6 +46,20 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 		
 		if (excludeUTR && varType.contains("UTR")) {
 			return false;
+		}
+		
+		if (excludeNCRNA && varType.contains("ncRNA")) {
+			return false;
+		}
+		
+		if (excludeSplicing && varType.contains("splic")) {
+			return false;
+		}
+		
+		
+		// ORDER CRUCIAL! Don't test exonFunc for nullness until after all varType tests!
+		if (exonFunc == null) {
+			return missingDataPasses;
 		}
 		
 		if (excludeSynonymous && exonFunc.startsWith("synonymous")) {
@@ -63,17 +74,13 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 			return false;
 		}
 		
-		if (excludeSplicing && varType.contains("splic")) {
-			return false;
-		}
+
 		
 		if (excludeFrameshift && exonFunc.startsWith("frameshift")) {
 			return false;
 		}
 		
-		if (excludeNCRNA && varType.contains("ncRNA")) {
-			return false;
-		}
+
 		return true;
 	}
 

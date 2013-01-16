@@ -69,7 +69,7 @@ public class CachingVariantServer extends AbstractVariantServer {
 	 * @return
 	 */
 	private static List<Variant> applyFilters(List<Variant> vars, List<VariantFilter> filters) {
-		List<Variant> passingVars = new ArrayList<Variant>(vars.size()/2+1);
+		List<Variant> passingVars = new ArrayList<Variant>(1024);
 		for(Variant var : vars) {
 			boolean passes = true;
 			for(VariantFilter filter : filters) {

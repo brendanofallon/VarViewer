@@ -7,8 +7,9 @@ import varviewer.client.varTable.VarTable;
 import varviewer.shared.VariantFilter;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -25,9 +26,9 @@ public class VarViewer implements EntryPoint {
 	  private void initComponents() {
 		  FlowPanel mainPanel = new FlowPanel();
 		  
-		  HorizontalPanel filtersAndTablePanel = new HorizontalPanel();
+		  DockLayoutPanel filtersAndTablePanel = new DockLayoutPanel(Unit.PX);
 		  filtersPanel = new FiltersPanel();
-		  filtersAndTablePanel.add(filtersPanel);
+		  filtersAndTablePanel.addWest(filtersPanel, 250);
 		  filtersAndTablePanel.setStylePrimaryName("filterandtablepanel");
 		  
 		  varTable = new VarTable();

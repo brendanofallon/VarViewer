@@ -14,6 +14,7 @@ public class GeneInfo implements Serializable {
 	String[] omimInheritance;
 	String[] hgmdDiseases;
 	String dbNSFPDisease;
+	String[] hgmdVars;
 	
 	public GeneInfo() {
 		//must have no-arg constructor for serialization
@@ -57,6 +58,14 @@ public class GeneInfo implements Serializable {
 
 	public void setDbNSFPDisease(String dbNSFPDisease) {
 		this.dbNSFPDisease = dbNSFPDisease;
+	}
+
+	public String[] getHgmdVars() {
+		return hgmdVars;
+	}
+
+	public void setHgmdVars(String[] hgmdVars) {
+		this.hgmdVars = hgmdVars;
 	}
 	
 	

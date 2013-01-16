@@ -129,7 +129,11 @@ public class FiltersPanel extends FlowPanel {
 		exonFilterBox.setConfigTool(exonConfig);
 		addFilter(exonFilterBox);
 		
-		
+		QualityDepthFilter qdFilter = new QualityDepthFilter();
+		FilterBox qdFilterBox = new FilterBox(this, "Quality & Depth", qdFilter);
+		QualDepthFilterConfig qualDepthConfig = new QualDepthFilterConfig(qdFilterBox);
+		qdFilterBox.setConfigTool(qualDepthConfig);
+		addFilter(qdFilterBox);
 	}
 
 }

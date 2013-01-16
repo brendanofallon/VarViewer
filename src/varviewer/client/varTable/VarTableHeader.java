@@ -39,7 +39,8 @@ public class VarTableHeader extends HorizontalPanel {
 		});
 		
 		this.add(exportButton);
-
+		exportButton.setWidth("24px");
+		exportButton.setHeight("24px");
 		
 		
 		final ColPickerPopup popup = new ColPickerPopup(tableParent.colModel);
@@ -56,6 +57,8 @@ public class VarTableHeader extends HorizontalPanel {
 		});
 
 		this.add(colMenuButton);
+		colMenuButton.setWidth("24px");
+		colMenuButton.setHeight("24px");
 		
 		this.add(pager);
 		

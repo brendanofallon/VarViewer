@@ -59,6 +59,8 @@ public class DBNSFPGeneDB {
 			info.functionDesc = toks[14];
 			info.expression = toks[19] + ";" + toks[20];
 			info.summary = toks[26];
+			info.hgmdHits = toks[27];
+			
 			if (info.summary.equals("null")) {
 				info.summary = "-";
 			}
@@ -78,5 +80,6 @@ public class DBNSFPGeneDB {
 		public String functionDesc = null; //Column 14
 		public String expression = null; //Columns 19 and 20
 		public String summary = null;
+		public String hgmdHits = null;
 	}
 }
