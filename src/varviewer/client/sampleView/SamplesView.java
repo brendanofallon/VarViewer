@@ -11,6 +11,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
@@ -26,11 +27,12 @@ public class SamplesView extends HorizontalPanel {
 	public SamplesView() {
 		initComponents();
 	}
-
-	
 	
 	private void initComponents() {
 			
+		sampleImage = new Image("images/sampleIcon48.png");
+		System.out.println("Inner html is : " + sampleImage.getElement().getInnerHTML() );
+		
 		SampleCell sampleCell = new SampleCell();
 		sampleList = new CellList<SampleInfo>( sampleCell );
 		
@@ -94,11 +96,22 @@ public class SamplesView extends HorizontalPanel {
 			if (value == null)
 				return;
 			
-			sb.appendEscaped(value.getSampleID() + " : " + value.getAnalysisType());
+			sb.appendHtmlConstant("<table class=\"sampletableitem\">");
+			sb.appendHtmlConstant("<tr><td rowspan='3'>");
+			sb.appendHtmlConstant("<img src=\"images/sampleIcon48.png\" />");
+		    sb.appendHtmlConstant("</td>");
+			sb.appendHtmlConstant("<td class=\"sampletabletext\">");
+		    sb.appendEscaped(value.getSampleID());
+		    sb.appendHtmlConstant("</td></tr><tr><td class=\"sampletabletextA\">");
+		    sb.appendEscaped(value.getAnalysisType());
+		    sb.appendHtmlConstant("</td></tr></table>");
+			
 		}
 		
 	}
 	
+	
+	static private Image sampleImage;
 	private SampleDetailView sampleDetailsPanel;
 	private CellList<SampleInfo> sampleList;
 	

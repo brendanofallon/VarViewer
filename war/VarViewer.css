@@ -282,6 +282,25 @@
 	height: 300px;
 }
 
+
+.sampletabletext {
+	padding-top: 10px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;	
+	font-weight: bold;
+}
+
+.sampletabletextA {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;	
+}
+
+.sampletableitem {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;
+	vertical-align: top;	
+}
+
 .alignA {
 	font-size: 14px;
 	text-align: right;
