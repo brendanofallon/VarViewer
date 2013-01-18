@@ -60,6 +60,8 @@ public class DBNSFPGeneDB {
 			info.expression = toks[19] + ";" + toks[20];
 			info.summary = toks[26];
 			info.hgmdHits = toks[27];
+			info.omimPhenos = toks[28];
+			info.omimInheritance = toks[29];
 			
 			if (info.summary.equals("null")) {
 				info.summary = "-";
@@ -81,5 +83,7 @@ public class DBNSFPGeneDB {
 		public String expression = null; //Columns 19 and 20
 		public String summary = null;
 		public String hgmdHits = null;
+		public String omimPhenos = null;
+		public String omimInheritance = null;
 	}
 }

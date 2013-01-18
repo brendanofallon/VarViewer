@@ -224,7 +224,7 @@
 	padding: 5px;
 	border: 1pt solid gray;
 	font-size: 11px;
-	height: 200px;
+	height: 300px;
 	width: 95%;
 	border-top: 1px solid gray;
   	border-left: 1px solid gray;
@@ -248,4 +248,52 @@
 
 .colpopup {
 	width: 150px;
+}
+
+
+.sampledetailsheader {
+	margin: 10px;
+	margin-top: 0px;
+	padding-bottom: 3px;
+	font-size: 14px;
+	font-weight: bold;
+	border-bottom: 1px solid gray;
+}
+
+.sampledetailspanel {
+	font-family: 'Open Sans', sans-serif;
+	outline: 0px;
+	padding: 10px;
+	margin: 2px;
+	margin-top: 10px;
+	border: 1px solid rgb(160, 160, 160);
+	border-radius: 10px;
+	-moz-box-shadow: 3px 3x 12px rgb(180, 180, 180);
+	-webkit-box-shadow: 3px 3px 12px rgb(180, 180, 180);
+	box-shadow: 3px 3px 12px rgb(180, 180, 180);
+	background : -webkit-radial-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
+	background : -moz-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
+	background : -o-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
+	background : -ms-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%); 
+	background : -linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 51%, rgb(179, 179, 179) 96%);
+	
+	margin-left: 20px;
+	width: 400px;
+	height: 300px;
+}
+
+.alignA {
+	font-size: 14px;
+	text-align: right;
+	width: 100px;
+}
+
+.alignB {
+	margin-left: 10px;
+	font-size: 14px;
+}
+
+.alignpanel {
+	margin-left: 20px;
+	margin-top: 4px;
 }

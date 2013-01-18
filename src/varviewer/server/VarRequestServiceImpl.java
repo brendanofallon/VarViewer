@@ -2,7 +2,7 @@ package varviewer.server;
 
 import java.util.List;
 
-import varviewer.client.VarRequestService;
+import varviewer.client.services.VarRequestService;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantRequest;
 

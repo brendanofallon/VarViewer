@@ -15,7 +15,16 @@ public class GeneInfo implements Serializable {
 	String[] hgmdDiseases;
 	String dbNSFPDisease;
 	String[] hgmdVars;
+	String[] omimPhenos;
 	
+	public String[] getOmimPhenos() {
+		return omimPhenos;
+	}
+
+	public void setOmimPhenos(String[] omimPhenos) {
+		this.omimPhenos = omimPhenos;
+	}
+
 	public GeneInfo() {
 		//must have no-arg constructor for serialization
 	}

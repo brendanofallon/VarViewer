@@ -58,7 +58,6 @@ public class CachingVariantServer extends AbstractVariantServer {
 			currentSampleID = null;
 			e.printStackTrace();
 		}
-		
 	}
 	
 	/**

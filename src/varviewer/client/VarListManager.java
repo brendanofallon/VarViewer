@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.filters.FilterListener;
+import varviewer.client.services.VarRequestService;
+import varviewer.client.services.VarRequestServiceAsync;
 import varviewer.shared.IntervalList;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;

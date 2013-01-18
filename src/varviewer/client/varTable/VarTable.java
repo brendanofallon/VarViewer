@@ -3,9 +3,9 @@ package varviewer.client.varTable;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.client.ExportService;
-import varviewer.client.ExportServiceAsync;
 import varviewer.client.VarListListener;
+import varviewer.client.services.ExportService;
+import varviewer.client.services.ExportServiceAsync;
 import varviewer.shared.Variant;
 
 import com.google.gwt.core.shared.GWT;

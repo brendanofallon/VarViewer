@@ -3,7 +3,7 @@ package varviewer.server;
 import java.io.File;
 import java.io.IOException;
 
-import varviewer.client.GeneDetailService;
+import varviewer.client.services.GeneDetailService;
 import varviewer.server.genedb.DBNSFPGeneDB;
 import varviewer.server.genedb.DBNSFPGeneDB.DBNSFPInfo;
 import varviewer.shared.GeneInfo;
@@ -57,6 +57,17 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 			if (hgmdHits != null) {
 				String[] hgmdVars = hgmdHits.split(";");
 				info.setHgmdVars( hgmdVars );
+			}
+			
+			String omimPhenos = dbInf.omimPhenos;
+			if (omimPhenos != null) {
+				String[] phenos = omimPhenos.split(",");
+				info.setOmimPhenos(phenos);
+			}
+			
+			String omimInheritance = dbInf.omimInheritance;
+			if (omimInheritance != null) {
+				info.setOmimInheritance(new String[]{omimInheritance});
 			}
 		}
 		return info;

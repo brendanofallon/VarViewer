@@ -77,7 +77,7 @@ public class ColumnStore {
 				String val = var.getAnnotation("gene");
 				return val != null ? val : "-";
 			}
-		}, 3.0, false));
+		}, 2.0, false));
 
 		addColumn(new VarAnnotation<String>("contig", "Chr", new TextColumn<Variant>() {
 
@@ -236,42 +236,90 @@ public class ColumnStore {
 			}
 		}, 1.0, false));
 		
-		addColumn(new VarAnnotation<ImageResource>("omim.disease.pic", "OMIM Disease", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+//		addColumn(new VarAnnotation<ImageResource>("omim.disease.pic", "OMIM Disease", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+//
+//			@Override
+//			public ImageResource getValue(Variant var) {
+//				String str = var.getAnnotation("omim.disease");
+//				if (str != null && str.length() > 3)
+//					return resources.omimImage();
+//				return null;
+//			}
+//			
+//		}, 1.0, false));
+//		
+//		addColumn(new VarAnnotation<ImageResource>("dbnsfp.info", "HGMD gene hit", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+//
+//			@Override
+//			public ImageResource getValue(Variant var) {
+//				String str = var.getAnnotation("hgmd.info");
+//				if (str != null && str.length() > 3)
+//					return resources.hgmdImage();
+//				return null;
+//			}
+//			
+//		}, 1.0, false));
+//		
+//		addColumn(new VarAnnotation<ImageResource>("hgmd.exact.match", "HGMD exact hit", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+//
+//			@Override
+//			public ImageResource getValue(Variant var) {
+//				String str = var.getAnnotation("hgmd.info");
+//				if (str != null && str.length() > 3)
+//					return resources.hgmdHitImage();
+//				return null;
+//			}
+//			
+//		}, 1.0, false));
+		
+		addColumn(new VarAnnotation<ImageResource>("disease.pics", "HGMD & OMIM", new Column<Variant, ImageResource>(new ImageResourceCell()) {
 
 			@Override
 			public ImageResource getValue(Variant var) {
-				String str = var.getAnnotation("omim.disease");
-				if (str != null && str.length() > 3)
-					return resources.omimImage();
-				return null;
-			}
-			
-		}, 1.0, false));
-		
-		addColumn(new VarAnnotation<ImageResource>("dbnsfp.info", "HGMD gene hit", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+				String hgmdExact = var.getAnnotation("hgmd.hit");
+				String hgmdGeneMatch = var.getAnnotation("hgmd.info");
+				String omimGeneMatch = var.getAnnotation("omim.disease");
+				
+				boolean hasHGMDExact = hgmdExact != null && hgmdExact.length() > 3;
+				boolean hasHGMDGene = hgmdGeneMatch != null && hgmdGeneMatch.length() > 3;
+				boolean hasOmim = omimGeneMatch != null && omimGeneMatch.length() > 3;
+				
+				ImageResource img = null;
+				if (hasHGMDExact) {
+					if (hasOmim) {
+						//Has all 3
+						img = resources.hgmdHitHgmdOmimImage();
+					}
+					else {
+						//No omim, but has hgmd exact and gene match
+						img = resources.hgmdHitHgmdImage();
+					}
+				}
+				else {
+					//No exact hit
+					if (hasHGMDGene) {
+						if (hasOmim) {
+							img = resources.hgmdOmimImage();
+						}
+						else {
+							//No OMIM, just hgmd gene match
+							img = resources.hgmdOnlyImage();
+						}
+					}
+					else {
+						if (hasOmim) {
+							img = resources.omimOnlyImage();
+						}
+						else {
+							//nothing, img is null
+						}
+					}
+				}
 
-			@Override
-			public ImageResource getValue(Variant var) {
-				String str = var.getAnnotation("hgmd.info");
-				if (str != null && str.length() > 3)
-					return resources.hgmdImage();
-				return null;
+				return img;
 			}
 			
 		}, 1.0, false));
-		
-		addColumn(new VarAnnotation<ImageResource>("hgmd.exact.match", "HGMD exact hit", new Column<Variant, ImageResource>(new ImageResourceCell()) {
-
-			@Override
-			public ImageResource getValue(Variant var) {
-				String str = var.getAnnotation("hgmd.info");
-				if (str != null && str.length() > 3)
-					return resources.hgmdHitImage();
-				return null;
-			}
-			
-		}, 1.0, false));
-		
 	}
 	
 	VarPageResources resources = (VarPageResources) GWT.create(VarPageResources.class);

@@ -1,5 +1,10 @@
 package varviewer.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import varviewer.client.services.GeneDetailService;
+import varviewer.client.services.GeneDetailServiceAsync;
 import varviewer.client.varTable.VariantSelectionListener;
 import varviewer.shared.GeneInfo;
 import varviewer.shared.Variant;
@@ -10,15 +15,19 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
 public class DetailsPanel extends FlowPanel implements VariantSelectionListener {
 
 	private String currentGene = null;
 	private DetailPanelHeader header = null;
 	private ScrollPanel scrollPanel;
-	HTML omimDiseases = new HTML("<b>OMIM Disease:</b>");
-	HTML hgmd = new HTML("<b>HGMD Variants:</b>");
-	HTML summary = new HTML("<b>Summary:</b>");
+	private SplitLayoutPanel summaryOmimPanel = new SplitLayoutPanel();
+	private HTML omimDiseases = new HTML("<b>OMIM Disease: </b>None");
+	private HTML hgmd = new HTML("<b>HGMD Variants: </b>None");
+	private HTML omimInheritance = new HTML("<b>Inheritance pattern: </b>None");
+	private HTML omimPhenotypes = new HTML("<b>Phenotypes: </b>None");
+	private HTML summary = new HTML("<b>Summary: </b>None");
 	
 	public DetailsPanel() {
 		this.setStylePrimaryName("detailspanel");
@@ -26,15 +35,30 @@ public class DetailsPanel extends FlowPanel implements VariantSelectionListener 
 		header = new DetailPanelHeader(this);
 		this.add(header);
 		
-		FlowPanel insidePanel= new FlowPanel();
-		insidePanel.add(summary);
-		insidePanel.add(omimDiseases);
-		insidePanel.add(hgmd);
 		
-		scrollPanel = new ScrollPanel(insidePanel);
+		
+		summaryOmimPanel.setHeight("280px");
+		summaryOmimPanel.setWidth("100%");
+		
+		FlowPanel leftSide = new FlowPanel();
+		FlowPanel rightSide = new FlowPanel();
+		summaryOmimPanel.addWest(leftSide, 500.0);
+		summaryOmimPanel.add(rightSide);
+		leftSide.add(summary);
+		leftSide.add(hgmd);
+		
+		rightSide.add(omimDiseases);
+		rightSide.add(omimInheritance);
+		rightSide.add(omimPhenotypes);
+		
+		summary.setWidth("500px");
+		omimDiseases.setWidth("100%");
+		
+		
+		scrollPanel = new ScrollPanel(summaryOmimPanel);
 		scrollPanel.setAlwaysShowScrollBars(false);
 		scrollPanel.setWidth("100%");
-		scrollPanel.setHeight("173px");
+		scrollPanel.setHeight("273px");
 		this.add(scrollPanel);
 		
 	}
@@ -86,17 +110,55 @@ public class DetailsPanel extends FlowPanel implements VariantSelectionListener 
 		}
 		
 		
+		if (result.getOmimPhenos() != null && result.getOmimPhenos().length > 0 && result.getOmimPhenos()[0].length()>3) {
+			StringBuilder phenoStr = new StringBuilder("<b>Phenotypes:</b><ul>");
+			String[] allPhenos = result.getOmimPhenos();
+			//Uniqify phenos
+			List<String> phenoSet = new ArrayList<String>();
+			for(int i=0; i<allPhenos.length; i++) {
+				if (! phenoSet.contains(allPhenos[i]) && (! allPhenos[i].startsWith("[")))
+					phenoSet.add(allPhenos[i]);
+			}
+			
+			
+			for(int i=0; i<phenoSet.size(); i++) {
+				phenoStr.append("<li>" + phenoSet.get(i) +"</li>");
+			}
+			phenoStr.append("</ul>");
+			omimPhenotypes.setHTML(phenoStr.toString());
+		}
+		else {
+			omimPhenotypes.setHTML("<b>Phenotypes: </b> None found");
+		}
+		
+		if (result.getOmimInheritance() != null && result.getOmimInheritance().length > 0 && result.getOmimInheritance()[0].length()>3) {
+			StringBuilder inheritStr = new StringBuilder("<b>Inheritance:  </b>");
+			inheritStr.append( result.getOmimInheritance()[0] );
+			for(int i=1; i<result.getOmimInheritance().length; i++) {
+				inheritStr.append(", " + result.getOmimInheritance()[i] );	
+			}
+			
+			omimInheritance.setHTML(inheritStr.toString());
+		}
+		else {
+			omimInheritance.setHTML("<b>Inheritance:</b> None found");
+		}
+		
+		
 		String omimStr = "None found";
-		if (result.getDbNSFPDisease() != null) {
+		if (result.getDbNSFPDisease() != null && result.getDbNSFPDisease().length()>3) {
 			omimStr = result.getDbNSFPDisease();
 		}
 		
 		omimDiseases.setHTML("<p><b>OMIM Diseases:</b> " + omimStr +"</p>" );
+		
+		
 		String summaryStr = "None";
 		if (result.getSummary() != null)
 			summaryStr = result.getSummary();
 		
 		summary.setHTML("<p><b>Summary:</b> " + summaryStr + "</p>");
+		scrollPanel.setWidget(summaryOmimPanel);
 	}
 
 	/**

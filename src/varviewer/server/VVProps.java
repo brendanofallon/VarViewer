@@ -1,0 +1,66 @@
+package varviewer.server;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Static access to some basic properties
+ * @author brendan
+ *
+ */
+public class VVProps {
+	
+	public static final String PROPS_FILENAME = "varviewerprops.txt";
+	
+	private static boolean initialized = false;
+	private static Map<String, String> props = new HashMap<String, String>();
+	
+	public static void loadProperties() throws IOException {
+
+		//Look for a file to add more properties
+		File propsFile = new File(PROPS_FILENAME);
+		if (! propsFile.exists()) {
+			propsFile = new File("../" + PROPS_FILENAME);
+		}
+		if (! propsFile.exists()) {
+			propsFile = new File(System.getProperty("user.dir") + "/" + PROPS_FILENAME);
+		}
+		if (! propsFile.exists()) {
+			propsFile = new File(System.getProperty("user.home") + "/" + PROPS_FILENAME);
+		}
+		
+		if (!propsFile.exists()) {
+			return;
+		}
+		
+		BufferedReader reader;
+		reader = new BufferedReader(new FileReader(propsFile));
+		String line = reader.readLine();
+		while(line != null) {
+			String[] toks = line.split("=");
+			if (toks.length==2) {
+				props.put(toks[0], toks[1]);
+			}
+			line = reader.readLine();
+		}
+		
+		reader.close();
+		initialized = true;
+	}
+	
+	public static String getProperty(String key) {
+		if (! initialized) {
+			try {
+				loadProperties();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return props.get(key);
+	}
+	
+}
