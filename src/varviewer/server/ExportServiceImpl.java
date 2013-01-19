@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import varviewer.client.ExportService;
+import varviewer.client.services.ExportService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

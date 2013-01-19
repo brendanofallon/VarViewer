@@ -103,7 +103,6 @@ public class VarPage extends CellTable<Variant> {
 	public void setColumns(ColumnModel model) {
 		clearColumns();
 		for(String key : model.getKeys()) {
-			System.out.println("Adding column : " + key);
 			addColumn(model.getVarAnnoForKey(key));
 		}
 		

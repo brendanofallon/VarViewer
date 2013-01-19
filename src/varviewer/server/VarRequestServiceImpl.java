@@ -2,8 +2,7 @@ package varviewer.server;
 
 import java.util.List;
 
-import varviewer.client.VarRequestService;
-import varviewer.server.variant.AnnotatedCSVReader;
+import varviewer.client.services.VarRequestService;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantRequest;
 
@@ -17,7 +16,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRequestService {
 
-	AbstractVariantServer variantSource = new AnnotatedCSVReader("/Users/brendanofallon/workspace/VarViewer/data/test.csv.gz");
+	AbstractVariantServer variantSource = new CachingVariantServer();
+
 	
 	@Override
 	public List<Variant> queryVariant(VariantRequest req)

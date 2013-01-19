@@ -1,7 +1,8 @@
 /** Add css rules here for your application. */
 
 #wrapper {
-	padding: 0px 50px;
+	padding: 0px;
+	margin: 0px;
 	background: white;
 	font-family: 'Open Sans', sans-serif;
 }
@@ -25,15 +26,17 @@
 .filterspanel {
 	border: 0px;
 	margin: 0px;
-	margin-top: 90px;
+	margin-top: 24px;
 	width: 240px;
 }
 
 .filterbox {
 	font-family: 'Open Sans', sans-serif;
+	width: 200px;
+	height: 50px;
 	outline: 0px;
 	padding: 10px;
-	margin: 5px;
+	margin: 2px;
 	margin-top: 10px;
 	border: 1px solid rgb(160, 160, 160);
 	border-radius: 3px;
@@ -48,10 +51,89 @@
 	
 }
 
+.filterboxheader {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+	text-shadow: 1px 1px rgb(225, 225, 225); 
+	width: 95%;
+	margin-top: 5px;
+	margin-left: 10px;
+}
+
+.filterbox-interior {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;
+	margin-left:10px;
+}
+
+.filterconfig {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	margin: 10px;
+	padding: 10px;
+	padding-bottom: 4px;
+	width: 250px;
+	background: rgb(255, 255, 255);
+	border: 1px solid gray;
+	border-radius: 2px;
+	-moz-box-shadow: 2px 2x 5px rgb(180, 180, 180);
+	-webkit-box-shadow: 2px 2px 5px rgb(180, 180, 180);
+	box-shadow: 2px 2px 5px rgb(180, 180, 180);	
+}
+
+.configtextbox {
+	width: 40px;
+	height: 20px;
+	margin-left: 5px;
+	font-size: 11px;
+	border: 1px solid lightgrey;
+	border-radius: 2px;
+	padding-left: 3px;
+}
+
+.topborder {
+	border-top: 1px solid lightgrey;
+	padding-top: 2px;	
+}
+
 .vartableheader {
 	font-family: 'Open Sans', sans-serif;
 	height: 30px;
 	width: 100%;
+}
+
+.interiortext {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;
+	padding-top: 3px;
+	text-align: right;
+}
+
+.textlabel{
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+	text-shadow: 1px 1px rgb(225, 225, 225);
+}
+
+.textlabel{
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+	text-shadow: 1px 1px rgb(225, 225, 225);
+}
+
+.textlabel12{
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.textlabel14{
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+	font-size: 14px;
 }
 
 .colmenu {
@@ -61,20 +143,38 @@
 	height: 24px;
 }
 
-.exportbutton {
-	margin: 0px;
+.highlightbutton {
+	cursor: pointer;
+	margin: 1px;
 	padding: 0px;
-	width: 24px;
-	height: 24px;
 	background: transparent;
 	border: 0px;
 }
 
-.exportbutton-hover {
+
+.highlightbutton-hover {
+	cursor: pointer;
 	margin: 0px;
 	padding: 0px;
-	width: 24px;
-	height: 24px;
+	background: rgb(220, 220, 220);
+	border: 1px solid rgb(170, 170, 170);
+	border-radius: 3px;
+}
+
+.smallbutton {
+	margin: 1px;
+	padding: 0px;
+	width: 16px;
+	height: 16px;
+	background: transparent;
+	border: 0px;
+}
+
+.smallbutton-hover {
+	margin: 0px;
+	padding: 0px;
+	width: 16px;
+	height: 16px;
 	background: rgb(220, 220, 220);
 	border: 1px solid rgb(170, 170, 170);
 	border-radius: 3px;
@@ -88,8 +188,10 @@
 }
 
 .vartable {
+	cursor: pointer;
 	font-family: 'Open Sans', sans-serif;
-	margin: 10px;
+	margin: 0px;
+	padding: 0px;
 	margin-left: 0px;
 	margin-bottom: 2px;
 	padding-bottom: 0px;
@@ -102,7 +204,8 @@
 }
 
 .filterandtablepanel {
-	width: 90%;
+	width: 100%;
+	height: 500px;
 }
 .detailspanelheader {
 	font-family: 'Open Sans', sans-serif;
@@ -116,12 +219,12 @@
 
 .detailspanel {
 	font-family: 'Open Sans', sans-serif;
-	margin-left: 20px;
+	margin-left: 5px;
 	margin-top: 2px;
 	padding: 5px;
 	border: 1pt solid gray;
 	font-size: 11px;
-	height: 200px;
+	height: 300px;
 	width: 95%;
 	border-top: 1px solid gray;
   	border-left: 1px solid gray;
@@ -144,5 +247,85 @@
 }
 
 .colpopup {
+	width: 150px;
+}
+
+.samplesview {
+	margin-left: 20px;	
+}
+
+.sampledetailsheader {
+	margin: 10px;
+	margin-top: 0px;
+	padding-bottom: 3px;
+	font-size: 14px;
+	font-weight: bold;
+	border-bottom: 1px solid gray;
+}
+
+.sampledetailspanel {
+	font-family: 'Open Sans', sans-serif;
+	outline: 0px;
+	padding: 10px;
+	margin: 2px;
+	margin-top: 10px;
+	border: 1px solid rgb(160, 160, 160);
+	border-radius: 10px;
+	-moz-box-shadow: 3px 3x 12px rgb(180, 180, 180);
+	-webkit-box-shadow: 3px 3px 12px rgb(180, 180, 180);
+	box-shadow: 3px 3px 12px rgb(180, 180, 180);
+	background : -webkit-radial-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
+	background : -moz-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
+	background : -o-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
+	background : -ms-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%); 
+	background : -linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 51%, rgb(179, 179, 179) 96%);
+	
+	margin-left: 50px;
+	width: 400px;
+	height: 300px;
+}
+
+
+.sampletabletext {
+	padding-top: 10px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;	
+	font-weight: bold;
+}
+
+.sampletabletextA {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;	
+}
+
+.sampletableitem {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;
+	vertical-align: top;	
+}
+
+.alignA {
+	font-size: 14px;
+	text-align: right;
 	width: 100px;
+}
+
+.alignB {
+	margin-left: 10px;
+	font-size: 14px;
+}
+
+.searchbox {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 10px;
+	border: 1px solid rgb(200, 200, 200);
+	border-radius: 2px;
+	height: 20px;
+	width: 105px;
+	margin-left: 5px;
+}
+
+.alignpanel {
+	margin-left: 20px;
+	margin-top: 4px;
 }

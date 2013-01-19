@@ -37,6 +37,17 @@
     <url-pattern>/varviewer/export</url-pattern>
   </servlet-mapping>
   
+  
+  <servlet>
+    <servlet-name>sampleListServlet</servlet-name>
+    <servlet-class>varviewer.server.SampleListServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>sampleListServlet</servlet-name>
+    <url-pattern>/varviewer/samplelist</url-pattern>
+  </servlet-mapping>
+  
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>VarViewer.html</welcome-file>

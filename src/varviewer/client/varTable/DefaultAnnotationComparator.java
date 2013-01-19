@@ -4,6 +4,12 @@ import java.util.Comparator;
 
 import varviewer.shared.Variant;
 
+/**
+ * This is the comparator used by default to compare two rows in the variant table. It 
+ * performs a simple string compareTo, but with null checks.  
+ * @author brendan
+ *
+ */
 public class DefaultAnnotationComparator implements Comparator<Variant> {
 	public final String key;
 	
@@ -29,7 +35,6 @@ public class DefaultAnnotationComparator implements Comparator<Variant> {
 		if (a1 == null && a0 != null) {
 			return -1;
 		}
-		System.out.println("String comparing " + a0 + " to " + a1 + " : " + a0.compareTo(a1));
 		return a0.compareTo(a1);
 	}
 }

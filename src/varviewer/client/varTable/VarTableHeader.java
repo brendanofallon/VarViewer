@@ -1,21 +1,18 @@
 package varviewer.client.varTable;
 
 
+import varviewer.client.HighlightButton;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PushButton;
 
 /**
  * Header of a VarTable with some controls, right now just a pager, export button, and 
- * column config button
+ * column config button.
  * @author brendan
  *
  */
@@ -23,9 +20,8 @@ public class VarTableHeader extends HorizontalPanel {
 
 	SimplePager pager = new SimplePager();
 	Label sampleLabel = new Label("Unknown sample");
-	final PushButton exportButton; 
-	PushButton colMenuButton;
-	//MenuBar colMenu = new MenuBar();
+	final HighlightButton exportButton; 
+	final HighlightButton colMenuButton;
 	
 	public VarTableHeader(final VarTable tableParent) {
 		this.setStylePrimaryName("vartableheader");
@@ -33,7 +29,7 @@ public class VarTableHeader extends HorizontalPanel {
 		sampleLabel.setStylePrimaryName("samplelabel");
 		
 		Image exportImage = new Image("images/export-icon.png");
-		exportButton = new PushButton(exportImage, new ClickHandler() {
+		exportButton = new HighlightButton(exportImage, new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -43,30 +39,15 @@ public class VarTableHeader extends HorizontalPanel {
 		});
 		
 		this.add(exportButton);
-		exportButton.setStylePrimaryName("exportbutton");
-		exportButton.addMouseOverHandler(new MouseOverHandler() {
-
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				exportButton.setStylePrimaryName("exportbutton-hover");
-			}
-			
-		});
-		exportButton.addMouseOutHandler(new MouseOutHandler() {
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				exportButton.setStylePrimaryName("exportbutton");
-				
-			}
-			
-		});
+		exportButton.setWidth("24px");
+		exportButton.setHeight("24px");
 		
 		
 		final ColPickerPopup popup = new ColPickerPopup(tableParent.colModel);
 		popup.hide();
 		
 		Image colMenuImage = new Image("images/config-icon.png");
-		colMenuButton = new PushButton(colMenuImage, new ClickHandler() {
+		colMenuButton = new HighlightButton(colMenuImage, new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -74,8 +55,10 @@ public class VarTableHeader extends HorizontalPanel {
 			}
 			
 		});
-		colMenuButton.setStylePrimaryName("exportbutton");
+
 		this.add(colMenuButton);
+		colMenuButton.setWidth("24px");
+		colMenuButton.setHeight("24px");
 		
 		this.add(pager);
 		

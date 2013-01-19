@@ -7,7 +7,7 @@ import java.util.Map;
 
 import varviewer.shared.Variant;
 
-import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.cellview.client.Column;
 
 /**
  * The list of columns / annotations that should be displayed in the VarTable. Each column
@@ -62,7 +62,7 @@ public class ColumnModel {
 	public String writeVariant(Variant var) {
 		StringBuilder str = new StringBuilder();
 		for(String key : getKeys()) {
-			str.append( getColumnForKey(key).getValue(var) + "\t");
+			str.append( getColumnForKey(key).getValue(var).toString() + "\t");
 		}
 		return str.toString();
 	}
@@ -73,7 +73,7 @@ public class ColumnModel {
 	 * @param key
 	 * @return
 	 */
-	public TextColumn<Variant> getColumnForKey(String key) {
+	public Column<Variant, ?> getColumnForKey(String key) {
 		return colMap.get(key).col;
 	}
 

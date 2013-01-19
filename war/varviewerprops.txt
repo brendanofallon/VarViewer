@@ -1,0 +1,2 @@
+sample.dir=/Users/brendanofallon/jobwrangler_samples/
+
