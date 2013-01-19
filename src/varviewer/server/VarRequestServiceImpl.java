@@ -17,7 +17,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRequestService {
 
-	AbstractVariantServer variantSource = new AnnotatedCSVReader("/home/brendan/workspace/VarViewer/data/test.csv.gz");
+	AbstractVariantServer variantSource = new AnnotatedCSVReader("/Users/brendanofallon/workspace/VarViewer/data/test.csv.gz");
 	
 	@Override
 	public List<Variant> queryVariant(VariantRequest req)
