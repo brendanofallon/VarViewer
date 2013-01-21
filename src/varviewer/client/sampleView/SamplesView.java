@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import varviewer.client.VarViewer;
+import varviewer.client.services.SampleListService;
+import varviewer.client.services.SampleListServiceAsync;
 import varviewer.shared.SampleInfo;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -26,21 +32,11 @@ import com.google.gwt.view.client.SingleSelectionModel;
 public class SamplesView extends HorizontalPanel {
 
 	private String filterText = null;
+	private VarViewer vvParent = null;
 	
-	public SamplesView() {
+	public SamplesView(VarViewer parent) {
+		this.vvParent = parent;
 		initComponents();
-		
-		//practice samples...
-//		List<SampleInfo> samples = new ArrayList<SampleInfo>();
-//
-//		samples.add( new SampleInfo("somesample", "some analysis", new Date(), "brendan"));
-//		samples.add( new SampleInfo("somesampleA", "some analysis1", new Date(), "brendan"));
-//		samples.add( new SampleInfo("blahablah", "some analysis2", new Date(), "brendan"));
-//		samples.add( new SampleInfo("somesampleC", "bogus", new Date(), "brendan"));
-//		samples.add( new SampleInfo("crazy", "some analysis4", new Date(), "brendan"));
-//		samples.add( new SampleInfo("somesampleE", "text142", new Date(), "brendan"));
-//		setSampleList(samples);		
-				
 	}
 	
 	/**
@@ -88,7 +84,7 @@ public class SamplesView extends HorizontalPanel {
 		searchBox = new SearchBox(this);
 		leftPanel.add(searchBox);
 		
-		sampleImage = new Image("images/sampleIcon48.png");
+		//sampleImage = new Image("images/sampleIcon48.png");
 		
 		SampleCell sampleCell = new SampleCell();
 		sampleList = new CellList<SampleInfo>( sampleCell );
@@ -105,19 +101,20 @@ public class SamplesView extends HorizontalPanel {
 		});
 		
 		ScrollPanel sampleSP = new ScrollPanel(sampleList);
-		sampleSP.setWidth("200px");
-		sampleSP.setHeight("500px");
 		sampleSP.setStylePrimaryName("samplescrollpane");
 		
 		leftPanel.add(sampleSP);
 		this.add(leftPanel);
 		
 		//Create sample details panel...
-		sampleDetailsPanel = new SampleDetailView();
+		sampleDetailsPanel = new SampleDetailView(this);
 		this.add(sampleDetailsPanel);
 	}
 
-
+	protected VarViewer getVarViewer() {
+		return vvParent;
+	}
+	
 	/**
 	 * Called when a new sample has been selected in the list. We 
 	 * update the details panel to show the new sample here. 
@@ -128,9 +125,29 @@ public class SamplesView extends HorizontalPanel {
 	}
 
 
+	public void refreshSampleList() {
+		  sampleListService.getSampleList(new AsyncCallback<List<SampleInfo>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error retrieving sample list : "+ caught.getMessage());
+				caught.printStackTrace();
+			}
+
+			@Override
+			public void onSuccess(List<SampleInfo> result) {
+				setSampleList(result);
+			}
+			  
+		  });
+	}
 
 
-
+	/**
+	 * Renders a single cell in the sample list table. 
+	 * @author brendanofallon
+	 *
+	 */
 	static class SampleCell extends AbstractCell<SampleInfo> {
 
 		@Override
@@ -154,9 +171,10 @@ public class SamplesView extends HorizontalPanel {
 		
 	}
 	
+	
+	SampleListServiceAsync sampleListService = (SampleListServiceAsync) GWT.create(SampleListService.class);
 	private List<SampleInfo> allSamples = null;
 	private SearchBox searchBox;
-	static private Image sampleImage;
 	private FlowPanel leftPanel;
 	private SampleDetailView sampleDetailsPanel;
 	private CellList<SampleInfo> sampleList;

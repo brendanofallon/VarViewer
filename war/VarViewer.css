@@ -254,35 +254,43 @@
 	margin-left: 20px;	
 }
 
+
+.samplescrollpane {
+	width: 200px;
+	height: 500px;
+	margin-top: 10px;	
+}
+
 .sampledetailsheader {
-	margin: 10px;
-	margin-top: 0px;
-	padding-bottom: 3px;
+	margin: 0px;
+	height: 25px;
+	padding-top: 10px;
+	padding-bottom: 0px;
+	padding-left: 20px;
 	font-size: 14px;
 	font-weight: bold;
+	text-shadow: 1px 1px rgba(205, 205, 205, 100); 
 	border-bottom: 1px solid gray;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	background : -webkit-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -moz-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -o-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -ms-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%); 
+	background : -linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
 }
 
 .sampledetailspanel {
 	font-family: 'Open Sans', sans-serif;
 	outline: 0px;
-	padding: 10px;
-	margin: 2px;
-	margin-top: 10px;
 	border: 1px solid rgb(160, 160, 160);
 	border-radius: 10px;
-	-moz-box-shadow: 3px 3x 12px rgb(180, 180, 180);
-	-webkit-box-shadow: 3px 3px 12px rgb(180, 180, 180);
-	box-shadow: 3px 3px 12px rgb(180, 180, 180);
-	background : -webkit-radial-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
-	background : -moz-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
-	background : -o-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
-	background : -ms-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%); 
-	background : -linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 51%, rgb(179, 179, 179) 96%);
-	
+	-moz-box-shadow: 5px 5x 12px rgb(180, 180, 180);
+	-webkit-box-shadow: 5px 5px 12px rgb(180, 180, 180);
+	box-shadow: 5px 5px 12px rgb(180, 180, 180);
 	margin-left: 50px;
 	width: 400px;
-	height: 300px;
+	height: 400px;
 }
 
 
@@ -296,6 +304,46 @@
 .sampletabletextA {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 12px;	
+}
+
+.buttongrid {
+	width: 400px;
+	margin: 20px;
+}
+
+.bigbutton {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;	
+	border: 1px solid rgb(129, 179, 229);
+	border-radius: 5px;
+	width: 100px;
+	height: 100px;
+	margin: 5px;
+	padding: 5px;
+	text-align: center;
+	background : -webkit-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -moz-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -o-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -ms-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%); 
+	background : -linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+}
+
+.bigbutton-hover {
+	border: 3px solid rgb(129, 179, 229);
+	font-family: 'Open Sans', sans-serif;
+	font-size: 11px;	
+	border-radius: 5px;
+	width: 100px;
+	height: 100px;
+	margin: 3px;
+	padding: 5px;
+	text-align: center;
+	background : -webkit-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -moz-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -o-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	background : -ms-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%); 
+	background : -linear-gradient(top, rgb(255, 255, 255) 08%, rgb(88, 162, 219) 99%);
+	cursor: pointer;
 }
 
 .sampletableitem {

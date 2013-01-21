@@ -1,5 +1,6 @@
 package varviewer.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,12 @@ public class CachingVariantServer extends AbstractVariantServer {
 
 	private String currentSampleID = null; //
 	private VariantCollection currentVariants = null;
+	private SampleSource source;
+	
+	public CachingVariantServer(SampleSource sampleSource) {
+		this.source = sampleSource;
+	}
+	
 	
 	@Override
 	public List<Variant> getVariants(VariantRequest req) {
@@ -46,17 +53,11 @@ public class CachingVariantServer extends AbstractVariantServer {
 		
 	}
 
-	
-	private void loadVariants(List<String> sampleIDs) {
-		//Temporary code, will be switched to something more flexible soon
-		AnnotatedCSVReader reader = new AnnotatedCSVReader("/home/brendan/workspace/VarViewer/data/HHT11.new.annotated.csv.gz");
-		try {
-			currentVariants = reader.toVariantCollection();
-			currentSampleID = sampleIDs.get(0);
-		} catch (IOException e) {
-			currentVariants = null;
-			currentSampleID = null;
-			e.printStackTrace();
+	private void loadVariants(List<String> ids) {
+		for(String id : ids) {
+			currentVariants = source.getVariantsForSample(id);
+			currentSampleID = id;
+			return;
 		}
 	}
 	

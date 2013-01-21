@@ -2,7 +2,9 @@ package varviewer.server;
 
 import java.util.List;
 
+import varviewer.server.variant.VariantCollection;
 import varviewer.shared.SampleInfo;
+import varviewer.shared.Variant;
 
 /**
  * Objects which generate a list of SampleInfo objects should implement this interface
@@ -32,9 +34,9 @@ public interface SampleSource {
 	public SampleInfo getInfoForSample(String sampleID);
 	
 	/**
-	 * Obtain sampleInfo for the given sample 
+	 * Obtain all variants in this sample in a VariantCollection object 
 	 * @param sampleID
 	 * @return
 	 */
-	public AbstractVariantServer getVariantServerForSample(String sampleID);
+	public VariantCollection getVariantsForSample(String sampleID);
 }

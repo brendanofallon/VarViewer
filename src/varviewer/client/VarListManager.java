@@ -109,7 +109,7 @@ public class VarListManager implements FilterListener {
 		varRequestService.queryVariant(req, new AsyncCallback<List<Variant>>() {
 
 			@Override
-			public void onFailure(Throwable caught) {
+		public void onFailure(Throwable caught) {
 				Window.alert("Error retrieving variants : " + caught.toString());
 			}
 
@@ -121,9 +121,8 @@ public class VarListManager implements FilterListener {
 			  
 		  });
 	}
-	VarRequestServiceAsync varRequestService = (VarRequestServiceAsync) GWT.create(VarRequestService.class);
-
 	
-
+	
+	VarRequestServiceAsync varRequestService = (VarRequestServiceAsync) GWT.create(VarRequestService.class);
 
 }

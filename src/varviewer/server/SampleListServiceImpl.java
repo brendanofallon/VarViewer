@@ -16,6 +16,7 @@ import varviewer.shared.SampleInfo;
 public class SampleListServiceImpl extends RemoteServiceServlet implements SampleListService {
 
 	DirSampleSource sampleDir = null;
+	
 	@Override
 	public List<SampleInfo> getSampleList() {
 		if (sampleDir == null) {
@@ -29,8 +30,9 @@ public class SampleListServiceImpl extends RemoteServiceServlet implements Sampl
 			sampleDir.initialize( dirFile );
 		}
 		
-		
+		//re-initialize every time
 		sampleDir.initialize();
+		
 		return sampleDir.getSampleInfos();
 	}
 

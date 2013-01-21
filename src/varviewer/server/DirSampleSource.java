@@ -11,7 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import varviewer.server.variant.AnnotatedCSVReader;
+import varviewer.server.variant.VariantCollection;
 import varviewer.shared.SampleInfo;
+import varviewer.shared.Variant;
 
 /**
  * A SampleSource that reads its samples from a single directory. 
@@ -217,8 +220,26 @@ public class DirSampleSource implements SampleSource {
 	}
 
 	@Override
-	public AbstractVariantServer getVariantServerForSample(String sampleID) {
+	public VariantCollection getVariantsForSample(String sampleID) {
 		if ( containsSample(sampleID)) {
+			SampleInfo info = samples.get(sampleID).info;
+			String annoVarsPath =  info.getAnnotatedVarsFile();
+			if (annoVarsPath == null || annoVarsPath.length()==0) {
+				return null;
+			}
+			
+			File varsFile = new File(annoVarsPath);
+			if (!varsFile.exists()) {
+				return null;
+			}
+			
+			AnnotatedCSVReader reader = new AnnotatedCSVReader(annoVarsPath);
+			try {
+				return reader.toVariantCollection();
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
 			
 		}
 		return null;
