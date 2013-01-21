@@ -5,15 +5,15 @@ import java.util.List;
 
 import varviewer.client.HighlightButton;
 import varviewer.client.VarListManager;
+import varviewer.client.VarViewer;
 import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.ExonFuncFilter;
 import varviewer.shared.varFilters.MaxFreqFilter;
 
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -101,27 +101,36 @@ public class FiltersPanel extends FlowPanel {
 	private void initComponents() {
 		this.setStylePrimaryName("filterspanel");
 		
-		HorizontalPanel topPanel = new HorizontalPanel();
-		topPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		this.add(topPanel);
+//		HorizontalPanel topPanel = new HorizontalPanel();
+//		topPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+//		this.add(topPanel);
+
 		
-		Image addImage = new Image("images/add-icon.png");
+		
+		Image backImage = new Image("images/backButton.png");
+		HighlightButton backButton = new HighlightButton(backImage, "Back to sample list", new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				VarViewer.getViewer().showSampleViewer();
+			}
+		});
+		
+		this.add(backButton);
+		backButton.setWidth("100px");
 		SimplePanel spacer1 = new SimplePanel();
-		spacer1.setWidth("80px");
-		topPanel.add(spacer1);
-		HighlightButton addFilterButton = new HighlightButton("Add new filter", addImage);
-		addFilterButton.getElement().getStyle().setPadding(2.0, Unit.PX);
+		spacer1.setHeight("20px");
+		this.add(spacer1);
 		
-		topPanel.add(addFilterButton);
+//		Image addImage = new Image("images/add-icon.png");
+//		HighlightButton addFilterButton = new HighlightButton("Add new filter", addImage);
+//		addFilterButton.getElement().getStyle().setPadding(2.0, Unit.PX);
+//		topPanel.add(addFilterButton);
 		
 		VariantFilter freqFilter = new MaxFreqFilter("pop.freq", 0.10);
 		FilterBox freqFilterBox = new FilterBox(this, "Pop. frequency", freqFilter);
 		PopFreqConfig freqConfig = new PopFreqConfig(freqFilterBox);
 		freqFilterBox.setConfigTool(freqConfig);
-		
 		addFilter(freqFilterBox);
-		
-		
 		
 		ExonFuncFilter effectFilter = new ExonFuncFilter();
 		FilterBox exonFilterBox = new FilterBox(this, "Exon effect", effectFilter);

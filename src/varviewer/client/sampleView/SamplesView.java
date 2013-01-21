@@ -1,7 +1,6 @@
 package varviewer.client.sampleView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import varviewer.client.VarViewer;
@@ -18,7 +17,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
@@ -162,9 +160,16 @@ public class SamplesView extends HorizontalPanel {
 			sb.appendHtmlConstant("<img src=\"images/sampleIcon48.png\" />");
 		    sb.appendHtmlConstant("</td>");
 			sb.appendHtmlConstant("<td class=\"sampletabletext\">");
-		    sb.appendEscaped(value.getSampleID());
+			String idStr = "unknown";
+			if (value.getSampleID() != null) 
+				idStr = value.getSampleID();
+		    sb.appendEscaped(idStr);
 		    sb.appendHtmlConstant("</td></tr><tr><td class=\"sampletabletextA\">");
-		    sb.appendEscaped(value.getAnalysisType());
+		    String analysisTypeStr = "unknown";
+		    if (value.getAnalysisType() != null)
+		    	analysisTypeStr = value.getAnalysisType();
+		    sb.appendEscaped(analysisTypeStr);
+		    
 		    sb.appendHtmlConstant("</td></tr></table>");
 			
 		}

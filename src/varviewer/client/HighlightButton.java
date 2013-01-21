@@ -37,6 +37,18 @@ public class HighlightButton extends FocusPanel {
 		interiorPanel.add(image);
 	}
 	
+	public HighlightButton(Image image, String text,  ClickHandler handler) {
+		initialize();
+		Label lab = new Label(text);
+		lab.setStylePrimaryName("textlabel");
+		SimplePanel spacer = new SimplePanel();
+		spacer.setWidth("4px");
+		interiorPanel.add(image);
+		interiorPanel.add(spacer);
+		interiorPanel.add(lab);
+		addClickHandler(handler);
+	}
+	
 	public HighlightButton(Image image) {
 		initialize();
 		interiorPanel.add(image);

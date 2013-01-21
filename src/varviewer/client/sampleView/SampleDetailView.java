@@ -76,6 +76,7 @@ public class SampleDetailView extends FlowPanel {
 	protected void doShowVariants() {
 		if (currentSample != null) {
 			VarListManager.getManager().setSample( currentSample.getSampleID() );
+			VarListManager.getManager().setFilters( sampleViewParent.getVarViewer().getVarDisplay().getActiveFilters() );
 			VarListManager.getManager().reloadIfRequired();
 			sampleViewParent.getVarViewer().showVariantDisplay();
 		}

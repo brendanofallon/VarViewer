@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +13,6 @@ import java.util.Map;
 import varviewer.server.variant.AnnotatedCSVReader;
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.SampleInfo;
-import varviewer.shared.Variant;
 
 /**
  * A SampleSource that reads its samples from a single directory. 
@@ -109,8 +107,7 @@ public class DirSampleSource implements SampleSource {
 			return null;
 		}
 		
-		SimpleDateFormat dateFormatter = new SimpleDateFormat();
-		
+				
 		SampleInfo info = new SampleInfo();
 		for(String key: pairs.keySet()) {
 			if (key.equals("sample.name")) {
@@ -122,16 +119,22 @@ public class DirSampleSource implements SampleSource {
 			if (key.equals("submitter")) {
 				info.setSubmitter(pairs.get(key));
 			}
+			if (key.equals("annotated.vars")) {
+				info.setAnnotatedVarsFile(pairs.get(key));
+			}
+			
 			if (key.equals("current.time")) {
 				String dateStr = pairs.get(key);
 				try {
-					Date analysisDate = dateFormatter.parse(dateStr);
+					Long time = Long.parseLong(dateStr);
+					Date analysisDate = new Date(time);
 					info.setAnalysisDate(analysisDate);
 				}
 				catch(Exception ex) {
-					
+					System.out.println("Could not parse date from string: " + dateStr + " reason: " + ex.getMessage());
 				}
 			}
+			
 		}
 		
 		//Now attempt to find vcf, annotated csv, and .bam files...
@@ -222,18 +225,24 @@ public class DirSampleSource implements SampleSource {
 	@Override
 	public VariantCollection getVariantsForSample(String sampleID) {
 		if ( containsSample(sampleID)) {
+			File sampleDir = samples.get(sampleID).source;
 			SampleInfo info = samples.get(sampleID).info;
 			String annoVarsPath =  info.getAnnotatedVarsFile();
 			if (annoVarsPath == null || annoVarsPath.length()==0) {
 				return null;
 			}
 			
-			File varsFile = new File(annoVarsPath);
+			File varsFile = null;
+			if (annoVarsPath.startsWith("/"))
+				varsFile = new File(annoVarsPath);
+			else 
+				varsFile = new File(sampleDir + "/" + annoVarsPath);
+			
 			if (!varsFile.exists()) {
 				return null;
 			}
 			
-			AnnotatedCSVReader reader = new AnnotatedCSVReader(annoVarsPath);
+			AnnotatedCSVReader reader = new AnnotatedCSVReader(varsFile.getAbsolutePath());
 			try {
 				return reader.toVariantCollection();
 			} catch (IOException e) {

@@ -29,7 +29,6 @@ public class ColumnModel {
 		addColumn( ColumnStore.getStore().getColumnForID("cdot"));
 		addColumn( ColumnStore.getStore().getColumnForID("pdot"));
 //		addColumn( ColumnStore.getStore().getColumnForID("depth"));
-//		addColumn( ColumnStore.getStore().getColumnForID("quality"));
 		addColumn( ColumnStore.getStore().getColumnForID("pop.freq"));
 	}
 	

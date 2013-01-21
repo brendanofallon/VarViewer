@@ -50,6 +50,15 @@ public class VarListManager implements FilterListener {
 		reloadRequired = true;
 	}
 	
+	/**
+	 * Obtain the list of current sample names. If the list has not been updated via a reload() call
+	 * the sample names may not reflect the names of the variants contained herein.
+	 * @return
+	 */
+	public List<String> getSampleNames() {
+		return req.getSampleIDs();
+	}
+	
 	public void setIntervals(IntervalList intervals) {
 		req.setIntervals(intervals);
 		reloadRequired = true;

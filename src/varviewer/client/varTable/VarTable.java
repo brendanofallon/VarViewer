@@ -3,7 +3,6 @@ package varviewer.client.varTable;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.client.VarListListener;
 import varviewer.client.services.ExportService;
 import varviewer.client.services.ExportServiceAsync;
 import varviewer.shared.Variant;
@@ -20,7 +19,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
  * @author brendan
  *
  */
-public class VarTable extends FlowPanel implements ColumnModelListener, VarListListener {
+public class VarTable extends FlowPanel implements ColumnModelListener {
 	
 	public static final int VISIBLE_ROWS = 25;
 	
@@ -91,10 +90,13 @@ public class VarTable extends FlowPanel implements ColumnModelListener, VarListL
 		columnStateChanged(colModel);
 		colModel.addListener(this);
 	}
-
-	@Override
-	public void variantListUpdated(List<Variant> newVars) {
-		setVariants(newVars);
+	
+	/**
+	 * Reference to the header object of this table, allowing access to the label
+	 * @return
+	 */
+	VarTableHeader getHeader() {
+		return header;
 	}
 	
 	@Override
@@ -113,8 +115,5 @@ public class VarTable extends FlowPanel implements ColumnModelListener, VarListL
 	}
 	
 	ExportServiceAsync exportService = (ExportServiceAsync) GWT.create(ExportService.class);
-
-	
-
 	
 }
