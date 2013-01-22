@@ -14,10 +14,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class DetailsPanel extends FlowPanel implements VariantSelectionListener {
+public class DetailsPanel extends FlowPanel implements VariantSelectionListener, ProvidesResize, RequiresResize {
 
 	private String currentGene = null;
 	private DetailPanelHeader header = null;
@@ -170,5 +173,15 @@ public class DetailsPanel extends FlowPanel implements VariantSelectionListener 
 	}
 	
 	GeneDetailServiceAsync geneDetailService = (GeneDetailServiceAsync) GWT.create(GeneDetailService.class);
+
+	@Override
+	public void onResize() { 
+		for (Widget child : getChildren()) { 
+			if (child instanceof RequiresResize) { 
+				((RequiresResize) child).onResize(); 
+			}
+		} 
+	}
+	
 
 }

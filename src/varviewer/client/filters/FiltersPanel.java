@@ -8,6 +8,8 @@ import varviewer.client.VarListManager;
 import varviewer.client.VarViewer;
 import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.ExonFuncFilter;
+import varviewer.shared.varFilters.GeneFilter;
+import varviewer.shared.varFilters.HGMDOmimFilter;
 import varviewer.shared.varFilters.MaxFreqFilter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -101,11 +103,6 @@ public class FiltersPanel extends FlowPanel {
 	private void initComponents() {
 		this.setStylePrimaryName("filterspanel");
 		
-//		HorizontalPanel topPanel = new HorizontalPanel();
-//		topPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-//		this.add(topPanel);
-
-		
 		
 		Image backImage = new Image("images/backButton.png");
 		HighlightButton backButton = new HighlightButton(backImage, "Back to sample list", new ClickHandler() {
@@ -120,11 +117,6 @@ public class FiltersPanel extends FlowPanel {
 		SimplePanel spacer1 = new SimplePanel();
 		spacer1.setHeight("20px");
 		this.add(spacer1);
-		
-//		Image addImage = new Image("images/add-icon.png");
-//		HighlightButton addFilterButton = new HighlightButton("Add new filter", addImage);
-//		addFilterButton.getElement().getStyle().setPadding(2.0, Unit.PX);
-//		topPanel.add(addFilterButton);
 		
 		VariantFilter freqFilter = new MaxFreqFilter("pop.freq", 0.10);
 		FilterBox freqFilterBox = new FilterBox(this, "Pop. frequency", freqFilter);
@@ -143,6 +135,20 @@ public class FiltersPanel extends FlowPanel {
 		QualDepthFilterConfig qualDepthConfig = new QualDepthFilterConfig(qdFilterBox);
 		qdFilterBox.setConfigTool(qualDepthConfig);
 		addFilter(qdFilterBox);
+		
+		GeneFilter geneFilter = new GeneFilter();
+		FilterBox geneFilterBox = new FilterBox(this, "Genes & Regions", geneFilter);
+		geneFilterBox.setInteriorText("No gene filters set");
+		GeneFilterConfig geneConfig = new GeneFilterConfig(geneFilterBox);
+		geneFilterBox.setConfigTool(geneConfig);
+		addFilter(geneFilterBox);
+		
+		HGMDOmimFilter diseaseFilter = new HGMDOmimFilter();
+		FilterBox diseaseFilterBox = new FilterBox(this, "HGMD & OMIM", diseaseFilter);
+		diseaseFilterBox.setInteriorText("No disease filters set");
+		HGMDOmimFilterConfig disConfig = new HGMDOmimFilterConfig(diseaseFilterBox);
+		diseaseFilterBox.setConfigTool(disConfig);
+		addFilter(diseaseFilterBox);
 	}
 
 }

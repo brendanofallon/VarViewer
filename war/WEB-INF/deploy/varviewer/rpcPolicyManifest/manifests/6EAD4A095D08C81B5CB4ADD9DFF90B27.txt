@@ -1,2 +1,0 @@
-serviceClass: varviewer.client.GreetingService
-path: 064AB4AEFC77D9DB766364006BAF4110.gwt.rpc

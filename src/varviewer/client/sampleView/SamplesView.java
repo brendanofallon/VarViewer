@@ -82,8 +82,6 @@ public class SamplesView extends HorizontalPanel {
 		searchBox = new SearchBox(this);
 		leftPanel.add(searchBox);
 		
-		//sampleImage = new Image("images/sampleIcon48.png");
-		
 		SampleCell sampleCell = new SampleCell();
 		sampleList = new CellList<SampleInfo>( sampleCell );
 		sampleList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);

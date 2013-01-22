@@ -1,2 +1,0 @@
-serviceClass: varviewer.client.ExportService
-path: BA52E6B9F0882198228C00B5FC9B3E50.gwt.rpc

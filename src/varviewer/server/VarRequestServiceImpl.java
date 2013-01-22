@@ -34,12 +34,14 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 			if (! sampleDirFile.exists()) {
 				throw new IllegalStateException("Sample directory " + sampleDirFile.getAbsolutePath() + " does not exist, cannot read variants");
 			}
+			//Bladi bloody blah
 			
 			DirSampleSource samplesSource = new DirSampleSource();
 			samplesSource.initialize(new File(sampleDir));
 			variantSource = new CachingVariantServer(samplesSource);
 		}
 		
+		//kjhiu
 		return variantSource.getVariants(req);
 	}
 

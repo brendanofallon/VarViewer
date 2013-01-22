@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import varviewer.server.variant.AnnotatedCSVReader;
+import varviewer.server.variant.AbstractVariantReader;
+import varviewer.server.variant.TabixCSVReader;
+import varviewer.server.variant.UncompressedCSVReader;
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.SampleInfo;
 
@@ -242,8 +244,14 @@ public class DirSampleSource implements SampleSource {
 				return null;
 			}
 			
-			AnnotatedCSVReader reader = new AnnotatedCSVReader(varsFile.getAbsolutePath());
+			
 			try {
+				AbstractVariantReader reader = null;
+				if (varsFile.getName().endsWith(".gz"))
+					reader = new TabixCSVReader(varsFile.getAbsolutePath());
+				else
+					reader = new UncompressedCSVReader(varsFile.getAbsolutePath());
+				
 				return reader.toVariantCollection();
 			} catch (IOException e) {
 				e.printStackTrace();

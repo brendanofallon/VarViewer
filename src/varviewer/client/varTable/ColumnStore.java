@@ -77,7 +77,7 @@ public class ColumnStore {
 				String val = var.getAnnotation("gene");
 				return val != null ? val : "-";
 			}
-		}, 2.0, false));
+		}, 1.0, false));
 
 		addColumn(new VarAnnotation<String>("contig", "Chr", new TextColumn<Variant>() {
 
@@ -106,7 +106,7 @@ public class ColumnStore {
 				}
 				return val != null ? val : "-";
 			}
-		}, 3.0, false));
+		}, 2.0, false));
 
 		addColumn(new VarAnnotation<String>("nm.number", "NM Number", new TextColumn<Variant>() {
 
@@ -115,7 +115,7 @@ public class ColumnStore {
 				String val = var.getAnnotation("nm.number");
 				return val != null ? val : "-";
 			}
-		}, 3.0, false));
+		}, 2.0, false));
 
 		addColumn(new VarAnnotation<String>("cdot", "c.dot", new TextColumn<Variant>() {
 
@@ -234,7 +234,7 @@ public class ColumnStore {
 				String val = var.getAnnotation("omim.disease.ids");
 				return val != null ? val : "0";
 			}
-		}, 1.0, false));
+		}, 2.0, false));
 		
 //		addColumn(new VarAnnotation<ImageResource>("omim.disease.pic", "OMIM Disease", new Column<Variant, ImageResource>(new ImageResourceCell()) {
 //

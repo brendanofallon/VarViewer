@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.server.variant.AnnotatedCSVReader;
+import varviewer.server.variant.TabixCSVReader;
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;

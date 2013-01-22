@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Label;
 public class FilterBox extends DockLayoutPanel {
 	
 	private HighlightButton configButton;
-	private HighlightButton removeButton;
+	//private HighlightButton removeButton;
 	private String name;
 	private FilterConfig configTool = null;
 	private VariantFilter filter;
@@ -53,10 +53,10 @@ public class FilterBox extends DockLayoutPanel {
 		topPanel.setStylePrimaryName("filterboxheader");
 		Label nameLabel = new Label(name);
 		nameLabel.setStylePrimaryName("textlabel");
-		topPanel.addWest(nameLabel, 90.0);
+		topPanel.addWest(nameLabel, 120.0);
 		
-		HorizontalPanel buttonsPanel = new HorizontalPanel();
-		topPanel.addEast(buttonsPanel, 40.0);
+		//HorizontalPanel buttonsPanel = new HorizontalPanel();
+		
 		Image configImage = new Image("images/wrench-icon.png");
 		configButton = new HighlightButton(configImage, new ClickHandler() {
 			@Override
@@ -66,19 +66,19 @@ public class FilterBox extends DockLayoutPanel {
 		});
 		configButton.setWidth("18px");
 		configButton.setHeight("18px");
+		topPanel.addEast(configButton, 20.0);
+		//buttonsPanel.add(configButton);
 		
-		buttonsPanel.add(configButton);
-		
-		Image removeImage = new Image("images/remove-icon.png");
-		removeButton = new HighlightButton(removeImage, new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				removeMe();
-			}
-		});
-		removeButton.setWidth("17px");
-		removeButton.setHeight("17px");
-		buttonsPanel.add(removeButton);
+//		Image removeImage = new Image("images/remove-icon.png");
+//		removeButton = new HighlightButton(removeImage, new ClickHandler() {
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				removeMe();
+//			}
+//		});
+//		removeButton.setWidth("17px");
+//		removeButton.setHeight("17px");
+//		buttonsPanel.add(removeButton);
 		
 		this.addNorth(topPanel, 26);
 		

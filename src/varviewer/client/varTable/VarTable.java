@@ -13,18 +13,23 @@ import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Wraps a VarPage with a few buttons and extra widgets, allows for some easy scrolling / paging
  * @author brendan
  *
  */
-public class VarTable extends FlowPanel implements ColumnModelListener {
+public class VarTable extends FlowPanel implements ColumnModelListener, ProvidesResize, RequiresResize {
 	
-	public static final int VISIBLE_ROWS = 25;
+	public static final int VISIBLE_ROWS = 20;
 	
 	//For custom styling of the VarPage CellTable, create the resources 
 	VarPage varPage = new VarPage( (Resources)GWT.create(VarTableResources.class) );
+	
 	VarTableHeader header = null;
 	ColumnModel colModel = new ColumnModel();
 	
@@ -82,7 +87,6 @@ public class VarTable extends FlowPanel implements ColumnModelListener {
 	private void initComponents() {
 		header = new VarTableHeader(this);
 		
-		
 		this.add(header);
 		this.add(varPage);
 		
@@ -112,6 +116,16 @@ public class VarTable extends FlowPanel implements ColumnModelListener {
 		for(String key: colModel.getKeys()) {
 			varPage.setColumnWidth(colModel.getColumnForKey(key), colModel.getVarAnnoForKey(key).getRelativeWidth() / widthTotal * 100.0, Unit.PCT);
 		}
+		
+	}
+	
+	@Override
+	public void onResize() { 
+		for (Widget child : getChildren()) { 
+			if (child instanceof RequiresResize) { 
+				((RequiresResize) child).onResize(); 
+			}
+		} 
 	}
 	
 	ExportServiceAsync exportService = (ExportServiceAsync) GWT.create(ExportService.class);

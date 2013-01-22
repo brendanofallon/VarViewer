@@ -34,9 +34,10 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 			}
 		}
 		
+	
 		GeneInfo info = new GeneInfo();
 		DBNSFPInfo dbInf = dbNSFP.getInfoForGene(geneID);
-		
+		//askjhds//
 		if (dbInf != null) {
 			String mimDisease = dbInf.mimDisease;
 			if (mimDisease != null) {
