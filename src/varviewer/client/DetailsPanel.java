@@ -14,18 +14,17 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SplitLayoutPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class DetailsPanel extends FlowPanel implements VariantSelectionListener, ProvidesResize, RequiresResize {
+public class DetailsPanel extends ScrollPanel implements VariantSelectionListener {
 
 	private String currentGene = null;
 	private DetailPanelHeader header = null;
-	private ScrollPanel scrollPanel;
-	private SplitLayoutPanel summaryOmimPanel = new SplitLayoutPanel();
+	private VerticalPanel mainPanel = new VerticalPanel();
+	private HorizontalPanel summaryOmimPanel = new HorizontalPanel();
 	private HTML omimDiseases = new HTML("<b>OMIM Disease: </b>None");
 	private HTML hgmd = new HTML("<b>HGMD Variants: </b>None");
 	private HTML omimInheritance = new HTML("<b>Inheritance pattern: </b>None");
@@ -34,18 +33,22 @@ public class DetailsPanel extends FlowPanel implements VariantSelectionListener,
 	
 	public DetailsPanel() {
 		this.setStylePrimaryName("detailspanel");
-		
+		this.add(mainPanel);
+		summaryOmimPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
 		header = new DetailPanelHeader(this);
-		this.add(header);
+		mainPanel.add(header);
 		
-		
-		
-		summaryOmimPanel.setHeight("280px");
 		summaryOmimPanel.setWidth("100%");
-		
 		FlowPanel leftSide = new FlowPanel();
+		leftSide.setStylePrimaryName("detailstext");
+		
 		FlowPanel rightSide = new FlowPanel();
-		summaryOmimPanel.addWest(leftSide, 500.0);
+		
+		leftSide.setWidth("450px");
+		rightSide.setWidth("450px");
+		
+		rightSide.setStylePrimaryName("detailstext");
+		summaryOmimPanel.add(leftSide);
 		summaryOmimPanel.add(rightSide);
 		leftSide.add(summary);
 		leftSide.add(hgmd);
@@ -54,16 +57,7 @@ public class DetailsPanel extends FlowPanel implements VariantSelectionListener,
 		rightSide.add(omimInheritance);
 		rightSide.add(omimPhenotypes);
 		
-		summary.setWidth("500px");
-		omimDiseases.setWidth("100%");
-		
-		
-		scrollPanel = new ScrollPanel(summaryOmimPanel);
-		scrollPanel.setAlwaysShowScrollBars(false);
-		scrollPanel.setWidth("100%");
-		scrollPanel.setHeight("273px");
-		this.add(scrollPanel);
-		
+		mainPanel.add(summaryOmimPanel);
 	}
 
 	@Override
@@ -161,7 +155,6 @@ public class DetailsPanel extends FlowPanel implements VariantSelectionListener,
 			summaryStr = result.getSummary();
 		
 		summary.setHTML("<p><b>Summary:</b> " + summaryStr + "</p>");
-		scrollPanel.setWidget(summaryOmimPanel);
 	}
 
 	/**
@@ -173,15 +166,6 @@ public class DetailsPanel extends FlowPanel implements VariantSelectionListener,
 	}
 	
 	GeneDetailServiceAsync geneDetailService = (GeneDetailServiceAsync) GWT.create(GeneDetailService.class);
-
-	@Override
-	public void onResize() { 
-		for (Widget child : getChildren()) { 
-			if (child instanceof RequiresResize) { 
-				((RequiresResize) child).onResize(); 
-			}
-		} 
-	}
 	
 
 }

@@ -118,7 +118,9 @@ public class FiltersPanel extends FlowPanel {
 		spacer1.setHeight("20px");
 		this.add(spacer1);
 		
-		VariantFilter freqFilter = new MaxFreqFilter("pop.freq", 0.10);
+		MaxFreqFilter freqFilter = new MaxFreqFilter();
+		freqFilter.setMaxFreq(0.10);
+		freqFilter.setArupMax(30);
 		FilterBox freqFilterBox = new FilterBox(this, "Pop. frequency", freqFilter);
 		PopFreqConfig freqConfig = new PopFreqConfig(freqFilterBox);
 		freqFilterBox.setConfigTool(freqConfig);

@@ -1,9 +1,10 @@
 package varviewer.server.variant;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+
+import org.apache.log4j.Logger;
+
 import varviewer.shared.Variant;
 
 public abstract class AbstractVariantReader {
@@ -14,9 +15,11 @@ public abstract class AbstractVariantReader {
 	public AbstractVariantReader(File source) throws IOException {
 		this.varFile = source;
 		if (!varFile.exists()) {
+			Logger.getLogger(getClass()).error("Cannot read variants from file " + varFile.getAbsolutePath() + ", it does not exist");
 			throw new IllegalArgumentException("File " + varFile.getAbsolutePath() + " does not exist");
 		}
 		if (!varFile.canRead()) {
+			Logger.getLogger(getClass()).error("Cannot read variants from file " + varFile.getAbsolutePath() + ", it is not readable");
 			throw new IllegalArgumentException("File " + varFile.getAbsolutePath() + " exists but is not readable");
 		}
 	}

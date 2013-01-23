@@ -3,6 +3,8 @@ package varviewer.server;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import varviewer.client.services.GeneDetailService;
 import varviewer.server.genedb.DBNSFPGeneDB;
 import varviewer.server.genedb.DBNSFPGeneDB.DBNSFPInfo;
@@ -20,16 +22,17 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneDetailService {
 
-	String dbNSFPPath = "/home/brendan/workspace/VarViewer/geneInfo.csv";
+	String dbNSFPPath = "geneInfo.csv";
 	DBNSFPGeneDB dbNSFP = null;
 	
 	@Override
 	public GeneInfo getDetails(String geneID) {
 		if (dbNSFP == null) {
 			try {
+				Logger.getLogger(getClass()).info("GeneInfoDB from path " + dbNSFPPath);
 				dbNSFP = DBNSFPGeneDB.getDB(new File(dbNSFPPath));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				Logger.getLogger(getClass()).error("Exception reading gene info db, message: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -37,7 +40,7 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 	
 		GeneInfo info = new GeneInfo();
 		DBNSFPInfo dbInf = dbNSFP.getInfoForGene(geneID);
-		//askjhds//
+		
 		if (dbInf != null) {
 			String mimDisease = dbInf.mimDisease;
 			if (mimDisease != null) {
@@ -70,6 +73,9 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 			if (omimInheritance != null) {
 				info.setOmimInheritance(new String[]{omimInheritance});
 			}
+		}
+		else {
+			Logger.getLogger(getClass()).debug("No gene details info found for gene : " + geneID);
 		}
 		return info;
 	}

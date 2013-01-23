@@ -12,14 +12,11 @@ import com.google.gwt.user.client.ui.TextBox;
 public class PopFreqConfig extends FilterConfig {
 
 	private TextBox freqBox = new TextBox();
+	private TextBox arupBox = new TextBox();
 	private MaxFreqFilter filter;
 	
 	public PopFreqConfig(FilterBox parent) {
 		super(parent);
-		
-		FlowPanel panel = new FlowPanel();
-		Label lab = new Label("Exclude all variants with population frequency greater than ");
-		panel.add(lab);
 		
 		VariantFilter filter = parent.getFilter();
 		if (filter instanceof MaxFreqFilter) {
@@ -28,13 +25,25 @@ public class PopFreqConfig extends FilterConfig {
 		else {
 			throw new IllegalArgumentException("Incorrect filter type given to PopFreqConfig tool");
 		}
-		parentBox.setInteriorText("Exclude variants with freq.  > " + this.filter.getMaxValue() );
+		
+		
+		FlowPanel panel = new FlowPanel();
+		Label lab = new Label("Exclude all variants with population frequency greater than ");
+		panel.add(lab);
+		
+		parentBox.setInteriorText("Exclude pop. freq. > " + this.filter.getMaxFreq() + ", ARUP > " + this.filter.getArupMax());
 		freqBox.setText("0.10");
 		freqBox.setWidth("50px");
 		panel.add(freqBox);
 		
 		HTML lab2 = new HTML("(<em> range 0.0-1.0 </em>)");
 		panel.add(lab2);
+		
+		Label lab3 = new Label("Exclude variants seen at ARUP more than");
+		panel.add(lab3);
+		arupBox.setText("50");
+		arupBox.setWidth("50px");
+		panel.add(arupBox);
 		
 		interiorPanel.add(panel);
 		interiorPanel.setWidth("250px");
@@ -49,8 +58,13 @@ public class PopFreqConfig extends FilterConfig {
 				Window.alert("Please enter a number between 0 and 1.0");
 				return false;
 			}
-			this.filter.setMaxValue(freq);
-			parentBox.setInteriorText("Exclude variants with freq. > " + this.filter.getMaxValue());
+			
+			
+			Integer arupTot = Integer.parseInt( arupBox.getText() );
+			
+			this.filter.setArupMax(arupTot);
+			this.filter.setMaxFreq(freq);
+			parentBox.setInteriorText("Exclude pop. freq. > " + this.filter.getMaxFreq() + ", ARUP > " + arupTot);
 			return true;
 		}
 		catch (NumberFormatException nfe) {

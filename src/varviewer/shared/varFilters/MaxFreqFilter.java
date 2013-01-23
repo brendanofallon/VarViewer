@@ -14,62 +14,75 @@ import varviewer.shared.VariantFilter;
  */
 public class MaxFreqFilter implements VariantFilter, Serializable {
 
-	//Maximum allowable value
-	double maxVal = Double.MAX_VALUE;
+	//Maximum allowable pop frequency
+	double maxFreq = Double.MAX_VALUE;
 	
-	//Annotation key for value to filter on
-	String annotation = null;
-	
-	private boolean missingDataPasses = true;
+	//Max arup value
+	int arupMax = 100;
 	
 	public MaxFreqFilter() {
 		//Required no-arg constructor
 	}
 	
-	public MaxFreqFilter(String annotation, double maxVal) {
-		this.annotation = annotation;
-		this.maxVal = maxVal;
-	}
-	
-	/**
-	 * True if variant pass when there is no annotation value associated with the given key
-	 * @param passes
-	 */
-	public void setMissingDataPasses(boolean passes) {
-		this.missingDataPasses = passes;
-	}
 	
 	/**
 	 * Set the maximum frequency allowed by this filter
 	 * @param freq
 	 */
-	public void setMaxValue(double freq) {
-		this.maxVal = freq;
+	public void setMaxFreq(double freq) {
+		this.maxFreq = freq;
 	}
 	
-	public double getMaxValue() {
-		return maxVal;
+	public double getMaxFreq() {
+		return maxFreq;
 	}
 	
+	
+	
+	public int getArupMax() {
+		return arupMax;
+	}
+
+	public void setArupMax(int arupMax) {
+		this.arupMax = arupMax;
+	}
+
 	@Override
 	public boolean variantPasses(Variant var) {
-		String freq = var.getAnnotation(annotation);
-		if (freq == null)
-			return missingDataPasses;
+		String freq = var.getAnnotation("pop.freq");
+		String arupStr = var.getAnnotation("ARUP.freq");
+		
+		if (freq == null && arupStr == null)
+			return true;
+
+		Double freqVal = 0.0;
+		int arupTot = 0;
 		try {
 			Double val = Double.parseDouble(freq);
-			if (val <= maxVal) {
-				return true;
-			}
-			else {
-				return false;
+			freqVal = val;
+		}
+		catch (NumberFormatException nfe) {
+		}
+
+		if (freqVal > maxFreq) {
+			return false;
+		}
+
+		try {
+
+			int idx = arupStr.indexOf(" tot");
+			if (idx > 0) {
+				arupTot = Integer.parseInt( arupStr.substring(0, idx));
+				if (arupTot > arupMax) {
+					return false;
+				}
 			}
 		}
 		catch(NumberFormatException nfe) {
-			
+
 		}
-		
-		return missingDataPasses;
+
+		return true;
 	}
 
 }

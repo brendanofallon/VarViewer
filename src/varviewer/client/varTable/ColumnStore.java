@@ -6,8 +6,11 @@ import java.util.List;
 import varviewer.shared.Variant;
 
 import com.google.gwt.cell.client.ImageResourceCell;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 
@@ -94,6 +97,19 @@ public class ColumnStore {
 				return "" + var.getPos();
 			}
 		}, 1.0, true));
+		
+		addColumn(new VarAnnotation<String>("zygosity", "Zygosity", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				String val = var.getAnnotation("zygosity");
+			
+				if (val == null || val.length()<2)
+					return "?";
+					
+				return val;
+			}
+		}, 1.0, false));
 
 
 		addColumn(new VarAnnotation<String>("exon.function", "Exon effect", new TextColumn<Variant>() {
@@ -168,6 +184,34 @@ public class ColumnStore {
 				return val != null ? val : "-";
 			}
 		}, 1.0, true));
+		
+		addColumn(new VarAnnotation<String>("var.freq", "Alt. Freq", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				String tot = var.getAnnotation("depth");
+				String alt = var.getAnnotation("var.depth");
+				if (tot != null && alt != null) {
+					try {
+						Double t = Double.parseDouble(tot);
+						Double a = Double.parseDouble(alt);
+						double freq = a / t;
+						String freqStr = "" + freq;
+						if (freqStr.length() > 5) {
+							freqStr = freqStr.substring(0, 4);
+						}
+						return freqStr;
+					}
+					catch (NumberFormatException nfe) {
+						
+					}
+					catch (RuntimeException ex) {
+						
+					}
+				}
+				return "-";
+			}
+		}, 1.0, true));
 
 		addColumn(new VarAnnotation<String>("pop.freq", "Pop. Freq.", new TextColumn<Variant>() {
 
@@ -180,6 +224,16 @@ public class ColumnStore {
 			}
 		}, 1.0, true));
 		
+		addColumn(new VarAnnotation<String>("arup.freq", "ARUP Freq.", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				String val = var.getAnnotation("ARUP.freq");
+				if (val.equals("-"))
+					val = "0";
+				return val != null ? val : "0";
+			}
+		}, 2.0, true));
 
 		
 		addColumn(new VarAnnotation<String>("sift.score", "SIFT score", new TextColumn<Variant>() {
@@ -209,13 +263,21 @@ public class ColumnStore {
 			}
 		}, 1.0, false));
 		
-		addColumn(new VarAnnotation<String>("rsnum", "dbSNP #", new TextColumn<Variant>() {
+		addColumn(new VarAnnotation<SafeHtml>("rsnum", "dbSNP #", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
 
 			@Override
-			public String getValue(Variant var) {
+			public SafeHtml getValue(Variant var) {
+				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
 				String val = var.getAnnotation("rsnum");
-				return val != null ? val : "-";
+				if (val == null || val.length() < 2) {
+					bldr.appendEscaped("-");
+				}
+				else {
+					bldr.appendHtmlConstant("<a href=\"http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=1063736\" target=\"_blank\">" + val + "</a>" );
+				}
+				return bldr.toSafeHtml();
 			}
+			
 		}, 1.0, false));
 		
 		addColumn(new VarAnnotation<String>("pp.score", "PolyPhen-2 score", new TextColumn<Variant>() {
@@ -323,6 +385,8 @@ public class ColumnStore {
 	}
 	
 	VarPageResources resources = (VarPageResources) GWT.create(VarPageResources.class);
-	//final Image img = new Image(resources.testImage());
+	
+	
+	
 	
 }

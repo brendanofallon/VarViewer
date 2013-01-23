@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 /**
  * Static access to some basic properties
  * @author brendan
@@ -34,9 +36,11 @@ public class VVProps {
 		}
 		
 		if (!propsFile.exists()) {
+			Logger.getLogger(VVProps.class).error("Could not find properties file on any path!");
 			return;
 		}
 		
+		Logger.getLogger(VVProps.class).info("Reading properties file on path: " + propsFile.getAbsolutePath());
 		BufferedReader reader;
 		reader = new BufferedReader(new FileReader(propsFile));
 		String line = reader.readLine();
@@ -44,6 +48,7 @@ public class VVProps {
 			String[] toks = line.split("=");
 			if (toks.length==2) {
 				props.put(toks[0], toks[1]);
+				Logger.getLogger(VVProps.class).info("Adding property " + toks[0] + "=" + toks[1]);
 			}
 			line = reader.readLine();
 		}

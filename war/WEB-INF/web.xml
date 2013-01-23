@@ -10,22 +10,21 @@
     <servlet-name>varRequestServlet</servlet-name>
     <servlet-class>varviewer.server.VarRequestServiceImpl</servlet-class>
   </servlet>
-  
+
   <servlet-mapping>
-    <servlet-name>geneDetailsServlet</servlet-name>
-    <url-pattern>/varviewer/genedetails</url-pattern>
+    <servlet-name>varRequestServlet</servlet-name>
+    <url-pattern>/varviewer/varrequest</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+    
+  <servlet>
     <servlet-name>geneDetailsServlet</servlet-name>
     <servlet-class>varviewer.server.GeneDetailServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>varRequestServlet</servlet-name>
-    <url-pattern>/varviewer/varrequest</url-pattern>
+    <servlet-name>geneDetailsServlet</servlet-name>
+    <url-pattern>/varviewer/genedetails</url-pattern>
   </servlet-mapping>
-  
   
   <servlet>
     <servlet-name>exportServlet</servlet-name>

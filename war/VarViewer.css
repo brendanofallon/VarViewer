@@ -123,13 +123,6 @@
 	text-shadow: 1px 1px rgb(225, 225, 225);
 }
 
-.textlabel{
-	font-family: 'Open Sans', sans-serif;
-	font-weight: bold;
-	font-size: 11px;
-	text-shadow: 1px 1px rgb(225, 225, 225);
-}
-
 .textlabel12{
 	font-family: 'Open Sans', sans-serif;
 	font-weight: bold;
@@ -198,7 +191,7 @@
 	font-family: 'Open Sans', sans-serif;
 	margin: 0px;
 	padding: 0px;
-	margin-left: 0px;
+	margin-left: 5px;
 	margin-bottom: 2px;
 	padding-bottom: 0px;
 	width: 100%;
@@ -222,6 +215,13 @@
 	font-size: 14pt;
 	font-weight: bold;
 	text-shadow: 2px 2px rgb(200, 200, 200); 
+}
+
+.detailstext {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 10pt;
+	text-align: left;
+	margin-left: 20px;
 }
 
 .detailspanel {

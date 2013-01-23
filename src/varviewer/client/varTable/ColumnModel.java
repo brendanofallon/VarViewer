@@ -26,10 +26,12 @@ public class ColumnModel {
 	public ColumnModel() {
 		addColumn( ColumnStore.getStore().getColumnForID("gene"));
 		addColumn( ColumnStore.getStore().getColumnForID("exon.function"));
+		addColumn( ColumnStore.getStore().getColumnForID("zygosity"));
 		addColumn( ColumnStore.getStore().getColumnForID("cdot"));
 		addColumn( ColumnStore.getStore().getColumnForID("pdot"));
-//		addColumn( ColumnStore.getStore().getColumnForID("depth"));
 		addColumn( ColumnStore.getStore().getColumnForID("pop.freq"));
+		addColumn( ColumnStore.getStore().getColumnForID("disease.pics"));
+		addColumn( ColumnStore.getStore().getColumnForID("rsnum"));
 	}
 	
 	public void addColumn(VarAnnotation varAnno) {

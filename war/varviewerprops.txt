@@ -1,2 +1,2 @@
-sample.dir=/Users/brendanofallon/jobwrangler_samples/
+sample.dir=/home/brendan/jobwrangler_samples/
 
