@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.shared.VariantFilter;
-import varviewer.shared.varFilters.ExonFuncFilter;
 import varviewer.shared.varFilters.GeneFilter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,7 +11,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
 
 public class GeneFilterConfig extends FilterConfig {
 	
@@ -67,18 +65,24 @@ public class GeneFilterConfig extends FilterConfig {
 				trimmedNames.add(tName);
 		}
 		filter.setGeneNames(trimmedNames);
-		if (trimmedNames.size()==0) {
+		updateInteriorLabelText();
+		return true;
+	}
+
+	@Override
+	public void updateInteriorLabelText() {
+		int size = filter.getGeneNames().size();
+		if (size==0) {
 			parentBox.setInteriorText("No gene filters set");
 		}
 		else {
-			if (trimmedNames.size()==1) {
-				parentBox.setInteriorText("Showing results for " + trimmedNames.get(0));
+			if (size==1) {
+				parentBox.setInteriorText("Showing results for " + filter.getGeneNames().get(0));
 			}
 			else {
-				parentBox.setInteriorText("Showing results for " + trimmedNames.size() + " genes");
+				parentBox.setInteriorText("Showing results for " + size + " genes");
 			}
 		}
-		return true;
 	}
 
 }

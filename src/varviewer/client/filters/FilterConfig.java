@@ -38,6 +38,12 @@ public abstract class FilterConfig extends PopupPanel {
 	}
 	
 	/**
+	 * Compose a short string that reflects this filter's state 
+	 * and set the text in the interior of the owning FilterBox to the string.  
+	 */
+	public abstract void updateInteriorLabelText();
+	
+	/**
 	 * Check to see if the user input is OK, if so update the filter with the new settings
 	 * and return true. If not, return false and do nothing. 
 	 * @return

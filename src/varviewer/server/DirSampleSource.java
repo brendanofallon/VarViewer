@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import varviewer.server.variant.AbstractVariantReader;
 import varviewer.server.variant.TabixCSVReader;
 import varviewer.server.variant.UncompressedCSVReader;
@@ -43,9 +45,11 @@ public class DirSampleSource implements SampleSource {
 	public void initialize(File rootDir) {
 		this.rootDir = rootDir;
 		if (! rootDir.exists()) {
+			Logger.getLogger(getClass()).error("Sample info directory "  + rootDir.getAbsolutePath() + " does not exist");
 			throw new IllegalArgumentException("Sample info directory " + rootDir.getAbsolutePath() + " does not exist");
 		}
 		if (! rootDir.isDirectory()) {
+			Logger.getLogger(getClass()).error("Sample info directory "  + rootDir.getAbsolutePath() + " is not a directory");
 			throw new IllegalArgumentException("Sample info directory " + rootDir.getAbsolutePath() + " is not a directory");
 		}
 		initialize();
@@ -56,12 +60,17 @@ public class DirSampleSource implements SampleSource {
 			throw new IllegalArgumentException("Sample info directory has not been initialized");
 		}
 		
+		samples.clear();
 		File[] subdirs = rootDir.listFiles();
 		for(int i=0; i<subdirs.length; i++) {
 			if (subdirs[i].isDirectory()) {
 				SampleInfoFile sampleInfo = createInfoForFile(subdirs[i]);
 				if (sampleInfo != null) {
+					Logger.getLogger(getClass()).info("Loading sample info from file " + subdirs[i].getAbsolutePath() + ", found sample id: " + sampleInfo.info.getSampleID());
 					samples.put(sampleInfo.info.getSampleID(), sampleInfo);
+				}
+				else {
+					Logger.getLogger(getClass()).warn("Could not parse sample info from directory " + subdirs[i].getAbsolutePath());
 				}
 			}
 		}
@@ -124,7 +133,9 @@ public class DirSampleSource implements SampleSource {
 			if (key.equals("annotated.vars")) {
 				info.setAnnotatedVarsFile(pairs.get(key));
 			}
-			
+			if (key.equals("qc.link")) {
+				info.setQCLink(pairs.get(key));
+			}
 			if (key.equals("current.time")) {
 				String dateStr = pairs.get(key);
 				try {
@@ -133,7 +144,7 @@ public class DirSampleSource implements SampleSource {
 					info.setAnalysisDate(analysisDate);
 				}
 				catch(Exception ex) {
-					System.out.println("Could not parse date from string: " + dateStr + " reason: " + ex.getMessage());
+					//System.out.println("Could not parse date from string: " + dateStr + " reason: " + ex.getMessage());
 				}
 			}
 			
@@ -141,17 +152,32 @@ public class DirSampleSource implements SampleSource {
 		
 		//Now attempt to find vcf, annotated csv, and .bam files...
 		File vcfFile = findVCF( new File(subFile.getAbsolutePath() + "/var/") );
-		if (vcfFile != null)
+		if (vcfFile != null) {
+			Logger.getLogger(getClass()).info("Found VCF file for sample " + info.getSampleID() + ": " + vcfFile.getAbsolutePath());
 			info.setVcfFile(vcfFile.getAbsolutePath());
+		}
+		else {
+			Logger.getLogger(getClass()).warn("No VCF file for sample " + info.getSampleID() );
+		}
 		
 		File csvFile = findCSV( new File(subFile.getAbsolutePath() + "/var/") );
-		if (csvFile != null)
+		if (csvFile != null) {
+			Logger.getLogger(getClass()).info("Found annotated vars file for sample " + info.getSampleID() + ": " + csvFile.getAbsolutePath());
 			info.setAnnotatedVarsFile(csvFile.getAbsolutePath());
+		}
+		else {
+			Logger.getLogger(getClass()).warn("No annotated csv file for sample " + info.getSampleID() );
+		}
 		
 		File bamFile = findBAM( new File(subFile.getAbsolutePath() + "/bam/") );
 		if (bamFile != null) {
+			Logger.getLogger(getClass()).info("Found BAM file for sample " + info.getSampleID() + ": " + bamFile.getAbsolutePath());
 			info.setBamFile(bamFile.getAbsolutePath());
 		}
+		else {
+			Logger.getLogger(getClass()).warn("No BAM file for sample " + info.getSampleID() );
+		}
+
 		
 		return info;
 	}
@@ -241,23 +267,30 @@ public class DirSampleSource implements SampleSource {
 				varsFile = new File(sampleDir + "/" + annoVarsPath);
 			
 			if (!varsFile.exists()) {
+				Logger.getLogger(getClass()).warn("IO error reading variants for " + sampleID + " annotated vars file " + varsFile.getAbsolutePath() + " does not exist" );
 				return null;
 			}
 			
 			
 			try {
 				AbstractVariantReader reader = null;
-				if (varsFile.getName().endsWith(".gz"))
+				if (varsFile.getName().endsWith(".gz")) {
 					reader = new TabixCSVReader(varsFile.getAbsolutePath());
-				else
+				}
+				else {
 					reader = new UncompressedCSVReader(varsFile.getAbsolutePath());
+				}
 				
 				return reader.toVariantCollection();
 			} catch (IOException e) {
+				Logger.getLogger(getClass()).warn("IO error reading variants for " + sampleID + " from " + varsFile.getAbsolutePath() + " Message: " + e.getMessage() );
 				e.printStackTrace();
 				return null;
 			}
 			
+		}
+		else {
+			Logger.getLogger(getClass()).warn("Request for variants from sample " + sampleID + " but there's no sample with that ID" );
 		}
 		return null;
 	}
@@ -272,8 +305,5 @@ public class DirSampleSource implements SampleSource {
 		File source;
 		SampleInfo info;
 	}
-	
-	public static void main(String[] args) {
-		System.out.println(new Date());
-	}
+
 }

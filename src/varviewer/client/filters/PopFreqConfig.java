@@ -64,7 +64,7 @@ public class PopFreqConfig extends FilterConfig {
 			
 			this.filter.setArupMax(arupTot);
 			this.filter.setMaxFreq(freq);
-			parentBox.setInteriorText("Exclude pop. freq. > " + this.filter.getMaxFreq() + ", ARUP > " + arupTot);
+			updateInteriorLabelText();
 			return true;
 		}
 		catch (NumberFormatException nfe) {
@@ -72,6 +72,11 @@ public class PopFreqConfig extends FilterConfig {
 			return false;
 		}
 		
+	}
+
+	@Override
+	public void updateInteriorLabelText() {
+		parentBox.setInteriorText("Exclude pop. freq. > " + this.filter.getMaxFreq() + ", ARUP > " + filter.getArupMax());
 	}
 
 }

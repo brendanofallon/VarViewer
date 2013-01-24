@@ -42,7 +42,8 @@ public class FiltersPanel extends FlowPanel {
 	public List<VariantFilter> getFilters() {
 		List<VariantFilter> filters = new ArrayList<VariantFilter>();
 		for(FilterBox box : activeFilters) {
-			filters.add(box.getFilter());
+			if (box.isEnabled())
+				filters.add(box.getFilter());
 		}
 		
 		return filters;
@@ -151,6 +152,10 @@ public class FiltersPanel extends FlowPanel {
 		HGMDOmimFilterConfig disConfig = new HGMDOmimFilterConfig(diseaseFilterBox);
 		diseaseFilterBox.setConfigTool(disConfig);
 		addFilter(diseaseFilterBox);
+	}
+
+	protected void toggleFiltersDisabled() {
+		
 	}
 
 }

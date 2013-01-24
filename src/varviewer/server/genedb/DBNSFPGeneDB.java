@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 /**
  * Temporary interface for info from dbNSFP-gene
  * @author brendan
@@ -23,6 +25,10 @@ public class DBNSFPGeneDB {
 	
 	public static DBNSFPGeneDB getDB(File sourceFile) throws IOException {
 		if (db == null) {
+			if (! sourceFile.exists()) {
+				Logger.getLogger(DBNSFPGeneDB.class).warn("GeneDB file " + sourceFile.getAbsolutePath() + " does not exist");
+				return null;
+			}
 			db = new DBNSFPGeneDB(sourceFile);
 		}
 		
@@ -70,7 +76,7 @@ public class DBNSFPGeneDB {
 			line = reader.readLine();
 		}
 	
-		System.err.println("Initialized gene database with " + map.size() + " elements");
+		Logger.getLogger(getClass()).info("Initialized gene database with " + map.size() + " elements");
 		reader.close();
 	}
 	

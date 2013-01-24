@@ -49,7 +49,7 @@ public class ExonFuncFilterConfig extends FilterConfig {
 		panel.add( addType("Splicing", false) );
 		panel.add( addType("Missense", false) );
 		
-		updateLabel(); //Set interior text in parental filterbox
+		updateInteriorLabelText(); //Set interior text in parental filterbox
 		interiorPanel.add(panel);
 		interiorPanel.setWidth("250px");
 		interiorPanel.setHeight("250px");
@@ -62,7 +62,7 @@ public class ExonFuncFilterConfig extends FilterConfig {
 		return box;
 	}
 	
-	private void updateLabel() {
+	public void updateInteriorLabelText() {
 		int count = 0;
 		List<String> types = new ArrayList<String>();
 		for(String key : exonTypes.keySet()) {
@@ -121,7 +121,7 @@ public class ExonFuncFilterConfig extends FilterConfig {
 				
 		}
 		
-		updateLabel();
+		updateInteriorLabelText();
 		return true;
 	}
 

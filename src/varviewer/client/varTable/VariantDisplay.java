@@ -1,5 +1,6 @@
 package varviewer.client.varTable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.DetailsPanel;
@@ -9,9 +10,6 @@ import varviewer.client.filters.FiltersPanel;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 
 /**
@@ -70,6 +68,17 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener 
 		setSampleLabelText(str.toString());
 	}
 	
+	@Override
+	public void variantListUpdateBeginning() {
+		varTable.setVariants(new ArrayList<Variant>());
+		setSampleLabelText("Loading data");
+	}
+
+	@Override
+	public void variantListUpdateError() {
+		setSampleLabelText("Error loading sample");
+	}
+	
 	/**
 	 * Set the text of the sample label in the header above the variant table
 	 * @param text
@@ -81,5 +90,6 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener 
 	VarListManager varManager = VarListManager.getManager();
 	FiltersPanel filtersPanel;
 	VarTable varTable = null;
+
 
 }

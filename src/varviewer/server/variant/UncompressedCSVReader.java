@@ -7,13 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.broad.tribble.readers.TabixReader;
+import org.apache.log4j.Logger;
 
-import varviewer.server.AbstractVariantServer;
-import varviewer.shared.Interval;
-import varviewer.shared.IntervalList;
 import varviewer.shared.Variant;
-import varviewer.shared.VariantRequest;
 
 public class UncompressedCSVReader extends AbstractVariantReader {
 	
@@ -31,6 +27,7 @@ public class UncompressedCSVReader extends AbstractVariantReader {
 		BufferedReader reader = new BufferedReader( new FileReader(varFile));
 		String line = reader.readLine();
 		initializeHeader(line);
+		line = reader.readLine(); //read next line, don't try to parse a variant from the header
 		while(line != null) {
 			Variant var = variantFromString(line);
 			if (var != null)
@@ -38,6 +35,11 @@ public class UncompressedCSVReader extends AbstractVariantReader {
 			line = reader.readLine();
 		}
 		reader.close();
+		if (vars.size()>0)
+			Logger.getLogger(getClass()).info("Read in " + vars.size() + " variants from " + varFile);
+		else {
+			Logger.getLogger(getClass()).warn("Read in " + vars.size() + " variants from " + varFile);
+		}
 		return new VariantCollection(vars);
 	}
 	

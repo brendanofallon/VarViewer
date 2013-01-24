@@ -16,4 +16,17 @@ public interface VarListListener {
 	 * @param newVars
 	 */
 	public void variantListUpdated(List<Variant> newVars);
+	
+	/**
+	 * Called when a variant list update has been requested (but not necessarily finished)
+	 * @param newVars
+	 */
+	public void variantListUpdateBeginning();
+	
+	/**
+	 * Called when a variant list update request has encountered an error
+	 * @param newVars
+	 */
+	public void variantListUpdateError();
+	
 }

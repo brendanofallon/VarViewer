@@ -1,11 +1,10 @@
 package varviewer.server;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.server.variant.TabixCSVReader;
+import org.apache.log4j.Logger;
+
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
@@ -82,6 +81,7 @@ public class CachingVariantServer extends AbstractVariantServer {
 				passingVars.add(var);
 		}
 		
+		Logger.getLogger(CachingVariantServer.class).info(passingVars.size() + " of " + vars.size() + " total vars passed filters");
 		return passingVars;
 	}
 

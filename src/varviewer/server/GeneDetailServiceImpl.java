@@ -28,12 +28,16 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 	@Override
 	public GeneInfo getDetails(String geneID) {
 		if (dbNSFP == null) {
-			try {
-				Logger.getLogger(getClass()).info("GeneInfoDB from path " + dbNSFPPath);
-				dbNSFP = DBNSFPGeneDB.getDB(new File(dbNSFPPath));
-			} catch (IOException e) {
-				Logger.getLogger(getClass()).error("Exception reading gene info db, message: " + e.getMessage());
-				e.printStackTrace();
+			String paths = VVProps.getProperty("genedb.path");
+			if (paths != null) {
+				String[] pathList = paths.split(":");
+				for(int i=0; i<pathList.length; i++) {
+					boolean ok = attemptCreateDBFromPath(pathList[i]);
+					if (ok) {
+						Logger.getLogger(getClass()).info("Successfully created GeneInfoDB from path " + pathList[i]);
+						break;
+					}
+				}
 			}
 		}
 		
@@ -80,4 +84,15 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 		return info;
 	}
 
+	
+	private boolean attemptCreateDBFromPath(String path) {
+		try {
+			File dbFile = new File(path);
+			Logger.getLogger(getClass()).info("Trying to create GeneInfoDB from path " + dbFile.getAbsolutePath());
+			dbNSFP = DBNSFPGeneDB.getDB(dbFile);
+			return dbNSFP != null;
+		} catch (IOException e) {
+			return false;
+		}
+	}
 }

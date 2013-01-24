@@ -104,6 +104,18 @@ public class VarListManager implements FilterListener {
 		}
 	}
 	
+	protected void fireVarUpdateBeginning() {
+		for(VarListListener l : listeners) {
+			l.variantListUpdateBeginning();
+		}
+	}
+	
+	protected void fireVarUpdateError() {
+		for(VarListListener l : listeners) {
+			l.variantListUpdateError();
+		}
+	}
+	
 	/**
 	 * Reload variant list only if settings have changed since last reload
 	 */
@@ -115,11 +127,14 @@ public class VarListManager implements FilterListener {
 
 	public void reloadVariants() {
 		reloadRequired = false;
+		fireVarUpdateBeginning();
 		varRequestService.queryVariant(req, new AsyncCallback<List<Variant>>() {
 
 			@Override
 		public void onFailure(Throwable caught) {
-				Window.alert("Error retrieving variants : " + caught.toString());
+				caught.printStackTrace();
+				fireVarUpdateError();
+				Window.alert("Error retrieving variants : " + caught.toString() + "Cause: " + caught.getCause());
 			}
 
 			@Override

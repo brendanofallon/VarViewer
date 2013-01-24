@@ -78,7 +78,7 @@ public class DetailsPanel extends ScrollPanel implements VariantSelectionListene
 
 				@Override
 				public void onFailure(Throwable caught) {
-					Window.alert("Unable to find gene details for gene : " + currentGene);
+					Window.alert("Unable to find gene details for gene : " + currentGene + " Reason: " + caught.getMessage());
 				}
 
 				@Override

@@ -123,6 +123,13 @@
 	text-shadow: 1px 1px rgb(225, 225, 225);
 }
 
+.textlabel-disabled {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+	font-size: 11px;
+	text-color: gray;
+}
+
 .textlabel12{
 	font-family: 'Open Sans', sans-serif;
 	font-weight: bold;
@@ -263,7 +270,7 @@
 
 
 .samplescrollpane {
-	width: 200px;
+	width: 300px;
 	height: 500px;
 	margin-top: 10px;	
 }

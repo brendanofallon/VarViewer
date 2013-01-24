@@ -1,8 +1,10 @@
 package varviewer.shared.varFilters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import varviewer.shared.Variant;
@@ -32,6 +34,16 @@ public class GeneFilter implements VariantFilter, Serializable {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Return all filtered gene names in a list
+	 * @return
+	 */
+	public List<String> getGeneNames() {
+		List<String> names = new ArrayList<String>();
+		names.addAll(geneNames);
+		return names;
 	}
 
 }

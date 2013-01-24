@@ -60,14 +60,14 @@ public class QualDepthFilterConfig extends FilterConfig {
 		panel.add(varFreqPanel);
 		
 		
-		updateLabel(); //Set interior text in parental filterbox
+		updateInteriorLabelText(); //Set interior text in parental filterbox
 		interiorPanel.add(panel);
 		interiorPanel.setWidth("250px");
 		interiorPanel.setHeight("200px");
 		
 	}
 
-	private void updateLabel() {
+	public void updateInteriorLabelText() {
 		parentBox.setInteriorText("Quality: " + filter.getMinQuality() + "  Depth: " + filter.getMinDepth() + "  Var. freq: " + filter.getMinVarFreq());
 	}
 
@@ -79,7 +79,7 @@ public class QualDepthFilterConfig extends FilterConfig {
 		}
 		catch (NumberFormatException nfe) {
 			Window.alert("Please enter a valid number for minimum quality");
-			updateLabel();
+			updateInteriorLabelText();
 			return false;
 		}
 		
@@ -89,7 +89,7 @@ public class QualDepthFilterConfig extends FilterConfig {
 		}
 		catch (NumberFormatException nfe) {
 			Window.alert("Please enter a valid number for minimum depth");
-			updateLabel();
+			updateInteriorLabelText();
 			return false;
 		}
 		
@@ -99,12 +99,13 @@ public class QualDepthFilterConfig extends FilterConfig {
 		}
 		catch (NumberFormatException nfe) {
 			Window.alert("Please enter a valid number for minimum var. freq.");
-			updateLabel();
+			updateInteriorLabelText();
 			return false;
 		}
 		
-		updateLabel();
+		updateInteriorLabelText();
 		return true;
 	}
+
 
 }

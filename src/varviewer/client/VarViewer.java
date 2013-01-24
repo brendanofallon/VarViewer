@@ -5,7 +5,6 @@ import varviewer.client.varTable.VariantDisplay;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -23,6 +22,7 @@ public class VarViewer implements EntryPoint {
 
 	public void onModuleLoad() {
 		initComponents();
+		//System.out.println(Location.get);
 	}
 
 	/**

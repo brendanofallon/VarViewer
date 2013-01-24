@@ -1,11 +1,10 @@
 package varviewer.client.filters;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.RadioButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
-
 import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.HGMDOmimFilter;
+
+import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class HGMDOmimFilterConfig extends FilterConfig {
 
@@ -49,19 +48,34 @@ public class HGMDOmimFilterConfig extends FilterConfig {
 		if (noFilterBox.getValue()) {
 			filter.setExcludeNonExactHits(false);
 			filter.setExcludeNonGeneHits(false);
-			parentBox.setInteriorText("No disease filters set");
+			
 		}
 		if (hgmdExactBox.getValue()) {
 			filter.setExcludeNonExactHits(true);
 			filter.setExcludeNonGeneHits(false);
-			parentBox.setInteriorText("Exact variant hits only");
+			
 		}
 		if (geneMatchBox.getValue()) {
 			filter.setExcludeNonExactHits(false);
 			filter.setExcludeNonGeneHits(true);
-			parentBox.setInteriorText("HGMD & OMIM gene hits only");
 		}
+		
+		updateInteriorLabelText();
 		return true;
 	}
 
+	@Override
+	public void updateInteriorLabelText() {
+		boolean exact = filter.isExcludeNonExactHits();
+		boolean gene = filter.isExcludeNonGeneHits();
+		if ((!exact) && (!gene)) {
+			parentBox.setInteriorText("No disease filters set");
+		}
+		if (exact && (!gene)) {
+			parentBox.setInteriorText("Exact variant matches only");
+		}
+		if ((!exact) && gene) {
+			parentBox.setInteriorText("HGMD & OMIM gene hits only");
+		}
+	}
 }

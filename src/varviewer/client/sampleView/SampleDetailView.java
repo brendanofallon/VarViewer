@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -83,17 +84,38 @@ public class SampleDetailView extends FlowPanel {
 	}
 
 	protected void doQualityMetrics() {
-		// TODO Auto-generated method stub
+		if (currentSample == null) {
+			return;
+		}
 		
+		if (currentSample.getQCLink() != null) {
+			String url = "http://genseqar01.aruplab.net/" + currentSample.getQCLink();
+			System.out.println("Showing qc metrics sample " + currentSample.getSampleID() + " at url: " + url);
+			Window.open(url, "_blank", "");
+		}
 	}
 
 	protected void doDownloadVCF() {
+		if (currentSample == null) {
+			return;
+		}
 		
+		if (currentSample.getVcfFile() != null) {
+			String url = "http://genseqar01.aruplab.net/" + currentSample.getVcfFile();
+			Window.open(url, "_self", "");
+		}
 	}
 
 	protected void doDownloadBAM() {
-		// TODO Auto-generated method stub
+		if (currentSample == null) {
+			return;
+		}
 		
+		if (currentSample.getQCLink() != null) {
+			String url = "http://genseqar01.aruplab.net/" + currentSample.getQCLink();
+			System.out.println("Showing qc metrics sample " + currentSample.getSampleID() + " at url: " + url);
+			Window.open(url, "_blank", "");
+		}
 	}
 
 	/**

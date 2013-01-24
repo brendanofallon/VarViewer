@@ -12,15 +12,14 @@ import java.util.Date;
  */
 public class SampleInfo implements Serializable {
 
-	private String sampleID = null;
-	private String analysisType = null;
-	private Date analysisDate = null;
-	private String submitter = null;
-	private String annotatedVarsFile = null;
+	private String sampleID = null; //name of sample, often accession number for clinical samples
+	private String analysisType = null; //exome, aortapathy, etc.
+	private Date analysisDate = null; //When bioinformatics was performed
+	private String submitter = null; //username associated with account that submitted job (e.g. marc, brendan, etc.)
+	private String annotatedVarsFile = null; //relative path to annotated variants file
 	private String vcfFile = null;
 	private String bamFile = null;
-
-	
+	private String qcLink = null; //location of link to qc report
 	
 	public SampleInfo() {
 		//required no-arg constructor
@@ -87,6 +86,14 @@ public class SampleInfo implements Serializable {
 
 	public void setSubmitter(String submitter) {
 		this.submitter = submitter;
+	}
+
+	public String getQCLink() {
+		return qcLink;
+	}
+	
+	public void setQCLink(String linkLoc) {
+		this.qcLink = linkLoc;
 	}
 	
 	
