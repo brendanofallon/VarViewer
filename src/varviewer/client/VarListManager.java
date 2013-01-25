@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * The VarListManager is responsible for sensibly handling requests for variants from the server.
  * It maintains information about the current sample, intervals and filters, and issues
  * requests for updated lists as necessary. This thing also maintains a list of VarListListeners
- * to be notified of var-list-updating events  
+ * to be notified of var-list-updating events.  
  * @author brendan
  *
  */
@@ -30,7 +30,6 @@ public class VarListManager implements FilterListener {
 	private boolean reloadRequired = false;
 	
 	private List<VarListListener> listeners = new ArrayList<VarListListener>();
-	
 	
 	private static VarListManager manager;
 	

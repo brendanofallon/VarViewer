@@ -17,8 +17,9 @@ public class SampleInfo implements Serializable {
 	private Date analysisDate = null; //When bioinformatics was performed
 	private String submitter = null; //username associated with account that submitted job (e.g. marc, brendan, etc.)
 	private String annotatedVarsFile = null; //relative path to annotated variants file
-	private String vcfFile = null;
-	private String bamFile = null;
+	private String vcfFile = null;  //relative path to variants vcf file
+	private String bamFile = null;  //relative path to BAM file
+	private String bamLink = null;  //location of html link to BAM file
 	private String qcLink = null; //location of link to qc report
 	
 	public SampleInfo() {
@@ -30,6 +31,14 @@ public class SampleInfo implements Serializable {
 		this.analysisType = analysisType;
 		this.analysisDate = analysisDate;
 		this.submitter = submitter;
+	}
+
+	public String getBamLink() {
+		return bamLink;
+	}
+
+	public void setBamLink(String bamLink) {
+		this.bamLink = bamLink;
 	}
 
 	public String getSampleID() {

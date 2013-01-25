@@ -12,8 +12,9 @@ import varviewer.shared.VariantRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * Implementation of the variant request service. All requests are currently honored
- * by a 'SimpleVariantServer' which is used for testing
+ * Implementation of the variant request service. The 'variantSource' is basically a caching
+ * wrapper for variants from a DirSampleSource, which reads variants from a file but
+ * doesn't store them in memory. 
  * @author brendan
  *
  */
@@ -46,7 +47,6 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 			variantSource = new CachingVariantServer(samplesSource);
 		}
 		
-		//kjhiu
 		return variantSource.getVariants(req);
 	}
 

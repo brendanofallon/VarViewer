@@ -60,6 +60,7 @@ public class DirSampleSource implements SampleSource {
 			throw new IllegalArgumentException("Sample info directory has not been initialized");
 		}
 		
+		Logger.getLogger(getClass()).info("Initializing sample info directory from path: " + rootDir.getAbsolutePath());
 		samples.clear();
 		File[] subdirs = rootDir.listFiles();
 		for(int i=0; i<subdirs.length; i++) {
@@ -95,6 +96,7 @@ public class DirSampleSource implements SampleSource {
 				return infoFile;
 			}
 		}
+		Logger.getLogger(getClass()).warn("No sample manifest file found in directory : " + file.getAbsolutePath());
 		return null;
 	}
 
@@ -113,7 +115,7 @@ public class DirSampleSource implements SampleSource {
 			}
 			reader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Logger.getLogger(getClass()).warn("IO error reading sample informatoin from file: " + subFile.getAbsolutePath() + " cause: " + e.getLocalizedMessage());
 			e.printStackTrace();
 			return null;
 		}
@@ -133,6 +135,12 @@ public class DirSampleSource implements SampleSource {
 			if (key.equals("annotated.vars")) {
 				info.setAnnotatedVarsFile(pairs.get(key));
 			}
+			if (key.equals("bam.file")) {
+				info.setBamFile(pairs.get(key));
+			}
+			if (key.equals("bam.link")) {
+				info.setBamLink(pairs.get(key));
+			}
 			if (key.equals("qc.link")) {
 				info.setQCLink(pairs.get(key));
 			}
@@ -150,8 +158,9 @@ public class DirSampleSource implements SampleSource {
 			
 		}
 		
+		File sampleRoot = subFile.getParentFile();
 		//Now attempt to find vcf, annotated csv, and .bam files...
-		File vcfFile = findVCF( new File(subFile.getAbsolutePath() + "/var/") );
+		File vcfFile = findVCF( new File(sampleRoot.getAbsolutePath() + "/var/") );
 		if (vcfFile != null) {
 			Logger.getLogger(getClass()).info("Found VCF file for sample " + info.getSampleID() + ": " + vcfFile.getAbsolutePath());
 			info.setVcfFile(vcfFile.getAbsolutePath());
@@ -160,7 +169,7 @@ public class DirSampleSource implements SampleSource {
 			Logger.getLogger(getClass()).warn("No VCF file for sample " + info.getSampleID() );
 		}
 		
-		File csvFile = findCSV( new File(subFile.getAbsolutePath() + "/var/") );
+		File csvFile = findCSV( new File(sampleRoot.getAbsolutePath() + "/var/") );
 		if (csvFile != null) {
 			Logger.getLogger(getClass()).info("Found annotated vars file for sample " + info.getSampleID() + ": " + csvFile.getAbsolutePath());
 			info.setAnnotatedVarsFile(csvFile.getAbsolutePath());
@@ -169,7 +178,7 @@ public class DirSampleSource implements SampleSource {
 			Logger.getLogger(getClass()).warn("No annotated csv file for sample " + info.getSampleID() );
 		}
 		
-		File bamFile = findBAM( new File(subFile.getAbsolutePath() + "/bam/") );
+		File bamFile = findBAM( new File(sampleRoot.getAbsolutePath() + "/bam/") );
 		if (bamFile != null) {
 			Logger.getLogger(getClass()).info("Found BAM file for sample " + info.getSampleID() + ": " + bamFile.getAbsolutePath());
 			info.setBamFile(bamFile.getAbsolutePath());
@@ -197,6 +206,9 @@ public class DirSampleSource implements SampleSource {
 				}
 			}
 		}
+		else {
+			Logger.getLogger(getClass()).warn("VCF base directory " + file.getAbsolutePath() + " does not exist, cannot read vcf files from this path");
+		}
 		return null;
 	}
 
@@ -210,6 +222,9 @@ public class DirSampleSource implements SampleSource {
 				}
 			}
 		}
+		else {
+			Logger.getLogger(getClass()).warn("CSV base directory " + file.getAbsolutePath() + " does not exist, cannot read csv files from this path");
+		}
 		return null;
 	}
 	
@@ -222,6 +237,9 @@ public class DirSampleSource implements SampleSource {
 					return subfile;
 				}
 			}
+		}
+		else {
+			Logger.getLogger(getClass()).warn("BAM base directory " + file.getAbsolutePath() + " does not exist, cannot read BAM files from this path");
 		}
 		return null;
 	}

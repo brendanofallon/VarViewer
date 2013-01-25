@@ -3,6 +3,7 @@ package varviewer.client.varTable;
 import java.util.ArrayList;
 import java.util.List;
 
+import varviewer.client.IGVInterface;
 import varviewer.shared.Variant;
 
 import com.google.gwt.cell.client.ImageResourceCell;
@@ -298,42 +299,6 @@ public class ColumnStore {
 			}
 		}, 2.0, false));
 		
-//		addColumn(new VarAnnotation<ImageResource>("omim.disease.pic", "OMIM Disease", new Column<Variant, ImageResource>(new ImageResourceCell()) {
-//
-//			@Override
-//			public ImageResource getValue(Variant var) {
-//				String str = var.getAnnotation("omim.disease");
-//				if (str != null && str.length() > 3)
-//					return resources.omimImage();
-//				return null;
-//			}
-//			
-//		}, 1.0, false));
-//		
-//		addColumn(new VarAnnotation<ImageResource>("dbnsfp.info", "HGMD gene hit", new Column<Variant, ImageResource>(new ImageResourceCell()) {
-//
-//			@Override
-//			public ImageResource getValue(Variant var) {
-//				String str = var.getAnnotation("hgmd.info");
-//				if (str != null && str.length() > 3)
-//					return resources.hgmdImage();
-//				return null;
-//			}
-//			
-//		}, 1.0, false));
-//		
-//		addColumn(new VarAnnotation<ImageResource>("hgmd.exact.match", "HGMD exact hit", new Column<Variant, ImageResource>(new ImageResourceCell()) {
-//
-//			@Override
-//			public ImageResource getValue(Variant var) {
-//				String str = var.getAnnotation("hgmd.info");
-//				if (str != null && str.length() > 3)
-//					return resources.hgmdHitImage();
-//				return null;
-//			}
-//			
-//		}, 1.0, false));
-		
 		addColumn(new VarAnnotation<ImageResource>("disease.pics", "HGMD & OMIM", new Column<Variant, ImageResource>(new ImageResourceCell()) {
 
 			@Override
@@ -382,7 +347,23 @@ public class ColumnStore {
 			}
 			
 		}, 1.0, false));
+		
+		addColumn(new VarAnnotation<SafeHtml>("igv.link", "IGV", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
+
+			@Override
+			public SafeHtml getValue(Variant var) {
+				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
+				String locus = "chr" + var.getChrom() + ":" + var.getPos();
+				
+				bldr.appendHtmlConstant("<a href=\"" + IGVInterface.baseURL + "goto?locus=" + locus + "\" target=\"_self\"><img src=\"images/linkIcon.png\"/></a>" );
+				
+				return bldr.toSafeHtml();
+			}
+			
+		}, 0.6, false));
 	}
+	
+	
 	
 	VarPageResources resources = (VarPageResources) GWT.create(VarPageResources.class);
 	

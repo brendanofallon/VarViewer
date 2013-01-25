@@ -14,7 +14,7 @@ public class VariantRequest implements Serializable {
 	
 	private List<String> sampleIDs = new ArrayList<String>();
 	private IntervalList intervals = new AllIntervals();
-	private List<String> annotationKeys = new ArrayList<String>();
+	//private List<String> annotationKeys = new ArrayList<String>();
 	private List<VariantFilter> filters = new ArrayList<VariantFilter>();
 	
 	public VariantRequest() {
@@ -75,17 +75,17 @@ public class VariantRequest implements Serializable {
 	 * Add a new item to the list of annotations requested for the variants. 
 	 * @param key
 	 */
-	public void addAnnotationKey(String key) {
-		annotationKeys.add(key);
-	}
-	
-	/**
-	 * Return a list of all annotation keys in this request
-	 * @return
-	 */
-	public List<String> getAnnotationKeys() {
-		return annotationKeys;
-	}
+//	public void addAnnotationKey(String key) {
+//		annotationKeys.add(key);
+//	}
+//	
+//	/**
+//	 * Return a list of all annotation keys in this request
+//	 * @return
+//	 */
+//	public List<String> getAnnotationKeys() {
+//		return annotationKeys;
+//	}
 	
 	/**
 	 * Obtain the series of intervals for request

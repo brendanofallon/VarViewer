@@ -25,6 +25,14 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener 
 	}
 	
 	/**
+	 * Set the bam link text that will be displayed in the BAM link button in the header of the vartable
+	 * @param linkText
+	 */
+	public void setBamLink(String linkText) {
+		varTable.getHeader().setBAMLink(linkText);
+	}
+	
+	/**
 	 * Return a list of the currently used filters
 	 * @return
 	 */

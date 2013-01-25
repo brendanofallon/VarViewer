@@ -32,6 +32,7 @@ public class ColumnModel {
 		addColumn( ColumnStore.getStore().getColumnForID("pop.freq"));
 		addColumn( ColumnStore.getStore().getColumnForID("disease.pics"));
 		addColumn( ColumnStore.getStore().getColumnForID("rsnum"));
+		addColumn( ColumnStore.getStore().getColumnForID("igv.link"));
 	}
 	
 	public void addColumn(VarAnnotation varAnno) {

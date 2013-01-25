@@ -1,6 +1,8 @@
 package varviewer.client.sampleView;
 
+import varviewer.client.IGVInterface;
 import varviewer.client.VarListManager;
+import varviewer.client.VarViewer;
 import varviewer.shared.SampleInfo;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -79,6 +81,11 @@ public class SampleDetailView extends FlowPanel {
 			VarListManager.getManager().setSample( currentSample.getSampleID() );
 			VarListManager.getManager().setFilters( sampleViewParent.getVarViewer().getVarDisplay().getActiveFilters() );
 			VarListManager.getManager().reloadIfRequired();
+			String bamLinkText = null;
+			if (currentSample.getBamLink() != null) {
+				bamLinkText = IGVInterface.baseURL + "load?file=http://genseqar01.aruplab.net/" + currentSample.getBamLink();
+			}
+			VarViewer.getViewer().getVarDisplay().setBamLink(bamLinkText);
 			sampleViewParent.getVarViewer().showVariantDisplay();
 		}
 	}
@@ -112,9 +119,9 @@ public class SampleDetailView extends FlowPanel {
 		}
 		
 		if (currentSample.getQCLink() != null) {
-			String url = "http://genseqar01.aruplab.net/" + currentSample.getQCLink();
-			System.out.println("Showing qc metrics sample " + currentSample.getSampleID() + " at url: " + url);
-			Window.open(url, "_blank", "");
+			String url = "http://genseqar01.aruplab.net/" + currentSample.getBamLink();
+			System.out.println("Showing bam sample " + currentSample.getSampleID() + " at url: " + url);
+			Window.open(url, "_self", "");
 		}
 	}
 
