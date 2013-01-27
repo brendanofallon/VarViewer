@@ -10,7 +10,6 @@ import varviewer.shared.GeneInfo;
 import varviewer.shared.Variant;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -78,7 +77,7 @@ public class DetailsPanel extends ScrollPanel implements VariantSelectionListene
 
 				@Override
 				public void onFailure(Throwable caught) {
-					Window.alert("Unable to find gene details for gene : " + currentGene + " Reason: " + caught.getMessage());
+					//Window.alert("Unable to find gene details for gene : " + currentGene + " Reason: " + caught.getMessage());
 				}
 
 				@Override

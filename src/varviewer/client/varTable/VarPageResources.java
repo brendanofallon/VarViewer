@@ -32,5 +32,7 @@ interface VarPageResources extends ClientBundle {
 	@Source("omimOnly.png")
 	ImageResource omimOnlyImage();
 	
+	//@Source("igvLink.png")
+	//ImageResource igvLinkImage();
 	
 }

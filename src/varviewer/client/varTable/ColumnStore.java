@@ -6,6 +6,8 @@ import java.util.List;
 import varviewer.client.IGVInterface;
 import varviewer.shared.Variant;
 
+import com.google.gwt.cell.client.ButtonCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.shared.GWT;
@@ -348,26 +350,30 @@ public class ColumnStore {
 			
 		}, 1.0, false));
 		
-		addColumn(new VarAnnotation<SafeHtml>("igv.link", "IGV", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
+		
+		
+		IGVCell igvCell = new IGVCell();
+		
+		addColumn(new VarAnnotation<String>("igv.link", "IGV", new Column<Variant, String>(igvCell) {
 
 			@Override
-			public SafeHtml getValue(Variant var) {
-				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
+			public String getValue(Variant var) {
 				String locus = "chr" + var.getChrom() + ":" + var.getPos();
-				
-				bldr.appendHtmlConstant("<a href=\"" + IGVInterface.baseURL + "goto?locus=" + locus + "\" target=\"_self\"><img src=\"images/linkIcon.png\"/></a>" );
-				
-				return bldr.toSafeHtml();
+				return locus;
 			}
 			
-		}, 0.6, false));
+		}, 1.0, false));
+			
 	}
 	
-	
+	static class IGVCell extends ButtonCell {
+		
+		public void render(Cell.Context context, String value, SafeHtmlBuilder sb) {
+			sb.appendHtmlConstant("<a href=\"" + IGVInterface.baseURL + "goto?locus=" + value + "\" target=\"_self\"><img src=\"images/linkIcon.png\"/></a>" );
+		}
+	}
 	
 	VarPageResources resources = (VarPageResources) GWT.create(VarPageResources.class);
-	
-	
 	
 	
 }

@@ -21,6 +21,7 @@ public class VarTableHeader extends HorizontalPanel {
 
 	SimplePager pager = new SimplePager();
 	Label sampleLabel = new Label("Unknown sample");
+	final HighlightButton pedigreeButton; 
 	final HighlightButton igvButton; 
 	final HighlightButton exportButton; 
 	final HighlightButton colMenuButton;
@@ -31,6 +32,21 @@ public class VarTableHeader extends HorizontalPanel {
 		this.add(sampleLabel);
 		sampleLabel.setStylePrimaryName("samplelabel");
 		
+		Image pedImage = new Image("/images/pedigreeIcon.png");
+		pedigreeButton = new HighlightButton(pedImage, new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				showPedigreePanel();
+			}
+			
+		});
+		pedigreeButton.setTitle("Pedigree based filtering");
+		this.add(pedigreeButton);
+		pedigreeButton.setWidth("24px");
+		pedigreeButton.setHeight("24px");
+		
+		
 		Image igvImage = new Image("images/igvIcon.png");
 		igvButton = new HighlightButton(igvImage, new ClickHandler() {
 
@@ -39,6 +55,7 @@ public class VarTableHeader extends HorizontalPanel {
 				attemptLoadIGV();
 			}
 		});
+		igvButton.setTitle("Load alignment information in IGV");
 		this.add(igvButton);
 		
 		igvButton.setWidth("24px");
@@ -53,7 +70,7 @@ public class VarTableHeader extends HorizontalPanel {
 			}
 			
 		});
-		
+		exportButton.setTitle("Download variants in Excel / csv");
 		this.add(exportButton);
 		exportButton.setWidth("24px");
 		exportButton.setHeight("24px");
@@ -72,6 +89,7 @@ public class VarTableHeader extends HorizontalPanel {
 			
 		});
 
+		colMenuButton.setTitle("Chose columns to display");
 		this.add(colMenuButton);
 		colMenuButton.setWidth("24px");
 		colMenuButton.setHeight("24px");
@@ -79,6 +97,14 @@ public class VarTableHeader extends HorizontalPanel {
 		this.add(pager);
 		
 		pager.setDisplay(tableParent.getVarPage());
+	}
+
+	/**
+	 * Called when user clicks the 'pedigree button', which brings up a popup allowing the
+	 * user to do a pedigree analysis
+	 */
+	protected void showPedigreePanel() {
+		
 	}
 
 	protected void attemptLoadIGV() {
