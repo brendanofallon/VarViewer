@@ -408,3 +408,38 @@
 	margin-left: 20px;
 	margin-top: 4px;
 }
+
+
+.pedpopuptitle {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 6px;
+	border-bottom: 1px solid gray;
+}
+
+.pedsamplechooser {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 10px;
+	margin: 4px;
+	border: 1px solid gray;
+	border-radius: 3px;
+	height: 240px;
+	width: 300px;
+}
+
+.pedsamplechoosertitle {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+	text-shadow: 1px 1px rgba(175, 175, 175, 50); 
+	border-top-right-radius: 3px;
+	border-top-left-radius: 3px;
+	background : -webkit-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%);
+	background : -moz-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%);
+	background : -o-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%);
+	background : -ms-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%); 
+	background : -linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%);
+	
+}

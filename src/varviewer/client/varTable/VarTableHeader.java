@@ -2,6 +2,7 @@ package varviewer.client.varTable;
 
 
 import varviewer.client.HighlightButton;
+import varviewer.client.varTable.pedigree.PedigreePopup;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -25,6 +26,7 @@ public class VarTableHeader extends HorizontalPanel {
 	final HighlightButton igvButton; 
 	final HighlightButton exportButton; 
 	final HighlightButton colMenuButton;
+	PedigreePopup pedPopup = null;
 	private String igvLinkText = null;
 	
 	public VarTableHeader(final VarTable tableParent) {
@@ -104,7 +106,11 @@ public class VarTableHeader extends HorizontalPanel {
 	 * user to do a pedigree analysis
 	 */
 	protected void showPedigreePanel() {
-		
+		if (pedPopup == null) {
+			pedPopup = new PedigreePopup();
+		}
+		pedPopup.setPopupPosition(200, 100);
+		pedPopup.show();
 	}
 
 	protected void attemptLoadIGV() {
