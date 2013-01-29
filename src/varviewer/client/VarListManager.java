@@ -139,7 +139,11 @@ public class VarListManager implements FilterListener {
 			@Override
 			public void onSuccess(List<Variant> result) {
 				currentList = result;
-				fireVarListChanged();
+				if (currentList != null) 
+					fireVarListChanged();
+				else {
+					fireVarUpdateError();
+				}
 			}
 			  
 		  });

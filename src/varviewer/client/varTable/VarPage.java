@@ -7,9 +7,6 @@ import varviewer.shared.Variant;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
-import com.google.gwt.user.client.ui.ProvidesResize;
-import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
@@ -57,8 +54,12 @@ public class VarPage extends CellTable<Variant> {
 	 * @param vars
 	 */
 	public void setVariants(List<Variant> vars) {
-		varData.setList(vars);		
-		initializeSorters();
+		//Server-side errors sometimes result in a null list of variants, which causes a 
+		//null pointer exception here if we don't catch it
+		if (vars != null) {
+			varData.setList(vars);		
+			initializeSorters();
+		}
 	}
 	
 	/**

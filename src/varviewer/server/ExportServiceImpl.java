@@ -1,9 +1,12 @@
 package varviewer.server;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import varviewer.client.services.ExportService;
 
@@ -20,24 +23,38 @@ public class ExportServiceImpl extends RemoteServiceServlet implements ExportSer
 	@Override
 	public String doExport(List<String> lines) {
 		
-		String dir = "exportdata";
+		
+		String dir = VVProps.getProperty("export.dir");
+		if (dir == null)
+			dir = "exportdata";
 		
 		String filename = "export-" + ("" + System.currentTimeMillis()).substring(5) + ".csv";
 		String fullPath = dir + "/" + filename;
 		
+		File tmpFile = new File(fullPath);
+		
+		Logger.getLogger(getClass()).info("Writing export data to: " + tmpFile.getAbsolutePath());
+		
 		BufferedWriter writer;
 		try {
-			writer = new BufferedWriter(new FileWriter(fullPath));
+			int lineCount = 0;
+			tmpFile.createNewFile();
+			writer = new BufferedWriter(new FileWriter(tmpFile));
 
 			for(String line : lines) {
 				writer.write(line + "\n");
+				lineCount++;
 			}
 			writer.close();
+			Logger.getLogger(getClass()).info("Wrote " + lineCount + " lines of export data to " + tmpFile.getAbsolutePath());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new IllegalStateException("Error writing tmp file for export: " + e.getMessage());
+			Logger.getLogger(getClass()).warn("Error writing export data to file: " + e.getMessage());
+			//throw new IllegalStateException("Error writing tmp file for export: " + e.getMessage());
 		}
-		return "/" + fullPath;
+		
+		return "/VarViewer/exportdata/" + filename;
 	}
 
 }

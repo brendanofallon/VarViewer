@@ -11,11 +11,11 @@ import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.cellview.client.CellTable.Resources;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -68,7 +68,7 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 
 			@Override
 			public void onSuccess(String result) {
-				Window.open(result, "_self", "");
+				Window.open("http://" + Location.getHost() + result, "_self", "");
 			}
 		});
 	}

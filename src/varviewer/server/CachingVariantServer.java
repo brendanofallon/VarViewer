@@ -29,27 +29,45 @@ public class CachingVariantServer extends AbstractVariantServer {
 	
 	@Override
 	public List<Variant> getVariants(VariantRequest req) {
+		StringBuilder msg = new StringBuilder();
+		for(String id : req.getSampleIDs()) {
+			msg.append(id + ", ");
+		}
+		
+		Logger.getLogger(CachingVariantServer.class).info("Processing request for variants for sample(s) " + msg);
+		
+		//No variants loaded, automatically attempt to load
+		if (currentVariants == null) {
+			Logger.getLogger(CachingVariantServer.class).info("No variant list currently loaded, reading new list from file");
+			loadVariants(req.getSampleIDs());
+		}
+		
+		//Check to see if current sample ID matches the loaded sample, if so filter and return the variants 
 		if (currentSampleID != null && req.getSampleIDs().contains(currentSampleID)) {
+			Logger.getLogger(CachingVariantServer.class).info("Returning variants for sample(s): " + msg);
 			List<Variant> vars = currentVariants.getVariantsInIntervals(req.getIntervals());
 			if (req.getFilters() != null && req.getFilters().size()>0) {
 				vars = applyFilters(vars, req.getFilters());
 			}
 			return vars;
 		}
-		else {
-			loadVariants(req.getSampleIDs());
-			
-			//IO errors will cause currentVariants to be null, so check for this here
-			if (currentVariants != null) {
-				List<Variant> vars = currentVariants.getVariantsInIntervals(req.getIntervals());
-				if (req.getFilters() != null && req.getFilters().size()>0) {
-					vars = applyFilters(vars, req.getFilters());
-				}
-				return vars;
+		
+		//Current variants is not null but sample IDs don't match, so try to load new variants
+		loadVariants(req.getSampleIDs());
+		
+		//if variant load failed (bad sample id) then current variants may still be null
+		if (currentVariants != null) {
+			Logger.getLogger(CachingVariantServer.class).info("Returning variants for sample(s): " + msg);
+			List<Variant> vars = currentVariants.getVariantsInIntervals(req.getIntervals());
+			if (req.getFilters() != null && req.getFilters().size()>0) {
+				vars = applyFilters(vars, req.getFilters());
 			}
-			return null;
+			return vars;
 		}
 		
+		
+		Logger.getLogger(CachingVariantServer.class).warn("Could not find or load variants for sample(s): " + msg);
+		return null;		
 	}
 
 	private void loadVariants(List<String> ids) {

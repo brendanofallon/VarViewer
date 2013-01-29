@@ -39,8 +39,10 @@ public class SampleListServiceImpl extends RemoteServiceServlet implements Sampl
 		
 		//re-initialize every time
 		sampleDir.initialize();
-		
-		return sampleDir.getSampleInfos();
+		List<SampleInfo> infos = sampleDir.getSampleInfos();
+	
+		return infos;
 	}
+	
 
 }

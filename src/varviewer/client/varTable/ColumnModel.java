@@ -64,7 +64,11 @@ public class ColumnModel {
 	public String writeVariant(Variant var) {
 		StringBuilder str = new StringBuilder();
 		for(String key : getKeys()) {
-			str.append( getColumnForKey(key).getValue(var).toString() + "\t");
+			Object val = getColumnForKey(key).getValue(var);
+			String valStr = "?";
+			if (val != null)
+				valStr = val.toString();
+			str.append( valStr + "\t");
 		}
 		return str.toString();
 	}

@@ -1,6 +1,7 @@
 package varviewer.client.sampleView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import varviewer.client.VarViewer;
@@ -11,13 +12,15 @@ import varviewer.shared.SampleInfo;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -31,6 +34,7 @@ public class SamplesView extends HorizontalPanel {
 
 	private String filterText = null;
 	private VarViewer vvParent = null;
+	private Comparator<SampleInfo> sampleSorter = new SampleDateComparator();
 	
 	public SamplesView(VarViewer parent) {
 		this.vvParent = parent;
@@ -73,7 +77,9 @@ public class SamplesView extends HorizontalPanel {
 	public void setSampleList(List<SampleInfo> allSamples) {
 		this.allSamples = new ArrayList<SampleInfo>();
 		this.allSamples.addAll(allSamples);
-		sampleList.setRowData(allSamples);
+		ListDataProvider<SampleInfo> dp = new ListDataProvider<SampleInfo>();
+		dp.getList().addAll(this.allSamples);
+		dp.addDataDisplay(sampleList);
 	}
 	
 	private void initComponents() {
@@ -83,7 +89,13 @@ public class SamplesView extends HorizontalPanel {
 		leftPanel.add(searchBox);
 		
 		SampleCell sampleCell = new SampleCell();
-		sampleList = new CellList<SampleInfo>( sampleCell );
+		sampleList = new CellTable<SampleInfo>();
+		sampleList.addColumn(new Column<SampleInfo, SampleInfo>(sampleCell) {
+			@Override
+			public SampleInfo getValue(SampleInfo object) {
+				return object;
+			}
+		});
 		sampleList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 		
 		final SingleSelectionModel<SampleInfo> selectionModel = new SingleSelectionModel<SampleInfo>();
@@ -174,12 +186,22 @@ public class SamplesView extends HorizontalPanel {
 		
 	}
 	
+	static class SampleDateComparator implements Comparator<SampleInfo> {
+
+		@Override
+		public int compare(SampleInfo s1, SampleInfo s2) {
+			return (int)(s2.getAnalysisDate().getTime() - s1.getAnalysisDate().getTime());
+			
+		}
+		
+	}
+	
 	
 	SampleListServiceAsync sampleListService = (SampleListServiceAsync) GWT.create(SampleListService.class);
 	private List<SampleInfo> allSamples = null;
 	private SearchBox searchBox;
 	private FlowPanel leftPanel;
 	private SampleDetailView sampleDetailsPanel;
-	private CellList<SampleInfo> sampleList;
+	private CellTable<SampleInfo> sampleList;
 	
 }
