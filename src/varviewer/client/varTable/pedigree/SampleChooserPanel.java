@@ -1,10 +1,13 @@
 package varviewer.client.varTable.pedigree;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import varviewer.client.HighlightButton;
-import varviewer.client.varTable.pedigree.PedigreeSample.OperationType;
-import varviewer.client.varTable.pedigree.PedigreeSample.ZygType;
+import varviewer.shared.PedigreeSample;
+import varviewer.shared.PedigreeSample.OperationType;
+import varviewer.shared.PedigreeSample.ZygType;
 import varviewer.shared.SampleInfo;
 
 import com.google.gwt.cell.client.ButtonCell;
@@ -50,6 +53,7 @@ public class SampleChooserPanel extends FlowPanel {
 		this.setStylePrimaryName("pedsamplechooser");
 		titlePanel.add(titleLab);
 		titlePanel.setStylePrimaryName("pedsamplechoosertitle");
+		titleLab.getElement().getStyle().setPaddingTop(5, Unit.PX);
 		ScrollPanel tableSP = new ScrollPanel(table);
 		this.add(tableSP);
 		tableSP.setHeight("150px");
@@ -73,7 +77,7 @@ public class SampleChooserPanel extends FlowPanel {
 
 			@Override
 			public String getValue(PedigreeSample o) {
-				return o.relId;
+				return o.getRelId();
 			}
 		});
 		
@@ -84,14 +88,14 @@ public class SampleChooserPanel extends FlowPanel {
 
 			@Override
 			public String getValue(PedigreeSample pedSample) {
-				return PedigreeSample.getUserString( pedSample.zType );
+				return PedigreeSample.getUserString( pedSample.getzType() );
 			}
 		}; 
 		zygColumn.setFieldUpdater(new FieldUpdater<PedigreeSample, String>() {
 
 			@Override
 			public void update(int index, PedigreeSample pedSample, String value) {
-				pedSample.zType = PedigreeSample.getZygTypeForString(value);
+				pedSample.setzType(PedigreeSample.getZygTypeForString(value));
 			}
 		});
 		table.addColumn(zygColumn);
@@ -100,25 +104,29 @@ public class SampleChooserPanel extends FlowPanel {
 		Column<PedigreeSample, String> remCol = new Column<PedigreeSample, String>(removeCell) {
 			@Override
 			public String getValue(PedigreeSample object) {
-				return object.relId;
+				return object.getRelId();
 			}
 		}; 
 		remCol.setFieldUpdater(new FieldUpdater<PedigreeSample, String>() {
 
 			@Override
 			public void update(int index, PedigreeSample object, String value) {
-				System.out.println("Attempting to remove sample with name: " + object.relId);
+				System.out.println("Attempting to remove sample with name: " + object.getRelId());
 				removeSample(object);
 			}
 		});
 		table.addColumn(remCol);
 		
-		addSample("Some sample #1");
-		addSample("Some sample #2");
-		addSample("Some sample #3");
+		table.setEmptyTableWidget(new Label("No samples added"));
+		table.getElement().getStyle().setWidth(100, Unit.PCT);
 	}
 	
 	
+	public List<PedigreeSample> getSampleSettings() {
+		List<PedigreeSample> samples = new ArrayList<PedigreeSample>();
+		samples.addAll(data.getList());
+		return samples;
+	}
 	
 	protected void showAddSamplePopup() {
 		AddSamplePopup popup = new AddSamplePopup(this);
@@ -135,9 +143,9 @@ public class SampleChooserPanel extends FlowPanel {
 
 	public void addSample(String sampleId) {
 		PedigreeSample pedSample = new PedigreeSample();
-		pedSample.relId = sampleId;
-		pedSample.zType = defaultZygType;
-		pedSample.oType = defaultOp;
+		pedSample.setRelId(sampleId);
+		pedSample.setzType(defaultZygType);
+		pedSample.setoType(defaultOp);
 		data.getList().add(pedSample);
 	}
 

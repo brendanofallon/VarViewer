@@ -14,7 +14,6 @@ public class VariantRequest implements Serializable {
 	
 	private List<String> sampleIDs = new ArrayList<String>();
 	private IntervalList intervals = new AllIntervals();
-	//private List<String> annotationKeys = new ArrayList<String>();
 	private List<VariantFilter> filters = new ArrayList<VariantFilter>();
 	
 	public VariantRequest() {

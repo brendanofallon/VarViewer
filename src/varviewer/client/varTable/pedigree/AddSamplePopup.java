@@ -4,11 +4,13 @@ import varviewer.client.sampleView.SampleChooserList;
 import varviewer.client.sampleView.SampleSelectionListener;
 import varviewer.shared.SampleInfo;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -29,17 +31,23 @@ public class AddSamplePopup extends PopupPanel implements SampleSelectionListene
 		this.chooserPanel = chooserPanel;
 		initComponents();
 		setWidth("300px");
-		setHeight("400px");
 		sampleChooser.refreshSampleList();
 	}
 
 	private void initComponents() {
+		this.setStylePrimaryName("genericpopup");
 		mainPanel = new FlowPanel();
 		this.add(mainPanel);
 		Label topLabel = new Label("Select a sample to add");
+		topLabel.setStylePrimaryName("textlabel12");
+		topLabel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+		topLabel.getElement().getStyle().setMarginBottom(5, Unit.PX);
+		
 		mainPanel.add(topLabel);
+		mainPanel.add(new HTML("<hr />"));
 		
 		sampleChooser = new SampleChooserList(this);
+		
 		mainPanel.add(sampleChooser);
 		
 		HorizontalPanel bottomPanel = new HorizontalPanel();
@@ -68,7 +76,7 @@ public class AddSamplePopup extends PopupPanel implements SampleSelectionListene
 		bottomPanel.setCellHorizontalAlignment(cancelButton, HasHorizontalAlignment.ALIGN_LEFT);
 		bottomPanel.setCellHorizontalAlignment(addSampleButton, HasHorizontalAlignment.ALIGN_RIGHT);
 		cancelButton.getElement().getStyle().setMarginLeft(10.0, Unit.PX);
-		addSampleButton.getElement().getStyle().setMarginLeft(100.0, Unit.PX);
+		addSampleButton.getElement().getStyle().setMarginLeft(120.0, Unit.PX);
 	}
 
 	protected void addSample() {

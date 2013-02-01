@@ -1,6 +1,9 @@
 package varviewer.client.varTable.pedigree;
 
-import varviewer.client.varTable.pedigree.PedigreeSample.OperationType;
+import java.util.List;
+
+import varviewer.shared.PedigreeSample;
+import varviewer.shared.PedigreeSample.OperationType;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
@@ -38,6 +41,7 @@ public class PedigreePopup extends PopupPanel {
 
 	private void initComponents() {
 		this.add(mainPanel);
+		this.setStylePrimaryName("genericpopup");
 		Label header = new Label("Choose additional samples to intersect and subtract");
 		header.setStylePrimaryName("pedpopuptitle");
 		mainPanel.add(header);
@@ -62,7 +66,7 @@ public class PedigreePopup extends PopupPanel {
 		centerPanel.add(includesContainer);
 		centerPanel.add(excludesContainer);
 		
-		includesPanel.setDefaultOp(OperationType.INTERSECT);
+		includesPanel.setDefaultOp(PedigreeSample.OperationType.INTERSECT);
 		
 		excludesPanel.setDefaultOp(OperationType.EXCLUDE);
 		mainPanel.add(centerPanel);
@@ -80,7 +84,7 @@ public class PedigreePopup extends PopupPanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				hidePopup();
+				done();
 			}
 		});
 		bottomPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
@@ -89,6 +93,12 @@ public class PedigreePopup extends PopupPanel {
 		bottomPanel.add(doneButton);
 		doneButton.getElement().getStyle().setMarginLeft(550, Unit.PX);
 		mainPanel.add(bottomPanel);
+	}
+
+	protected void done() {
+		List<PedigreeSample> includeSamples = includesPanel.getSampleSettings();
+		List<PedigreeSample> excludeSamples = excludesPanel.getSampleSettings();
+		hidePopup();
 	}
 
 	protected void hidePopup() {
