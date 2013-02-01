@@ -20,10 +20,10 @@ public class SearchBox extends HorizontalPanel {
 
 	private TextBox textBox = new TextBox();
 	private HighlightButton clearButton;
-	private SamplesView sampleView;
+	private SampleChooserList sampleView;
 	private boolean first = true;
 	
-	public SearchBox(SamplesView parentView) {
+	public SearchBox(SampleChooserList parentView) {
 		this.sampleView = parentView;
 		initComponents();
 	}

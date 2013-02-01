@@ -1,35 +1,53 @@
 /** Add css rules here for your application. */
 
-#wrapper {
-	padding: 0px;
-	margin: 0px;
-	background: white;
-	font-family: 'Open Sans', sans-serif;
-}
 
-#topbar {
+.topbar {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 16pt;
 	font-style: italic;
 	font-weight: bold;
 	text-shadow: 1px 1px rgba(175, 175, 175, 50); 
 	outline: 0px;
-	margin: -16px -10px;
+	margin: 0px;
+	margin-top: -10px;
+	margin-left: -10px;
+	margin-bottom: 10px;
 	padding: 0px;
 	padding-left: 40px;
 	padding-top: 10px;
-	position: absolute;
-	width: 120%;
 	height: 40px;
+	width: 110%;
 	-moz-box-shadow: 0px 0x 10px #202020;
 	-webkit-box-shadow: 0px 0px 10px #202020;
 	box-shadow: 0px 0px 10px #202020;
-	background : -webkit-linear-gradient(bottom, rgb(102, 102, 102) 10%, rgb(184, 178, 184) 77%);
-	background : -moz-linear-gradient(bottom, rgb(102, 102, 102) 10%, rgb(184, 178, 184) 77%);
-	background : -o-linear-gradient(bottom, rgb(102, 102, 102) 10%, rgb(184, 178, 184) 77%);
-	background : -ms-linear-gradient(bottom, rgb(102, 102, 102) 10%, rgb(184, 178, 184) 77%); 
-	background : -linear-gradient(bottom, rgb(102, 102, 102) 10%, rgb(184, 178, 184) 77%);
+	background : -webkit-linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%);
+	background : -moz-linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%);
+	background : -o-linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%);
+	background : -ms-linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%); 
+	background : -linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%);
+	border-bottom: 1px solid gray;
 }
+
+.maincontainer {
+	margin: 0px;
+}
+
+
+.footer {
+	font-family: 'Open Sans', sans-serif;
+	height: 50px;
+	padding-left: 25px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+	border-radius: 5px;
+	margin-top: 10px;
+	margin-bottom: 25px;
+	border-top: 1px solid rgb(200, 200, 200);
+	font-size: 12px;
+	text-align: center;	
+}
+
 .filterspanel {
 	border: 0px;
 	margin: 0px;
@@ -265,13 +283,12 @@
 }
 
 .samplesview {
-	margin-left: 20px;	
+	margin-left: 50px;
 }
 
 
 .samplescrollpane {
-	width: 300px;
-	height: 500px;
+	width: 350px;
 	margin-top: 10px;	
 }
 
@@ -425,21 +442,22 @@
 	border: 1px solid gray;
 	border-radius: 3px;
 	height: 240px;
-	width: 300px;
+	width: 340px;
 }
 
 .pedsamplechoosertitle {
 	font-family: 'Open Sans', sans-serif;
-	font-size: 12px;
-	font-weight: bold;
+	font-size: 13px;
 	text-align: center;
+	vertical-align: center;
 	text-shadow: 1px 1px rgba(175, 175, 175, 50); 
 	border-top-right-radius: 3px;
 	border-top-left-radius: 3px;
+	padding: 5px;
+	width: 100%;
 	background : -webkit-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%);
 	background : -moz-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%);
 	background : -o-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%);
 	background : -ms-linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%); 
 	background : -linear-gradient(top, rgb(255, 255, 255) 08%, rgb(170, 170, 170) 99%);
-	
 }

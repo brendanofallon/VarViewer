@@ -141,6 +141,9 @@ public class DirSampleSource implements SampleSource {
 			if (key.equals("bam.link")) {
 				info.setBamLink(pairs.get(key));
 			}
+			if (key.equals("vcf.link")) {
+				info.setVcfLink(pairs.get(key));
+			}
 			if (key.equals("qc.link")) {
 				info.setQCLink(pairs.get(key));
 			}
@@ -309,6 +312,11 @@ public class DirSampleSource implements SampleSource {
 		}
 		else {
 			Logger.getLogger(getClass()).warn("Request for variants from sample " + sampleID + " but there's no sample with that ID" );
+			StringBuilder msg = new StringBuilder();
+			for(String samp: samples.keySet()) {
+				msg.append(samp + ", ");
+			}
+			Logger.getLogger(getClass()).warn("Current sample ids are: " + msg);
 		}
 		return null;
 	}

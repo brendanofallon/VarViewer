@@ -1,5 +1,6 @@
 package varviewer.server;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +72,14 @@ public class CachingVariantServer extends AbstractVariantServer {
 	}
 
 	private void loadVariants(List<String> ids) {
+		try {
+			//Force re-loading of sample info
+			source.initialize();
+		} catch (IOException e) {
+			Logger.getLogger(CachingVariantServer.class).warn("IOError re-loading variants: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
 		for(String id : ids) {
 			currentVariants = source.getVariantsForSample(id);
 			currentSampleID = id;

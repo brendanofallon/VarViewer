@@ -1,10 +1,10 @@
 package varviewer.server;
 
+import java.io.IOException;
 import java.util.List;
 
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.SampleInfo;
-import varviewer.shared.Variant;
 
 /**
  * Objects which generate a list of SampleInfo objects should implement this interface
@@ -13,6 +13,14 @@ import varviewer.shared.Variant;
  */
 public interface SampleSource {
 
+	
+	/**
+	 * Read (or re-load) the source of the variants to search for changes
+	 * @param sampleID
+	 * @return
+	 */
+	public void initialize() throws IOException;
+	
 	/**
 	 * True if this source contains a sample with the given id
 	 * @param sampleID

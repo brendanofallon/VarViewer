@@ -107,8 +107,8 @@ public class SampleDetailView extends FlowPanel {
 			return;
 		}
 		
-		if (currentSample.getVcfFile() != null) {
-			String url = "http://genseqar01.aruplab.net/" + currentSample.getVcfFile();
+		if (currentSample.getVcfLink() != null) {
+			String url = "http://genseqar01.aruplab.net/" + currentSample.getVcfLink();
 			Window.open(url, "_self", "");
 		}
 	}
@@ -118,7 +118,7 @@ public class SampleDetailView extends FlowPanel {
 			return;
 		}
 		
-		if (currentSample.getQCLink() != null) {
+		if (currentSample.getBamLink() != null) {
 			String url = "http://genseqar01.aruplab.net/" + currentSample.getBamLink();
 			System.out.println("Showing bam sample " + currentSample.getSampleID() + " at url: " + url);
 			Window.open(url, "_self", "");

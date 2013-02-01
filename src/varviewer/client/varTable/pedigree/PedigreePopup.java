@@ -2,6 +2,8 @@ package varviewer.client.varTable.pedigree;
 
 import varviewer.client.varTable.pedigree.PedigreeSample.OperationType;
 
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -10,7 +12,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
  * Allows users to select additional samples to intersect and subtract from 
@@ -31,7 +32,7 @@ public class PedigreePopup extends PopupPanel {
 	public PedigreePopup() {
 		super(false);
 		initComponents();
-		setWidth("650px");
+		setWidth("700px");
 		setHeight("350px");
 	}
 
@@ -42,9 +43,27 @@ public class PedigreePopup extends PopupPanel {
 		mainPanel.add(header);
 		
 		centerPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		centerPanel.add(includesPanel);
+		FlowPanel includesContainer = new FlowPanel();
+		FlowPanel excludesContainer = new FlowPanel();
+		includesContainer.add(includesPanel);
+		Label includeLabel = new Label("Show only variants present in ALL of these samples at the given zygosity");
+		includesContainer.add(includeLabel);
+		excludesContainer.add(excludesPanel);
+		Label excludesLabel = new Label("Remove all variants present at the given zygosity in ANY of these samples");
+		includeLabel.setStylePrimaryName("interiortext");
+		excludesLabel.setStylePrimaryName("interiortext");
+		includeLabel.getElement().getStyle().setTextAlign(Style.TextAlign.LEFT);
+		excludesLabel.getElement().getStyle().setTextAlign(Style.TextAlign.LEFT);
+		includeLabel.getElement().getStyle().setMarginLeft(10, Unit.PX);
+		includeLabel.getElement().getStyle().setMarginRight(10, Unit.PX);
+		excludesLabel.getElement().getStyle().setMarginRight(10, Unit.PX);
+		excludesLabel.getElement().getStyle().setMarginLeft(10, Unit.PX);
+		excludesContainer.add(excludesLabel);
+		centerPanel.add(includesContainer);
+		centerPanel.add(excludesContainer);
+		
 		includesPanel.setDefaultOp(OperationType.INTERSECT);
-		centerPanel.add(excludesPanel);
+		
 		excludesPanel.setDefaultOp(OperationType.EXCLUDE);
 		mainPanel.add(centerPanel);
 		
@@ -64,11 +83,11 @@ public class PedigreePopup extends PopupPanel {
 				hidePopup();
 			}
 		});
+		bottomPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
 		bottomPanel.add(cancelButton);
-		SimplePanel spacer = new SimplePanel();
-		spacer.setWidth("200px");
-		bottomPanel.add(spacer);
+		cancelButton.getElement().getStyle().setMarginLeft(10, Unit.PX);
 		bottomPanel.add(doneButton);
+		doneButton.getElement().getStyle().setMarginLeft(550, Unit.PX);
 		mainPanel.add(bottomPanel);
 	}
 

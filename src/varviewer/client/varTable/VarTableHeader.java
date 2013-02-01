@@ -44,7 +44,7 @@ public class VarTableHeader extends HorizontalPanel {
 			
 		});
 		pedigreeButton.setTitle("Pedigree based filtering");
-		//this.add(pedigreeButton);
+		this.add(pedigreeButton);
 		pedigreeButton.setWidth("24px");
 		pedigreeButton.setHeight("24px");
 		

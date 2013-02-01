@@ -40,10 +40,10 @@ public class PedigreeSample {
 		if (zygStr.equals("All")) {
 			return ZygType.ALL;
 		}
-		if (zygStr.equals("Hets.")) {
+		if (zygStr.equals("Hets")) {
 			return ZygType.HETS;
 		}
-		if (zygStr.equals("Homs.")) {
+		if (zygStr.equals("Homs")) {
 			return ZygType.HOMS;
 		}
 		//Should never get here

@@ -5,6 +5,7 @@ import varviewer.client.varTable.VariantDisplay;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -22,7 +23,6 @@ public class VarViewer implements EntryPoint {
 
 	public void onModuleLoad() {
 		initComponents();
-		//System.out.println(Location.get);
 	}
 
 	/**
@@ -35,6 +35,15 @@ public class VarViewer implements EntryPoint {
 
 	private void initComponents() {
 		mainPanel = new FlowPanel();
+		mainPanel.setStylePrimaryName("maincontainer");
+		Label topLabel = new Label("ARUP NGS Variant Viewer");
+		topLabel.setStylePrimaryName("topbar");
+		mainPanel.add(topLabel);
+		centerPanel = new FlowPanel();
+		mainPanel.add(centerPanel);
+		Label footer = new Label("VariantViewer, ARUP Labs, Winter 2013");
+		footer.setStylePrimaryName("footer");
+		mainPanel.add(footer);
 		showSampleViewer();
 		RootPanel.get().add(mainPanel);		  
 	}
@@ -51,37 +60,19 @@ public class VarViewer implements EntryPoint {
 	 * Remove all widgets from main panel and add the varDisplay widget to it
 	 */
 	public void showVariantDisplay() {
-		if (mainPanel.getWidgetCount() > 0
-				&& mainPanel.getWidget(0) == varDisplay) {
-			//Variant Display is already showing
-			return; 
-		}
-		else {
-			while(mainPanel.getWidgetCount()>0) {
-				mainPanel.remove(0);
-			}
-			mainPanel.add(varDisplay);
-		}
+		centerPanel.clear();
+		centerPanel.add(varDisplay);
 	}
 
 	public void showSampleViewer() {
-		if (mainPanel.getWidgetCount() > 0
-				&& mainPanel.getWidget(0) == sampleView) {
-			//SampleView is already showing
-			return; 
-		}
-		else {
-			//Remove all current widgets
-			while(mainPanel.getWidgetCount()>0) {
-				mainPanel.remove(0);
-			}
-			mainPanel.add(sampleView);
-			sampleView.refreshSampleList();
-		}
+		centerPanel.clear();
+		sampleView.refreshSampleList();
+		centerPanel.add(sampleView);
 	}
 
 
 	FlowPanel mainPanel; //Root container for all UI elements
+	FlowPanel centerPanel; //Central container, does not include topbar or footer
 	VariantDisplay varDisplay = new VariantDisplay(); //Displays variant table and related panels
 	SamplesView sampleView = new SamplesView(this); //UI element that displays sample list	  
 	VarListManager varManager = VarListManager.getManager(); //client-side store of current variant data

@@ -18,6 +18,7 @@ public class SampleInfo implements Serializable {
 	private String submitter = null; //username associated with account that submitted job (e.g. marc, brendan, etc.)
 	private String annotatedVarsFile = null; //relative path to annotated variants file
 	private String vcfFile = null;  //relative path to variants vcf file
+	private String vcfLink = null;  //location of link to vcf file
 	private String bamFile = null;  //relative path to BAM file
 	private String bamLink = null;  //location of html link to BAM file
 	private String qcLink = null; //location of link to qc report
@@ -103,6 +104,14 @@ public class SampleInfo implements Serializable {
 	
 	public void setQCLink(String linkLoc) {
 		this.qcLink = linkLoc;
+	}
+
+	public String getVcfLink() {
+		return vcfLink;
+	}
+	
+	public void setVcfLink(String link) {
+		this.vcfLink = link;
 	}
 	
 	
