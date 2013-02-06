@@ -1,6 +1,7 @@
 package varviewer.client.varTable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import varviewer.client.IGVInterface;
@@ -85,21 +86,44 @@ public class ColumnStore {
 			}
 		}, 1.0, false));
 
-		addColumn(new VarAnnotation<String>("contig", "Chr", new TextColumn<Variant>() {
+		VarAnnotation<String> chrAnno = new VarAnnotation<String>("contig", "Chr", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
 				return var.getChrom();
 			}
-		}, 1.0, false));
+		}, 0.5, false); 
+		chrAnno.setComparator(new Comparator<Variant>() {
 
-		addColumn(new VarAnnotation<String>("pos", "Start", new TextColumn<Variant>() {
+			@Override
+			public int compare(Variant o1, Variant o2) {
+				return o1.getChrom().compareTo(o2.getChrom());
+			}
+			
+		});
+		addColumn(chrAnno);
 
+		VarAnnotation<String> posAnnotation = new VarAnnotation<String>("pos", "Start", new TextColumn<Variant>() {
 			@Override
 			public String getValue(Variant var) {
 				return "" + var.getPos();
 			}
-		}, 1.0, true));
+		}, 1.0, true); 
+		
+		posAnnotation.setComparator(new Comparator<Variant>() {
+
+			@Override
+			public int compare(Variant v0, Variant v1) {
+				if (v0.getChrom().equals(v1.getChrom())) {
+					return v1.getPos() - v0.getPos();
+				}
+				else {
+					return v0.getChrom().compareTo(v1.getChrom());
+				}
+			}
+			
+		});
+		addColumn(posAnnotation);
 		
 		addColumn(new VarAnnotation<String>("zygosity", "Zygosity", new TextColumn<Variant>() {
 

@@ -86,6 +86,7 @@ public class SampleDetailView extends FlowPanel {
 				bamLinkText = IGVInterface.baseURL + "load?file=http://genseqar01.aruplab.net/" + currentSample.getBamLink();
 			}
 			VarViewer.getViewer().getVarDisplay().setBamLink(bamLinkText);
+			VarViewer.getViewer().getVarDisplay().clearPedAnnotations();
 			sampleViewParent.getVarViewer().showVariantDisplay();
 		}
 	}

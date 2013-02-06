@@ -21,6 +21,24 @@ public class VariantRequest implements Serializable {
 	}
 	
 	/**
+	 * Perform semi-deep copy of this request, all lists are new but the objects in them are 
+	 * the same (by reference) as that in this object. 
+	 */
+	public VariantRequest clone() {
+		VariantRequest newReq = new VariantRequest();
+		for(String id : sampleIDs) {
+			newReq.addSample(id);
+		}
+		newReq.setIntervals(intervals);
+		for(VariantFilter filter : filters) {
+			newReq.addFilter(filter);
+		}
+		
+		
+		return newReq;
+	}
+	
+	/**
 	 * Empties the list of sampleIDs. Until new sampleIDs are added no variants
 	 * will be returned by this request
 	 */

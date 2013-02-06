@@ -47,6 +47,24 @@ public class ColumnModel {
 		fireColumnChange();
 	}
 	
+	public void removeColumnsByClass(Class<?> clz) {
+		List<String> keysToRemove = new ArrayList<String>();
+		for(String key : colMap.keySet()) {
+			VarAnnotation<?> varAnno = colMap.get(key);
+			if (varAnno.getClass().equals(clz)) {
+				keysToRemove.add(key);
+			}
+		}
+		
+		for(String key: keysToRemove) {
+			colMap.remove(key);
+			keys.remove(key);
+		}
+		
+		if (keysToRemove.size()>0)
+			fireColumnChange();
+	}
+	
 	/**
 	 * Returns the list used to store all current annotation keys
 	 * @return

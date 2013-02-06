@@ -120,6 +120,17 @@ public class CachingVariantServer extends AbstractVariantServer {
 				passingVars.add(var);
 		}
 		
+		//Similar hack here, PedigreeFilters also apply an annotation, but they need to be told
+		//to do so to a given list of variants. We do this here so they don't waste time annotating
+		//variants that will be filtered out, but this functionality should be encapsulated somewhere
+		//else at some point
+		for(VariantFilter filter : filters) {
+			if (filter instanceof PedigreeFilter) {
+				PedigreeFilter pedFilter = (PedigreeFilter)filter;
+				pedFilter.applyAnnotations(passingVars);
+			}
+		}
+		
 		Logger.getLogger(CachingVariantServer.class).info(passingVars.size() + " of " + vars.size() + " total vars passed filters");
 		return passingVars;
 	}

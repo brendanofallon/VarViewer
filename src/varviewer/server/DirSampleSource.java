@@ -16,6 +16,7 @@ import varviewer.server.variant.AbstractVariantReader;
 import varviewer.server.variant.TabixCSVReader;
 import varviewer.server.variant.UncompressedCSVReader;
 import varviewer.server.variant.VariantCollection;
+import varviewer.shared.HasVariants;
 import varviewer.shared.SampleInfo;
 
 /**
@@ -321,6 +322,10 @@ public class DirSampleSource implements SampleSource {
 		return null;
 	}
 	
+	@Override
+	public HasVariants getHasVariantsForSample(String sampleID) {
+		return getVariantsForSample(sampleID);
+	}
 	
 	/**
 	 * Small wrapper for sample info and file path, used in this class only
@@ -331,5 +336,8 @@ public class DirSampleSource implements SampleSource {
 		File source;
 		SampleInfo info;
 	}
+
+
+
 
 }

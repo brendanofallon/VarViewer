@@ -3,6 +3,8 @@ package varviewer.client.varTable.pedigree;
 import java.util.ArrayList;
 import java.util.List;
 
+import varviewer.client.VarListManager;
+import varviewer.client.varTable.VarTable;
 import varviewer.shared.PedigreeFilter;
 import varviewer.shared.PedigreeSample;
 import varviewer.shared.PedigreeSample.OperationType;
@@ -27,15 +29,16 @@ import com.google.gwt.user.client.ui.PopupPanel;
 public class PedigreePopup extends PopupPanel {
 
 	
-	FlowPanel mainPanel = new FlowPanel();
-	HorizontalPanel centerPanel = new HorizontalPanel();
-	HorizontalPanel bottomPanel = new HorizontalPanel();
-	SampleChooserPanel includesPanel = new SampleChooserPanel("Intersect");
-	SampleChooserPanel excludesPanel = new SampleChooserPanel("Subtract");
-	
+	private FlowPanel mainPanel = new FlowPanel();
+	private HorizontalPanel centerPanel = new HorizontalPanel();
+	private HorizontalPanel bottomPanel = new HorizontalPanel();
+	private SampleChooserPanel includesPanel = new SampleChooserPanel("Intersect");
+	private SampleChooserPanel excludesPanel = new SampleChooserPanel("Subtract");
+	private VarTable varTable;
 	 
-	public PedigreePopup() {
+	public PedigreePopup(VarTable table) {
 		super(false);
+		this.varTable = table;
 		initComponents();
 		setWidth("700px");
 		setHeight("350px");
@@ -98,6 +101,8 @@ public class PedigreePopup extends PopupPanel {
 	}
 
 	protected void done() {
+		hidePopup();
+		
 		List<PedigreeFilter> filters = new ArrayList<PedigreeFilter>();
 		for(PedigreeSample sample : includesPanel.getSampleSettings()) {
 			filters.add(new PedigreeFilter(sample));
@@ -105,14 +110,32 @@ public class PedigreePopup extends PopupPanel {
 		for(PedigreeSample sample : excludesPanel.getSampleSettings()) {
 			filters.add(new PedigreeFilter(sample));
 		}
+
+		//Two things need to happen here. First, we need to add the pedigreeFilters to the list of
+		//filters used.
+
+		VarListManager.getManager().setPedigreeFilters(filters);
+
+		//Second, we need to add columns to the current column model so that the zygosities of 
+		//the filtered samples are displayed in the table
+		//Clear existing PedigreeVarAnnotations from column model, then add the new ones
+		varTable.getColumnModel().removeColumnsByClass(PedigreeVarAnnotation.class);
+		for(PedigreeSample sample : includesPanel.getSampleSettings()) {
+			PedigreeVarAnnotation pedAnnotation = new PedigreeVarAnnotation(sample);
+			varTable.getColumnModel().addColumn(pedAnnotation);	
+		}
+		for(PedigreeSample sample : excludesPanel.getSampleSettings()) {
+			PedigreeVarAnnotation pedAnnotation = new PedigreeVarAnnotation(sample);
+			varTable.getColumnModel().addColumn(pedAnnotation);
+		}
 		
-		//List<VariantFilter> currentFilters = 
-		//VarListManager.getManager().filtersUpdated( );
-		//Do something with the filter list... like ask the VarListManager to get new variants?
-		hidePopup();
+		VarListManager.getManager().reloadIfRequired();
+		
 	}
 
 	protected void hidePopup() {
 		this.hide();
 	}
+	
+	
 }

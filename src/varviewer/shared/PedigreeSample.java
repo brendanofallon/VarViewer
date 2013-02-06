@@ -89,4 +89,14 @@ public class PedigreeSample implements Serializable {
 		return ZygType.HETS;
 	}
 	
+	public boolean equals(Object o) {
+		if (! (o instanceof PedigreeSample)) {
+			return false;
+		}
+		PedigreeSample p = (PedigreeSample)o;
+		if (p.getRelId().equals(relId) && p.getoType().equals(oType)) {
+			return true;
+		}
+		return false;
+	}
 }

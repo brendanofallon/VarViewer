@@ -57,5 +57,9 @@ public class VarAnnotation<T> {
 	public void setRelativeWidth(double relativeWidth) {
 		this.relativeWidth = relativeWidth;
 	}
+
+	public void setComparator(Comparator<Variant> comparator) {
+		this.sortComparator = comparator;		
+	}
 	
 }

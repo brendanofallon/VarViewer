@@ -30,8 +30,10 @@ public class VarTableHeader extends HorizontalPanel {
 	final HeaderSearchBox searchBox;
 	PedigreePopup pedPopup = null;
 	private String igvLinkText = null;
+	private VarTable tableParent;
 	
 	public VarTableHeader(final VarTable tableParent) {
+		this.tableParent = tableParent;
 		this.setStylePrimaryName("vartableheader");
 		this.add(sampleLabel);
 		sampleLabel.setStylePrimaryName("samplelabel");
@@ -113,7 +115,7 @@ public class VarTableHeader extends HorizontalPanel {
 	 */
 	protected void showPedigreePanel() {
 		if (pedPopup == null) {
-			pedPopup = new PedigreePopup();
+			pedPopup = new PedigreePopup(tableParent);
 		}
 		pedPopup.setPopupPosition(200, 100);
 		pedPopup.show();

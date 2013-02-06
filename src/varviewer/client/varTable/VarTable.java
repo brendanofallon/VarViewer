@@ -5,6 +5,7 @@ import java.util.List;
 
 import varviewer.client.services.ExportService;
 import varviewer.client.services.ExportServiceAsync;
+import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
 import varviewer.shared.Variant;
 
 import com.google.gwt.core.shared.GWT;
@@ -34,6 +35,7 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	ColumnModel colModel = new ColumnModel();
 	SearchBoxVariantFilter searchBoxFilter = new SearchBoxVariantFilter();
 	List<Variant> fullVariantList = null; //Stores all variants passed in from VarListManager, but does not reflect filtering from the SearchBoxFilter
+	List<PedigreeVarAnnotation> pedAnnotations = new ArrayList<PedigreeVarAnnotation>(); //Stores pedigree 
 	
 	public VarTable() {
 		this.setStylePrimaryName("vartable");
@@ -144,6 +146,10 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 		
 	}
 	
+	public void clearPedAnnotations() {
+		pedAnnotations.clear();
+	}
+	
 	@Override
 	public void onResize() { 
 		for (Widget child : getChildren()) { 
@@ -153,9 +159,12 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 		} 
 	}
 	
+	public ColumnModel getColumnModel() {
+		return colModel;
+	}
 	
 	ExportServiceAsync exportService = (ExportServiceAsync) GWT.create(ExportService.class);
 
 	
-	
+
 }

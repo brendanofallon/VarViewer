@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import varviewer.server.variant.VariantCollection;
+import varviewer.shared.HasSamples;
 import varviewer.shared.SampleInfo;
 
 /**
@@ -11,7 +12,7 @@ import varviewer.shared.SampleInfo;
  * @author brendan
  *
  */
-public interface SampleSource {
+public interface SampleSource extends HasSamples {
 
 	
 	/**

@@ -7,6 +7,7 @@ import varviewer.client.filters.FilterListener;
 import varviewer.client.services.VarRequestService;
 import varviewer.client.services.VarRequestServiceAsync;
 import varviewer.shared.IntervalList;
+import varviewer.shared.PedigreeFilter;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
 import varviewer.shared.VariantRequest;
@@ -27,6 +28,7 @@ public class VarListManager implements FilterListener {
 
 	private VariantRequest req = new VariantRequest();
 	private List<Variant> currentList = new ArrayList<Variant>();
+	private List<PedigreeFilter> pedigreeFilters = new ArrayList<PedigreeFilter>(); //Active pedigree filters, these are managed separately from normal filters
 	private boolean reloadRequired = false;
 	
 	private List<VarListListener> listeners = new ArrayList<VarListListener>();
@@ -46,6 +48,7 @@ public class VarListManager implements FilterListener {
 	public void setSample(String sampleID) {
 		req.clearSamples();
 		req.addSample(sampleID);
+		pedigreeFilters.clear();
 		reloadRequired = true;
 	}
 	
@@ -69,7 +72,7 @@ public class VarListManager implements FilterListener {
 	}
 	
 	/**
-	 * Clear current filter settings and 
+	 * Clear current filter settings and add all given filters to the filter list
 	 * @param filters
 	 */
 	public void setFilters(List<VariantFilter> filters) {
@@ -79,6 +82,19 @@ public class VarListManager implements FilterListener {
 		}		
 		reloadRequired = true;
 	}
+	
+	
+	/**
+	 * Add all given filters to the filter list. 
+	 * @param filters
+	 */
+	public void setPedigreeFilters(List<PedigreeFilter> pedFilters) {
+		pedigreeFilters.clear();
+		pedigreeFilters.addAll(pedFilters);
+		reloadRequired = true;
+	}
+	
+	
 	
 	/**
 	 * Returns true if settings have been changed since last variant reload. This is 
@@ -127,7 +143,14 @@ public class VarListManager implements FilterListener {
 	public void reloadVariants() {
 		reloadRequired = false;
 		fireVarUpdateBeginning();
-		varRequestService.queryVariant(req, new AsyncCallback<List<Variant>>() {
+		
+		//We actually send a copy of the usual variant request to which we append 
+		//all PedigreeFilters
+		VariantRequest newReq = req.clone();
+		for(PedigreeFilter pedFilter : pedigreeFilters) {
+			newReq.addFilter(pedFilter);
+		}
+		varRequestService.queryVariant(newReq, new AsyncCallback<List<Variant>>() {
 
 			@Override
 		public void onFailure(Throwable caught) {

@@ -33,6 +33,10 @@ public class NumericAnnotationComparator implements Comparator<Variant> {
 			return -1;
 		}
 		
+		if (a0==null && a1 == null) {
+			return 0;
+		}
+		
 		Double d0 = 0.0;
 		Double d1 = 0.0;
 		try {

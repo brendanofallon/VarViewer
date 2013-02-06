@@ -25,7 +25,7 @@ public class HeaderSearchBox extends HorizontalPanel {
 
 	private void initComponents() {
 		textBox.setStylePrimaryName("searchbox");
-		textBox.setText("Filter...");
+		textBox.setText("Search genes & regions...");
 		textBox.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {

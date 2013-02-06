@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import varviewer.shared.AllIntervals;
+import varviewer.shared.HasVariants;
 import varviewer.shared.IntervalList;
 import varviewer.shared.Variant;
 
@@ -18,7 +19,7 @@ import varviewer.shared.Variant;
  * @author brendan
  *
  */
-public class VariantCollection {
+public class VariantCollection implements HasVariants {
 
 	protected Map<String, List<Variant>>  vars = new HashMap<String, List<Variant>>();
 	

@@ -7,6 +7,7 @@ import varviewer.client.DetailsPanel;
 import varviewer.client.VarListListener;
 import varviewer.client.VarListManager;
 import varviewer.client.filters.FiltersPanel;
+import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
 
@@ -95,9 +96,15 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener 
 		varTable.getHeader().setSampleName(text);
 	}
 	
+	/**
+	 * Remove annotations (columns) displaying pedigree info
+	 */
+	public void clearPedAnnotations() {
+		varTable.getColumnModel().removeColumnsByClass(PedigreeVarAnnotation.class);
+	}
+	
 	VarListManager varManager = VarListManager.getManager();
 	FiltersPanel filtersPanel;
 	VarTable varTable = null;
-
 
 }
