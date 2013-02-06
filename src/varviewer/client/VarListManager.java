@@ -149,7 +149,6 @@ public class VarListManager implements FilterListener {
 		  });
 	}
 	
-	
 	VarRequestServiceAsync varRequestService = (VarRequestServiceAsync) GWT.create(VarRequestService.class);
 
 }

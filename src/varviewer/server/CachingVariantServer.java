@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import varviewer.server.variant.VariantCollection;
+import varviewer.shared.PedigreeFilter;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
 import varviewer.shared.VariantRequest;
@@ -94,8 +95,19 @@ public class CachingVariantServer extends AbstractVariantServer {
 	 * @param filters
 	 * @return
 	 */
-	private static List<Variant> applyFilters(List<Variant> vars, List<VariantFilter> filters) {
+	private List<Variant> applyFilters(List<Variant> vars, List<VariantFilter> filters) {
 		List<Variant> passingVars = new ArrayList<Variant>(1024);
+		
+		//Kind of a hack here... pedigree-based filters need to be 'initialized' with a SampleSource
+		//before they work, right now we do this here. 
+		
+		for(VariantFilter filter : filters) {
+			if (filter instanceof PedigreeFilter) {
+				PedigreeFilter pedFilter = (PedigreeFilter)filter;
+				pedFilter.setVariantSource(source);
+			}
+		}
+		
 		for(Variant var : vars) {
 			boolean passes = true;
 			for(VariantFilter filter : filters) {

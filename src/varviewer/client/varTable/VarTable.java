@@ -32,6 +32,8 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	
 	VarTableHeader header = null;
 	ColumnModel colModel = new ColumnModel();
+	SearchBoxVariantFilter searchBoxFilter = new SearchBoxVariantFilter();
+	List<Variant> fullVariantList = null; //Stores all variants passed in from VarListManager, but does not reflect filtering from the SearchBoxFilter
 	
 	public VarTable() {
 		this.setStylePrimaryName("vartable");
@@ -39,11 +41,34 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	}
 	
 	public void setVariants(List<Variant> variants) {
-		varPage.setVariants(variants);
-		varPage.setRowCount(variants.size(), true);
+		fullVariantList = variants;
+		List<Variant> searchBoxPassingVars = new ArrayList<Variant>();
+		if (searchBoxFilter.getFilterCount()>0) {
+			for(Variant var : variants) {
+				if ( searchBoxFilter.variantPasses(var)) {
+					searchBoxPassingVars.add(var);
+				}
+			}
+		}
+		else {
+			searchBoxPassingVars = fullVariantList;
+		}
+		varPage.setVariants(searchBoxPassingVars);
+		varPage.setRowCount(searchBoxPassingVars.size(), true);
 		varPage.setVisibleRange(0, VISIBLE_ROWS);
 	}
 
+	public void handleSearchBoxTextChange(String text) {
+		if (text.trim().length()==0) {
+			searchBoxFilter.clearFilters();
+		}
+		else {
+			searchBoxFilter.setTerms(text);
+		}
+		
+		setVariants(fullVariantList);
+	}
+	
 	protected VarPage getVarPage() {
 		return varPage;
 	}
@@ -128,6 +153,9 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 		} 
 	}
 	
+	
 	ExportServiceAsync exportService = (ExportServiceAsync) GWT.create(ExportService.class);
+
+	
 	
 }

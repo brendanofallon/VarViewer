@@ -1,7 +1,9 @@
 package varviewer.client.varTable.pedigree;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import varviewer.shared.PedigreeFilter;
 import varviewer.shared.PedigreeSample;
 import varviewer.shared.PedigreeSample.OperationType;
 
@@ -96,8 +98,17 @@ public class PedigreePopup extends PopupPanel {
 	}
 
 	protected void done() {
-		List<PedigreeSample> includeSamples = includesPanel.getSampleSettings();
-		List<PedigreeSample> excludeSamples = excludesPanel.getSampleSettings();
+		List<PedigreeFilter> filters = new ArrayList<PedigreeFilter>();
+		for(PedigreeSample sample : includesPanel.getSampleSettings()) {
+			filters.add(new PedigreeFilter(sample));
+		}
+		for(PedigreeSample sample : excludesPanel.getSampleSettings()) {
+			filters.add(new PedigreeFilter(sample));
+		}
+		
+		//List<VariantFilter> currentFilters = 
+		//VarListManager.getManager().filtersUpdated( );
+		//Do something with the filter list... like ask the VarListManager to get new variants?
 		hidePopup();
 	}
 

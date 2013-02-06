@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,29 @@ public class VariantCollection {
 	}
 	
 	/**
+	 * Find and return the variant at the given position, returns null if there is
+	 * no such variant
+	 * @param contig
+	 * @param pos
+	 * @return
+	 */
+	public Variant getVariant(String contig, int pos) {
+		List<Variant> cVars = vars.get(contig);
+		if (cVars == null)
+			return null;
+		
+		qRec.setPos(pos);
+		
+		int index = Collections.binarySearch(cVars, qRec, posComparator);
+		if (index < 0) {
+			return null;
+		}
+		
+		return cVars.get(index);		
+		
+	}
+	
+	/**
 	 * Returns a reference to the list of variants in the given contig, modifications
 	 * to the list will modify this collection
 	 * @param contig
@@ -146,4 +170,18 @@ public class VariantCollection {
 		return allVars;
 	}
 	
+	public static class PositionComparator implements Comparator<Variant> {
+
+		@Override
+		public int compare(Variant o1, Variant o2) {
+			if (o1 == o2) {
+				return 0;
+			}
+
+			return o1.getPos() - o2.getPos();
+		}
+	}
+	
+	private Variant qRec = new Variant(); //Just used for binary searches
+	private PositionComparator posComparator = new PositionComparator();
 }

@@ -44,10 +44,16 @@ public class Variant implements Comparable<Variant>, Serializable {
 	public int getPos() {
 		return pos;
 	}
-
+	
+	/**
+	 * Set the position of this variant. Warning! If this is in a VariantCollection you must re-sort
+	 * all variants after you set the position!
+	 * @param pos
+	 */
 	public void setPos(int pos) {
 		this.pos = pos;
 	}
+
 
 	public String getRef() {
 		return ref;
