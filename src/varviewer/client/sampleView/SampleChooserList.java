@@ -36,6 +36,7 @@ public class SampleChooserList extends FlowPanel {
 	private List<SampleInfo> allSamples = null;
 	private CellTable<SampleInfo> sampleList;
 	private SampleSelectionListener listener = null;
+	private ScrollPanel sampleSP;
 	
 	public SampleChooserList(SampleSelectionListener listener) {
 		this.listener = listener;
@@ -91,11 +92,15 @@ public class SampleChooserList extends FlowPanel {
 			}
 		});
 		
-		ScrollPanel sampleSP = new ScrollPanel(sampleList);
+		sampleSP = new ScrollPanel(sampleList);
 		sampleSP.setStylePrimaryName("samplescrollpane");	
 		this.add(sampleSP);
 	}
 
+	public ScrollPanel getScrollPanel() {
+		return sampleSP;
+	}
+	
 	/**
 	 * Re-load list of samples from the server
 	 */

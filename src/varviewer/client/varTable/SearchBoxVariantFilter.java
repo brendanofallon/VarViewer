@@ -98,13 +98,13 @@ public class SearchBoxVariantFilter implements VariantFilter {
 		String geneName;
 		
 		GeneFilter(String gene) {
-			this.geneName = gene;
+			this.geneName = gene.toUpperCase();
 		}
 		
 		@Override
 		public boolean variantPasses(Variant var) {
 			String varGene = var.getAnnotation("gene");
-			if (varGene != null && varGene.equals(geneName)) {
+			if (varGene != null && varGene.startsWith(geneName)) {
 				return true;
 			}
 			return false;

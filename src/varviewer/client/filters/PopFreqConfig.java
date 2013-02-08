@@ -13,6 +13,7 @@ public class PopFreqConfig extends FilterConfig {
 
 	private TextBox freqBox = new TextBox();
 	private TextBox arupBox = new TextBox();
+	private TextBox varBinBox = new TextBox();
 	private MaxFreqFilter filter;
 	
 	public PopFreqConfig(FilterBox parent) {
@@ -31,7 +32,6 @@ public class PopFreqConfig extends FilterConfig {
 		Label lab = new Label("Exclude all variants with population frequency greater than ");
 		panel.add(lab);
 		
-		parentBox.setInteriorText("Exclude pop. freq. > " + this.filter.getMaxFreq() + ", ARUP > " + this.filter.getArupMax());
 		freqBox.setText("0.10");
 		freqBox.setWidth("50px");
 		panel.add(freqBox);
@@ -45,9 +45,16 @@ public class PopFreqConfig extends FilterConfig {
 		arupBox.setWidth("50px");
 		panel.add(arupBox);
 		
+		Label lab4 = new Label("Exclude with VarBin greater than (1-4)");
+		panel.add(lab4);
+		varBinBox.setText("3");
+		varBinBox.setWidth("50px");
+		panel.add(varBinBox);
+		
 		interiorPanel.add(panel);
 		interiorPanel.setWidth("250px");
-		interiorPanel.setHeight("200px");
+		interiorPanel.setHeight("240px");
+		updateInteriorLabelText();
 	}
 
 	@Override
@@ -61,9 +68,15 @@ public class PopFreqConfig extends FilterConfig {
 			
 			
 			Integer arupTot = Integer.parseInt( arupBox.getText() );
+			Integer varBinMin = Integer.parseInt( varBinBox.getText() );
+			
 			
 			this.filter.setArupMax(arupTot);
 			this.filter.setMaxFreq(freq);
+			this.filter.setVarBinMin(varBinMin);
+			
+			
+			
 			updateInteriorLabelText();
 			return true;
 		}
@@ -76,7 +89,7 @@ public class PopFreqConfig extends FilterConfig {
 
 	@Override
 	public void updateInteriorLabelText() {
-		parentBox.setInteriorText("Exclude pop. freq. > " + this.filter.getMaxFreq() + ", ARUP > " + filter.getArupMax());
+		parentBox.setInteriorText("Exclude pop. freq. > " + this.filter.getMaxFreq() + ", ARUP > " + filter.getArupMax() + ", VarBin > " + filter.getVarBinMin());
 	}
 
 }

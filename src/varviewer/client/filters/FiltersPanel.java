@@ -114,7 +114,7 @@ public class FiltersPanel extends FlowPanel {
 		});
 		
 		this.add(backButton);
-		backButton.setWidth("100px");
+		backButton.setWidth("130px");
 		SimplePanel spacer1 = new SimplePanel();
 		spacer1.setHeight("20px");
 		this.add(spacer1);

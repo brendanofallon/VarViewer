@@ -20,11 +20,27 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	//Max arup value
 	int arupMax = 100;
 	
+	//VarBin min
+	int varBinMin = 3;
+	
 	public MaxFreqFilter() {
 		//Required no-arg constructor
 	}
 	
 	
+	
+	public int getVarBinMin() {
+		return varBinMin;
+	}
+
+
+
+	public void setVarBinMin(int varBinMin) {
+		this.varBinMin = varBinMin;
+	}
+
+
+
 	/**
 	 * Set the maximum frequency allowed by this filter
 	 * @param freq
@@ -51,6 +67,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	public boolean variantPasses(Variant var) {
 		String freq = var.getAnnotation("pop.freq");
 		String arupStr = var.getAnnotation("ARUP.freq");
+		String varbinStr = var.getAnnotation("varbin.bin");
 		
 		if (freq == null && arupStr == null)
 			return true;
@@ -82,6 +99,18 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 
 		}
 
+		if (varbinStr != null) {
+			try {
+				int bin = Integer.parseInt(varbinStr);
+				if (bin > varBinMin) {
+					return false;
+				}
+			}
+			catch (NumberFormatException nfe) {
+				
+			}
+		}
+		
 		return true;
 	}
 

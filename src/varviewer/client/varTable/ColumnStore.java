@@ -125,18 +125,36 @@ public class ColumnStore {
 		});
 		addColumn(posAnnotation);
 		
-		addColumn(new VarAnnotation<String>("zygosity", "Zygosity", new TextColumn<Variant>() {
+//		addColumn(new VarAnnotation<String>("zygosity", "Zygosity", new TextColumn<Variant>() {
+//
+//			@Override
+//			public String getValue(Variant var) {
+//				String val = var.getAnnotation("zygosity");
+//			
+//				if (val == null || val.length()<2)
+//					return "?";
+//					
+//				return val;
+//			}
+//		}, 1.0, false));
+		
+		addColumn(new VarAnnotation<ImageResource>("zygosity", "Zygosity", new Column<Variant, ImageResource>(new ImageResourceCell()) {
 
 			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotation("zygosity");
-			
-				if (val == null || val.length()<2)
-					return "?";
-					
-				return val;
+			public ImageResource getValue(Variant var) {
+				String zyg = var.getAnnotation("zygosity");
+								
+				if (zyg == null || zyg.equals("ref"))
+					return resources.refImage();
+				if (zyg.equals("het"))
+					return resources.hetImage();
+				if (zyg.equals("hom"))
+					return resources.homImage();
+				
+				return resources.refImage();
 			}
-		}, 1.0, false));
+			
+		}, 0.6, false));
 
 
 		addColumn(new VarAnnotation<String>("exon.function", "Exon effect", new TextColumn<Variant>() {
@@ -239,7 +257,37 @@ public class ColumnStore {
 				return "-";
 			}
 		}, 1.0, true));
+		
+		addColumn(new VarAnnotation<SafeHtml>("varbin.bin", "VarBin", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
 
+			@Override
+			public SafeHtml getValue(Variant var) {
+				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
+				String val = var.getAnnotation("varbin.bin");
+				
+				if (val == null) {
+					bldr.appendEscaped("-");
+				}
+				else {
+					if (val.contains("1")) {
+						bldr.appendHtmlConstant("<span style=\"color: green;\">1</span>");	
+					}
+					if (val.contains("2")) {
+						bldr.appendHtmlConstant("<span style=\"color: yellow;\">2</span>");	
+					}
+					if (val.contains("3")) {
+						bldr.appendHtmlConstant("<span style=\"color: orange;\">3</span>");	
+					}
+					if (val.contains("4")) {
+						bldr.appendHtmlConstant("<span style=\"color: red;\">4</span>");	
+					}
+					
+				}
+				return bldr.toSafeHtml();
+			}
+			
+		}, 1.0, false));
+		
 		addColumn(new VarAnnotation<String>("pop.freq", "Pop. Freq.", new TextColumn<Variant>() {
 
 			@Override

@@ -30,7 +30,6 @@ public class AddSamplePopup extends PopupPanel implements SampleSelectionListene
 		super(false);
 		this.chooserPanel = chooserPanel;
 		initComponents();
-		setWidth("300px");
 		sampleChooser.refreshSampleList();
 	}
 
@@ -47,8 +46,10 @@ public class AddSamplePopup extends PopupPanel implements SampleSelectionListene
 		mainPanel.add(new HTML("<hr />"));
 		
 		sampleChooser = new SampleChooserList(this);
-		
+		sampleChooser.getScrollPanel().setHeight("300px");
+	
 		mainPanel.add(sampleChooser);
+		mainPanel.add(new HTML("<hr />"));
 		
 		HorizontalPanel bottomPanel = new HorizontalPanel();
 		mainPanel.add(bottomPanel);

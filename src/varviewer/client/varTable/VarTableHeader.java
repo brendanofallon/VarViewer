@@ -4,7 +4,6 @@ package varviewer.client.varTable;
 import varviewer.client.HighlightButton;
 import varviewer.client.varTable.pedigree.PedigreePopup;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -39,10 +38,9 @@ public class VarTableHeader extends HorizontalPanel {
 		sampleLabel.setStylePrimaryName("samplelabel");
 		
 		searchBox = new HeaderSearchBox(tableParent);
-		searchBox.getElement().getStyle().setMarginRight(100.0, Unit.PX);
 		this.add(searchBox);
 		
-		Image pedImage = new Image("/images/pedigreeIcon.png");
+		Image pedImage = new Image("images/pedigreeIcon.png");
 		pedigreeButton = new HighlightButton(pedImage, new ClickHandler() {
 
 			@Override
@@ -105,6 +103,10 @@ public class VarTableHeader extends HorizontalPanel {
 		colMenuButton.setHeight("24px");
 		
 		this.add(pager);
+		
+		this.setCellHorizontalAlignment(sampleLabel, ALIGN_LEFT);
+		this.setCellHorizontalAlignment(searchBox, ALIGN_CENTER);
+		this.setCellHorizontalAlignment(pager, ALIGN_RIGHT);
 		
 		pager.setDisplay(tableParent.getVarPage());
 	}

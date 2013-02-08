@@ -5,8 +5,14 @@ import com.google.gwt.resources.client.ImageResource;
 
 interface VarPageResources extends ClientBundle {
 
-	@Source("export-icon.png")
-	ImageResource testImage();
+	@Source("hetPic.png")
+	ImageResource hetImage();
+	
+	@Source("homPic.png")
+	ImageResource homImage();
+	
+	@Source("refPic.png")
+	ImageResource refImage();
 	
 	@Source("OMIM-icon.png")
 	ImageResource omimImage();
