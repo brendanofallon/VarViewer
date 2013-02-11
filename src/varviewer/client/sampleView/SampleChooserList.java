@@ -172,7 +172,6 @@ public class SampleChooserList extends FlowPanel {
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
 				SampleTreeNode value, SafeHtmlBuilder sb) {
-
 			
 			sb.appendHtmlConstant("<table class=\"sampletableitem\">");
 			sb.appendHtmlConstant("<tr><td rowspan='3'>");

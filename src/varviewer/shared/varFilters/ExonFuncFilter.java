@@ -36,7 +36,7 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 		if (varType == null)
 			return missingDataPasses;
 		
-		if (excludeIntergenic && varType.contains("intergenic")) {
+		if (excludeIntergenic && (varType.contains("intergenic") || varType.contains("upstream") || varType.contains("downstream"))) {
 			return false;
 		}
 		

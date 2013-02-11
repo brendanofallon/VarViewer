@@ -7,6 +7,7 @@ import varviewer.client.HighlightButton;
 import varviewer.client.VarListManager;
 import varviewer.client.VarViewer;
 import varviewer.shared.VariantFilter;
+import varviewer.shared.varFilters.DeleteriousFilter;
 import varviewer.shared.varFilters.ExonFuncFilter;
 import varviewer.shared.varFilters.GeneFilter;
 import varviewer.shared.varFilters.HGMDOmimFilter;
@@ -138,6 +139,14 @@ public class FiltersPanel extends FlowPanel {
 		QualDepthFilterConfig qualDepthConfig = new QualDepthFilterConfig(qdFilterBox);
 		qdFilterBox.setConfigTool(qualDepthConfig);
 		addFilter(qdFilterBox);
+
+		
+		DeleteriousFilter delFilter = new DeleteriousFilter();
+		FilterBox deleteriousFilterBox = new FilterBox(this, "Deleterious Score", delFilter);
+		deleteriousFilterBox.setInteriorText("No del. prediction filters set");
+		DelFilterConfig delConfig = new DelFilterConfig(deleteriousFilterBox);
+		deleteriousFilterBox.setConfigTool(delConfig);
+		addFilter(deleteriousFilterBox);
 		
 		GeneFilter geneFilter = new GeneFilter();
 		FilterBox geneFilterBox = new FilterBox(this, "Genes & Regions", geneFilter);
