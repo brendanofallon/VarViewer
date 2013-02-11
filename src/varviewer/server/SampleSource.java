@@ -6,6 +6,7 @@ import java.util.List;
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.HasSamples;
 import varviewer.shared.SampleInfo;
+import varviewer.shared.SampleTreeNode;
 
 /**
  * Objects which generate a list of SampleInfo objects should implement this interface
@@ -33,7 +34,14 @@ public interface SampleSource extends HasSamples {
 	 * Retrieve a list of all SampleInfo objects representing samples available through this source
 	 * @return
 	 */
-	public List<SampleInfo> getSampleInfos();
+	public List<SampleInfo> getAllSamples();
+	
+	
+	/**
+	 * Retrieve the root of the tree containing all samples
+	 * @return
+	 */
+	public SampleTreeNode getSampleTreeRoot();
 	
 	/**
 	 * Obtain sampleInfo for the given sample 

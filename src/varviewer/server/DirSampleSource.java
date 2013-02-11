@@ -18,6 +18,7 @@ import varviewer.server.variant.UncompressedCSVReader;
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.HasVariants;
 import varviewer.shared.SampleInfo;
+import varviewer.shared.SampleTreeNode;
 
 /**
  * A SampleSource that reads its samples from a single directory. 
@@ -30,6 +31,7 @@ public class DirSampleSource implements SampleSource {
 	
 	private File rootDir = null;
 	private Map<String, SampleInfoFile> samples = new HashMap<String, SampleInfoFile>();
+	private SampleTreeNode root = null; //null until initialized
 	
 	public DirSampleSource() {
 		String rootPath = VVProps.getProperty("sample.dir");
@@ -63,21 +65,50 @@ public class DirSampleSource implements SampleSource {
 		
 		Logger.getLogger(getClass()).info("Initializing sample info directory from path: " + rootDir.getAbsolutePath());
 		samples.clear();
-		File[] subdirs = rootDir.listFiles();
+		root = new SampleTreeNode("root", new ArrayList<SampleTreeNode>());
+		attachChildSamples(root, rootDir);
+//		File[] subdirs = rootDir.listFiles();
+//		for(int i=0; i<subdirs.length; i++) {
+//			if (subdirs[i].isDirectory()) {
+//				SampleInfoFile sampleInfo = createInfoForFile(subdirs[i]);
+//				if (sampleInfo != null) {
+//					Logger.getLogger(getClass()).info("Loading sample info from file " + subdirs[i].getAbsolutePath() + ", found sample id: " + sampleInfo.info.getSampleID());
+//					samples.put(sampleInfo.info.getSampleID(), sampleInfo);
+//				}
+//				else {
+//					Logger.getLogger(getClass()).warn("Could not parse sample info from directory " + subdirs[i].getAbsolutePath());
+//				}
+//			}
+//		}
+	}
+
+	private void attachChildSamples(SampleTreeNode parentNode, File parentDir) {
+		File[] subdirs = parentDir.listFiles();
 		for(int i=0; i<subdirs.length; i++) {
 			if (subdirs[i].isDirectory()) {
 				SampleInfoFile sampleInfo = createInfoForFile(subdirs[i]);
 				if (sampleInfo != null) {
 					Logger.getLogger(getClass()).info("Loading sample info from file " + subdirs[i].getAbsolutePath() + ", found sample id: " + sampleInfo.info.getSampleID());
 					samples.put(sampleInfo.info.getSampleID(), sampleInfo);
+					SampleTreeNode sampleNode = new SampleTreeNode(sampleInfo.info);
+					parentNode.addChild(sampleNode);
 				}
 				else {
-					Logger.getLogger(getClass()).warn("Could not parse sample info from directory " + subdirs[i].getAbsolutePath());
+					//No sample manifest or info in this directory, so assume that it contains more directories to list
+					
+					if (subdirs[i].listFiles().length>0) {
+						SampleTreeNode dirNode = new SampleTreeNode(subdirs[i].getName(), new ArrayList<SampleTreeNode>());
+						parentNode.addChild(dirNode);
+						attachChildSamples(dirNode, subdirs[i]);
+					}
 				}
+			}
+			else {
+				//this file is not a directory, so ignore it
 			}
 		}
 	}
-
+	
 	/**
 	 * Attempt to parse a SampleInfoFile from the given directory. 
 	 * @param file
@@ -254,7 +285,7 @@ public class DirSampleSource implements SampleSource {
 	}
 
 	@Override
-	public List<SampleInfo> getSampleInfos() {
+	public List<SampleInfo> getAllSamples() {
 		List<SampleInfo> infos = new ArrayList<SampleInfo>();
 		for(String id : samples.keySet()) {
 			SampleInfoFile infoFile = samples.get(id);
@@ -323,6 +354,11 @@ public class DirSampleSource implements SampleSource {
 	}
 	
 	@Override
+	public SampleTreeNode getSampleTreeRoot() {
+		return root;
+	}
+	
+	@Override
 	public HasVariants getHasVariantsForSample(String sampleID) {
 		return getVariantsForSample(sampleID);
 	}
@@ -336,6 +372,8 @@ public class DirSampleSource implements SampleSource {
 		File source;
 		SampleInfo info;
 	}
+
+	
 
 
 

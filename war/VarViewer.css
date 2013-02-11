@@ -288,9 +288,9 @@
 }
 
 
-.samplescrollpane {
-	width: 350px;
-	margin-top: 10px;	
+.samplebrowser {
+	height: 400px;
+	width: 500px;
 }
 
 .sampledetailsheader {
@@ -321,7 +321,8 @@
 	-moz-box-shadow: 5px 5x 12px rgb(180, 180, 180);
 	-webkit-box-shadow: 5px 5px 12px rgb(180, 180, 180);
 	box-shadow: 5px 5px 12px rgb(180, 180, 180);
-	margin-left: 50px;
+	margin-left: 30px;
+	margin-top: 20px;
 	width: 400px;
 	height: 400px;
 	background : rgb(255, 255, 255);
@@ -329,15 +330,15 @@
 
 
 .sampletabletext {
-	padding-top: 10px;
+	padding-top: 4px;
 	font-family: 'Open Sans', sans-serif;
-	font-size: 12px;	
+	font-size: 11px;	
 	font-weight: bold;
 }
 
 .sampletabletextA {
 	font-family: 'Open Sans', sans-serif;
-	font-size: 12px;	
+	font-size: 11px;	
 }
 
 .buttongrid {

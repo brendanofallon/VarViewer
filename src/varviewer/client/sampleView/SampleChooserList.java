@@ -16,13 +16,10 @@ import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellBrowser;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
@@ -42,10 +39,8 @@ public class SampleChooserList extends FlowPanel {
 	private List<SampleInfo> allSamples = null;
 	final private SampleTreeNode rootNode = new SampleTreeNode();
 	private SampleViewModel model = null;
-	private ScrollPanel sampleScrollPanel = null;
 	private CellBrowser sampleBrowser;
 	private SampleSelectionListener listener = null;
-	private ScrollPanel sampleSP;
 	
 	public SampleChooserList(SampleSelectionListener listener) {
 		this.listener = listener;
@@ -80,44 +75,26 @@ public class SampleChooserList extends FlowPanel {
 	private void initComponents() {
 		searchBox = new SearchBox(this);
 		this.add(searchBox);
-//		SampleCell sampleCell = new SampleCell();
-//		sampleList = new CellTable<SampleInfo>();
-//		sampleList.addColumn(new Column<SampleInfo, SampleInfo>(sampleCell) {
-//			@Override
-//			public SampleInfo getValue(SampleInfo object) {
-//				return object;
-//			}
-//		});
-//		sampleList.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
-//		
-//		final SingleSelectionModel<SampleInfo> selectionModel = new SingleSelectionModel<SampleInfo>();
-//		sampleList.setSelectionModel(selectionModel);
-//		selectionModel.addSelectionChangeHandler(new Handler() {
-//
-//			@Override
-//			public void onSelectionChange(SelectionChangeEvent event) {
-//				if (listener != null)
-//					listener.updateSelectedSample(selectionModel.getSelectedObject());
-//			}
-//		});
-//		
-//		sampleSP = new ScrollPanel(sampleList);
-//		sampleSP.setStylePrimaryName("samplescrollpane");	
-//		this.add(sampleSP);
-		
+
 		model = new SampleViewModel(rootNode);
 		rootNode.setChildren("root", new ArrayList<SampleTreeNode>());
 		sampleBrowser = new CellBrowser(model, rootNode);
-		sampleScrollPanel = new ScrollPanel(sampleBrowser);
-		
-			
-		this.add(sampleScrollPanel);
-	}
-
-	public ScrollPanel getScrollPanel() {
-		return sampleSP;
+		sampleBrowser.setStylePrimaryName("samplebrowser");
+		selectionModel.addSelectionChangeHandler(new Handler()  {
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				fireSelectionChange();
+			}
+		});
+		this.add(sampleBrowser);
 	}
 	
+	protected void fireSelectionChange() {
+		SampleTreeNode selectedNode = selectionModel.getSelectedObject();
+		if (selectedNode != null && selectedNode.getSampleInfo() != null)
+			listener.updateSelectedSample( selectedNode.getSampleInfo() );
+	}
+
 	/**
 	 * Re-load list of samples from the server
 	 */
@@ -174,13 +151,15 @@ public class SampleChooserList extends FlowPanel {
 	 * @param allSamples
 	 */
 	protected void setSampleList(SampleListResult result) {
+		this.remove(sampleBrowser);
 		this.allSamples = treeToList(result);
 		model = new SampleViewModel(rootNode);
 		rootNode.setChildren("root", result.getRootNode().getChildren());
 		sampleBrowser = new CellBrowser(model, rootNode);
-		sampleScrollPanel.setWidget(sampleBrowser);
-		System.out.println("Setting sample list, root node now has " + rootNode.getChildren().size() + " children");
-		model.getSampleList().refresh();
+		sampleBrowser.setAnimationEnabled(true);
+		sampleBrowser.setStylePrimaryName("samplebrowser");
+		sampleBrowser.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+		this.add(sampleBrowser);
 		//setFilterText(null); //reset filter, force re-display of all samples
 	}
 	/**
@@ -193,10 +172,17 @@ public class SampleChooserList extends FlowPanel {
 		@Override
 		public void render(com.google.gwt.cell.client.Cell.Context context,
 				SampleTreeNode value, SafeHtmlBuilder sb) {
+
 			
 			sb.appendHtmlConstant("<table class=\"sampletableitem\">");
 			sb.appendHtmlConstant("<tr><td rowspan='3'>");
-			sb.appendHtmlConstant("<img src=\"images/sampleIcon48.png\" />");
+			if (value.getSampleInfo() != null) {
+				sb.appendHtmlConstant("<img src=\"images/newSampleIcon32.png\" />");	
+			}
+			else {
+				sb.appendHtmlConstant("<img src=\"images/folder32.png\" />");
+			}
+			
 		    sb.appendHtmlConstant("</td>");
 			sb.appendHtmlConstant("<td class=\"sampletabletext\">");
 			String idStr = "unknown";
@@ -217,7 +203,7 @@ public class SampleChooserList extends FlowPanel {
 		    	sb.appendEscaped(analysisTypeStr);
 		    }
 		    else {
-		    	sb.appendEscaped("Folder, " + value.getChildren().size() + " children");
+		    	sb.appendEscaped("");
 		    }
 		    sb.appendHtmlConstant("</td></tr></table>");
 			
@@ -235,13 +221,10 @@ public class SampleChooserList extends FlowPanel {
 		
 	}
 	
-	
-	SampleListServiceAsync sampleListService = (SampleListServiceAsync) GWT.create(SampleListService.class);
-	
 	static class SampleViewModel implements TreeViewModel {
 		
 		
-		private ListDataProvider<SampleTreeNode> sampleList = new ListDataProvider<SampleTreeNode>();
+		
 		SampleCell cell = new SampleCell();
 		final SampleTreeNode root;
 		
@@ -250,26 +233,16 @@ public class SampleChooserList extends FlowPanel {
 		}
 		
 		
-		public ListDataProvider<SampleTreeNode> getSampleList() {
-			return sampleList;
-		}
-		
 		@Override
 		public <T> NodeInfo<?> getNodeInfo(T value) {
-			//ListDataProvider<SampleTreeNode> list = new ListDataProvider<SampleTreeNode>();
-			System.out.println("Getting node info, value is : " + value + "  root node is : " +root);
-			if (value == root) {
-				//Use the root node
-				System.out.println("Adding all " + root.getChildren().size() + " children from root node");
-				sampleList.getList().addAll(root.getChildren());
-			}
+			ListDataProvider<SampleTreeNode> sampleList = new ListDataProvider<SampleTreeNode>();
 			if (value instanceof SampleTreeNode) {
 				SampleTreeNode node = (SampleTreeNode)value;
 				if (!node.isLeaf() && node.getChildren() != null) {
 					sampleList.getList().addAll(node.getChildren());
 				}
 			}
-			return new DefaultNodeInfo<SampleTreeNode>(sampleList, cell);
+			return new DefaultNodeInfo<SampleTreeNode>(sampleList, cell, selectionModel, null);
 		}
 
 		@Override
@@ -283,5 +256,8 @@ public class SampleChooserList extends FlowPanel {
 		
 	}
 	
+	
+	final static SingleSelectionModel<SampleTreeNode> selectionModel = new SingleSelectionModel<SampleTreeNode>();
+	SampleListServiceAsync sampleListService = (SampleListServiceAsync) GWT.create(SampleListService.class);
 	
 }

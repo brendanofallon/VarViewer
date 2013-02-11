@@ -1,19 +1,13 @@
 package varviewer.server;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import varviewer.client.services.SampleListService;
-import varviewer.shared.SampleInfo;
 import varviewer.shared.SampleListResult;
-import varviewer.shared.SampleTreeNode;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.TreeViewModel;
 
 /**
  * Grabs the list of available samples and returns them in a list of SampleInfos
@@ -44,14 +38,7 @@ public class SampleListServiceImpl extends RemoteServiceServlet implements Sampl
 		
 		//re-initialize every time
 		sampleDir.initialize();
-		final List<SampleInfo> infos = sampleDir.getSampleInfos();
-		List<SampleTreeNode> nodes = new ArrayList<SampleTreeNode>(infos.size());
-		for(SampleInfo info : infos) {
-			nodes.add( new SampleTreeNode(info));
-		}
-		SampleTreeNode rootNode = new SampleTreeNode("root", nodes);
-		
-		return new SampleListResult(rootNode);
+		return new SampleListResult(sampleDir.getSampleTreeRoot());
 	}
 	
 

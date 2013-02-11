@@ -1,4 +1,4 @@
-sample.dir=/Users/brendanofallon/jobwrangler_samples/
-#sample.dir=/home/brendan/jobwrangler_samples/
+#sample.dir=/Users/brendanofallon/jobwrangler_samples/
+sample.dir=/home/brendan/jobwrangler_samples/
 genedb.path=geneInfo.csv:../geneInfo.csv:/home/brendan/workspace/VarViewer/war/geneInfo.csv:/home/web/geneInfo.csv
 

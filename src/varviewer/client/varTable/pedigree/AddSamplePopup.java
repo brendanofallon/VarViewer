@@ -46,7 +46,7 @@ public class AddSamplePopup extends PopupPanel implements SampleSelectionListene
 		mainPanel.add(new HTML("<hr />"));
 		
 		sampleChooser = new SampleChooserList(this);
-		sampleChooser.getScrollPanel().setHeight("300px");
+		//sampleChooser.getWidget().setHeight("300px");
 	
 		mainPanel.add(sampleChooser);
 		mainPanel.add(new HTML("<hr />"));

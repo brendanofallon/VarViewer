@@ -35,6 +35,13 @@ public class SampleTreeNode implements Serializable {
 		this.children = children;
 	}
 	
+	public void addChild(SampleTreeNode child) {
+		if (children == null) {
+			throw new IllegalArgumentException("Node " + getTitle() + " is a leaf node, you can't add children to it");
+		}
+		children.add(child);
+	}
+	
 	public SampleInfo getSampleInfo() {
 		return info;
 	}
