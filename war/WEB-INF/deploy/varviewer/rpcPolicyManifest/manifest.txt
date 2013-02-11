@@ -1,6 +1,2 @@
 # Module varviewer
 # RPC service class, partial path of RPC policy file
-varviewer.client.services.SampleListService, 9CF3DFC15043D4B7B42F566551D28307.gwt.rpc
-varviewer.client.services.GeneDetailService, A46C4F6A3A328A279B0B91157A23C0B2.gwt.rpc
-varviewer.client.services.ExportService, 7DE342FB65A05BFF1BB251C6455750BA.gwt.rpc
-varviewer.client.services.VarRequestService, 04D4E92D39DFFF307E365992373B0B54.gwt.rpc
