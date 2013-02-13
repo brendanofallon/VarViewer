@@ -69,9 +69,13 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		String arupStr = var.getAnnotation("ARUP.freq");
 		String varbinStr = var.getAnnotation("varbin.bin");
 		
-		if (freq == null && arupStr == null)
-			return true;
-
+		
+		if (freq == null)
+			freq = "0.0";
+		if (arupStr == null) {
+			arupStr = "0 total";
+		}
+		
 		Double freqVal = 0.0;
 		int arupTot = 0;
 		try {
@@ -84,6 +88,8 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		if (freqVal > maxFreq) {
 			return false;
 		}
+
+
 
 		try {
 
@@ -99,9 +105,10 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 
 		}
 
+		
 		if (varbinStr != null) {
 			try {
-				int bin = Integer.parseInt(varbinStr);
+				double bin = Double.parseDouble(varbinStr);
 				if (bin > varBinMin) {
 					return false;
 				}

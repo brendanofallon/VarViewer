@@ -265,21 +265,21 @@ public class ColumnStore {
 				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
 				String val = var.getAnnotation("varbin.bin");
 				
-				if (val == null) {
+				if (val == null || val.equals("-")) {
 					bldr.appendEscaped("-");
 				}
 				else {
 					if (val.contains("1")) {
-						bldr.appendHtmlConstant("<span style=\"color: green;\">1</span>");	
+						bldr.appendHtmlConstant("<span style=\"color: #003300;\"><b>1</b></span>");	
 					}
 					if (val.contains("2")) {
-						bldr.appendHtmlConstant("<span style=\"color: yellow;\">2</span>");	
+						bldr.appendHtmlConstant("<span style=\"color: #996600;\"><b>2</b></span>");	
 					}
 					if (val.contains("3")) {
-						bldr.appendHtmlConstant("<span style=\"color: orange;\">3</span>");	
+						bldr.appendHtmlConstant("<span style=\"color: #990000;\"><b>3</b></span>");	
 					}
 					if (val.contains("4")) {
-						bldr.appendHtmlConstant("<span style=\"color: red;\">4</span>");	
+						bldr.appendHtmlConstant("<span style=\"color: #FF0000;\"><b>4</b></span>");	
 					}
 					
 				}
