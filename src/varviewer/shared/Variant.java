@@ -12,7 +12,7 @@ public class Variant implements Comparable<Variant>, Serializable {
 	String ref = "X";
 	String alt = "X";
 	
-	Map<String, String> annotations = new HashMap<String, String>();
+	Map<String, Annotation> annotations = new HashMap<String, Annotation>();
 	
 	public Variant() {
 		//blank on purpose, must have a no-arg constructor for serialization
@@ -26,11 +26,25 @@ public class Variant implements Comparable<Variant>, Serializable {
 	}
 	
 	public void addAnnotation(String key, String value) {
-		annotations.put(key, value);
+		annotations.put(key, new Annotation(value));
 	}
 	
-	public String getAnnotation(String key) {
+	public void addAnnotation(String key, Double value) {
+		annotations.put(key, new Annotation(value));
+	}
+	
+	public Annotation getAnnotation(String key) {
 		return annotations.get(key);
+	}
+	
+	public String getAnnotationStr(String key) {
+		Annotation anno = getAnnotation(key);
+		return anno == null ? null : anno.toString();
+	}
+	
+	public Double getAnnotationDouble(String key) {
+		Annotation anno = getAnnotation(key);
+		return anno == null ? null : anno.doubleVal;
 	}
 
 	public String getChrom() {

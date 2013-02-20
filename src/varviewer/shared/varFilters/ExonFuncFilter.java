@@ -30,8 +30,8 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 	
 	@Override
 	public boolean variantPasses(Variant var) {
-		String varType = var.getAnnotation("variant.type");
-		String exonFunc = var.getAnnotation("exon.function");
+		String varType = var.getAnnotationStr("variant.type");
+		String exonFunc = var.getAnnotationStr("exon.function");
 		
 		if (varType == null)
 			return missingDataPasses;

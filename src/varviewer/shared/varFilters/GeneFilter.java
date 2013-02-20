@@ -29,7 +29,7 @@ public class GeneFilter implements VariantFilter, Serializable {
 		if (geneNames.size()==0) {
 			return true;
 		}
-		String name = var.getAnnotation("gene");
+		String name = var.getAnnotationStr("gene");
 		if (name != null && geneNames.contains(name)) {
 			return true;
 		}

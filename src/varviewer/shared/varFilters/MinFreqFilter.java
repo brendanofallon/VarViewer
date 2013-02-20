@@ -34,22 +34,17 @@ public class MinFreqFilter implements VariantFilter, Serializable {
 	
 	@Override
 	public boolean variantPasses(Variant var) {
-		String freq = var.getAnnotation(annotation);
+		Double freq = var.getAnnotationDouble(annotation);
 		if (freq == null)
 			return missingDataPasses;
-		try {
-			Double val = Double.parseDouble(freq);
-			if (val >= maxVal) {
-				return true;
-			}
-			else {
-				return false;
-			}
+
+		if (freq >= maxVal) {
+			return true;
 		}
-		catch(NumberFormatException nfe) {
-			
+		else {
+			return false;
 		}
-		return missingDataPasses;
+
 	}
 
 

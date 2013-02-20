@@ -73,7 +73,7 @@ public class ContainsFilter implements VariantFilter, Serializable {
 	
 	@Override
 	public boolean variantPasses(Variant var) {
-		String val = var.getAnnotation(annotation);
+		String val = var.getAnnotationStr(annotation);
 		if (val == null)
 			return missingDataPasses;
 		

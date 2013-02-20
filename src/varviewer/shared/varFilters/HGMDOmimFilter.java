@@ -43,9 +43,9 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 
 	@Override
 	public boolean variantPasses(Variant var) {
-		String hgmdExact = var.getAnnotation("hgmd.hit");
-		String hgmdInfo = var.getAnnotation("hgmd.info");
-		String omim = var.getAnnotation("omim.disease");
+		String hgmdExact = var.getAnnotationStr("hgmd.hit");
+		String hgmdInfo = var.getAnnotationStr("hgmd.info");
+		String omim = var.getAnnotationStr("omim.disease");
 		
 		if (excludeNonExactHits) {
 			if (hgmdExact == null || hgmdExact.length()<2) {

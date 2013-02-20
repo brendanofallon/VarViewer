@@ -20,28 +20,24 @@ public class QualityDepthFilter implements VariantFilter, Serializable {
 	
 	@Override
 	public boolean variantPasses(Variant var) {
-		String qual = var.getAnnotation("quality");
-		String depth = var.getAnnotation("depth");
-		String varDepth = var.getAnnotation("var.depth");
-		if (qual == null || depth == null || varDepth == null) {
-			return missingDataPasses;
-		}
+		Double qual = var.getAnnotationDouble("quality");
+		Double depth = var.getAnnotationDouble("depth");
+		Double varDepth = var.getAnnotationDouble("var.depth");
 		
-		Double dQual = Double.parseDouble(qual);
 		
-		if (dQual < minQuality) {
+		if (qual != null && qual < minQuality) {
 			return false;
 		}
 		
-		Double dDepth = Double.parseDouble(depth);
-		if (dDepth < minDepth) {
+		if (depth != null && depth < minDepth) {
 			return false;
 		}
 		
-		Double dvd = Double.parseDouble(varDepth);
-		double varFreq = dvd / dDepth;
-		if (varFreq < minVarFreq) {
-			return false;
+		if (depth != null && varDepth != null) {
+			double varFreq =  varDepth / depth;
+			if (varFreq < minVarFreq) {
+				return false;
+			}
 		}
 		return true;
 	}

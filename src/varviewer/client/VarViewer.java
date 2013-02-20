@@ -17,6 +17,8 @@ public class VarViewer implements EntryPoint {
 	//Static reference to VarViewer object 
 	static private VarViewer viewer = null;
 
+	//private AuthToken token = null; //This gets set when a user logs in. 
+	
 	public VarViewer() {
 		viewer = this;
 	}
@@ -70,12 +72,16 @@ public class VarViewer implements EntryPoint {
 		centerPanel.add(sampleView);
 	}
 
+//	public void setAuthToken(final AuthToken tok) {
+//		//Check to see if the token is valid, then set it
+//		
+//	}
 
 	FlowPanel mainPanel; //Root container for all UI elements
 	FlowPanel centerPanel; //Central container, does not include topbar or footer
 	VariantDisplay varDisplay = new VariantDisplay(); //Displays variant table and related panels
 	SamplesView sampleView = new SamplesView(this); //UI element that displays sample list	  
 	VarListManager varManager = VarListManager.getManager(); //client-side store of current variant data
-
+	//private final CheckAuthTokenServiceAsync authCheckService = GWT.create(CheckAuthTokenService.class);
 }
 

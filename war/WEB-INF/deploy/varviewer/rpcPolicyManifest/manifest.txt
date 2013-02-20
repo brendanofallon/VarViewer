@@ -3,4 +3,4 @@
 varviewer.client.services.GeneDetailService, A46C4F6A3A328A279B0B91157A23C0B2.gwt.rpc
 varviewer.client.services.SampleListService, AC1AB1D36E6242338BAB20347521DCC2.gwt.rpc
 varviewer.client.services.ExportService, 7DE342FB65A05BFF1BB251C6455750BA.gwt.rpc
-varviewer.client.services.VarRequestService, 7FCC8A3C2A46889A8C101B0DB243626C.gwt.rpc
+varviewer.client.services.VarRequestService, 34F165B42BB88D19FE50D1A0823BDBF8.gwt.rpc

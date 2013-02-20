@@ -95,7 +95,7 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 
 			@Override
 			public void onSuccess(String result) {
-				Window.open("http://" + Location.getHost() + result, "_self", "");
+				Window.open("http://" + Location.getHost() + result, "_blank", "");
 			}
 		});
 	}

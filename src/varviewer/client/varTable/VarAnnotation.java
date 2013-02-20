@@ -19,18 +19,21 @@ public class VarAnnotation<T> {
 	final Column<Variant, T> col;
 	private double relativeWidth = 2.0; //Column width scaling factor
 	private Comparator<Variant> sortComparator = null;
-	private boolean numeric = false;
-	
-	public VarAnnotation(String id, String userText, Column<Variant, T> col, double relativeWidth, boolean numeric) {
+		
+	public VarAnnotation(String id, String userText, Column<Variant, T> col, double relativeWidth) {
 		this(id, userText, col);
 		this.relativeWidth = relativeWidth;
-		this.numeric = numeric;
-		if (numeric) {
-			sortComparator = new NumericAnnotationComparator(id);
+		sortComparator = new DefaultAnnotationComparator(id);
+	}
+	
+	public VarAnnotation(String id, String userText, Column<Variant, T> col, double relativeWidth, Comparator<Variant> comparator) {
+		this(id, userText, col);
+		this.relativeWidth = relativeWidth;
+		if (comparator == null) {
+			col.setSortable(false);
 		}
-		else {
-			sortComparator = new DefaultAnnotationComparator(id);
-		}
+		
+		sortComparator = comparator;
 	}
 	
 	public VarAnnotation(String id, String userText, Column<Variant, T> col) {
@@ -38,12 +41,7 @@ public class VarAnnotation<T> {
 		this.userText = userText;
 		this.col = col;
 		col.setSortable(true);
-		if (numeric) {
-			sortComparator = new NumericAnnotationComparator(id);
-		}
-		else {
-			sortComparator = new DefaultAnnotationComparator(id);
-		}
+		sortComparator = new DefaultAnnotationComparator(id);
 	}
 
 	public Comparator<Variant> getComparator() {

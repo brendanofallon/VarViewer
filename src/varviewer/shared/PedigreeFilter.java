@@ -52,7 +52,7 @@ public class PedigreeFilter implements VariantFilter, Serializable {
 			Variant relVar = relVars.getVariant(var.getChrom(), var.getPos());
 			String relZyg = null;
 			if (relVar != null) {
-				relZyg = relVar.getAnnotation("zygosity");
+				relZyg = relVar.getAnnotationStr("zygosity");
 				var.addAnnotation(sample.getRelId() + "-zygosity", relZyg);
 			}
 			else {
@@ -70,7 +70,7 @@ public class PedigreeFilter implements VariantFilter, Serializable {
 		Variant relVar = relVars.getVariant(var.getChrom(), var.getPos());
 		String relZyg = null;
 		if (relVar != null) {
-			relZyg = relVar.getAnnotation("zygosity");
+			relZyg = relVar.getAnnotationStr("zygosity");
 		}
 		
 		if (sample.getoType() == PedigreeSample.OperationType.EXCLUDE) {

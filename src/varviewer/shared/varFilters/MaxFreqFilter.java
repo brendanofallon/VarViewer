@@ -65,32 +65,26 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 
 	@Override
 	public boolean variantPasses(Variant var) {
-		String freq = var.getAnnotation("pop.freq");
-		String arupStr = var.getAnnotation("ARUP.freq");
-		String varbinStr = var.getAnnotation("varbin.bin");
+		Double freq = var.getAnnotationDouble("pop.freq");
+		String arupStr = var.getAnnotationStr("ARUP.freq");
+		Double varbin = var.getAnnotationDouble("varbin.bin");
 		
 		
 		if (freq == null)
-			freq = "0.0";
+			freq = 0.0;
+		if (varbin == null) {
+			varbin = 0.0;
+		}
 		if (arupStr == null) {
 			arupStr = "0 total";
 		}
 		
-		Double freqVal = 0.0;
-		int arupTot = 0;
-		try {
-			Double val = Double.parseDouble(freq);
-			freqVal = val;
-		}
-		catch (NumberFormatException nfe) {
-		}
-
-		if (freqVal > maxFreq) {
+		
+		if (freq > maxFreq) {
 			return false;
 		}
 
-
-
+		int arupTot = 0;
 		try {
 
 			int idx = arupStr.indexOf(" tot");
@@ -105,17 +99,8 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 
 		}
 
-		
-		if (varbinStr != null) {
-			try {
-				double bin = Double.parseDouble(varbinStr);
-				if (bin > varBinMin) {
-					return false;
-				}
-			}
-			catch (NumberFormatException nfe) {
-				
-			}
+		if (varbin > varBinMin) {
+			return false;
 		}
 		
 		return true;

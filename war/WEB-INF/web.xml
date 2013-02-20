@@ -6,6 +6,27 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
 
   <!-- Servlets -->
+
+  <servlet>
+    <servlet-name>checkTokenServlet</servlet-name>
+    <servlet-class>varviewer.server.auth.CheckAuthTokenServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>checkTokenServlet</servlet-name>
+    <url-pattern>/varviewer/checktoken</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>authServlet</servlet-name>
+    <servlet-class>varviewer.server.auth.AuthServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>authServlet</servlet-name>
+    <url-pattern>/varviewer/authenticate</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>varRequestServlet</servlet-name>
     <servlet-class>varviewer.server.VarRequestServiceImpl</servlet-class>

@@ -14,12 +14,12 @@ public class DeleteriousFilter implements VariantFilter, Serializable {
 	double phyloPMin = -10.0;
 	double combinedMin = 0.0;
 	
-	boolean siftEnabled = true;
-	boolean polyphenEnabled = true;
-	boolean mutationTasterEnabled = true;
-	boolean gerpEnabled = true;
-	boolean phyloPEnabled = true;
-	boolean combinedEnabled = true;
+	boolean siftEnabled = false;
+	boolean polyphenEnabled = false;
+	boolean mutationTasterEnabled = false;
+	boolean gerpEnabled = false;
+	boolean phyloPEnabled = false;
+	boolean combinedEnabled = false;
 	
 	
 	
@@ -126,81 +126,67 @@ public class DeleteriousFilter implements VariantFilter, Serializable {
 		boolean passes = true;
 		if (siftEnabled) {
 			passes = checkLess(var, "sift.score", siftMax);
-			if (!passes) {
-				return false;
+			if (passes) {
+				return true;
 			}
 		}
 		
 		if (polyphenEnabled) {
 			passes = checkMore(var, "pp.score", polyphenMin);
-			if (!passes) {
-				return false;
+			if (passes) {
+				return true;
 			}
 		}
 		
 		if (mutationTasterEnabled) {
 			passes = checkMore(var, "mt.score", mutationTasterMin);
-			if (!passes) {
-				return false;
+			if (passes) {
+				return true;
 			}
 		}
 		
 		if (gerpEnabled) {
 			passes = checkMore(var, "gerp.score", gerpMin);
-			if (!passes) {
-				return false;
+			if (passes) {
+				return true;
 			}
 		}
 		
 		if (phyloPEnabled) {
 			passes = checkMore(var, "phylop.score", phyloPMin);
-			if (!passes) {
-				return false;
+			if (passes) {
+				return true;
 			}
 		}
 		
 		if (combinedEnabled) {
 			passes = checkMore(var, "svm.effect.prediction", combinedMin);
-			if (!passes) {
-				return false;
+			if (passes) {
+				return true;
 			}
 		}
 		
+		//If no filters are enabled (the default) it passes
+		//Otherwise it failed every enabled filter, so it fails overall. 
+		if (siftEnabled
+				|| polyphenEnabled
+				|| gerpEnabled
+				|| mutationTasterEnabled
+				|| phyloPEnabled
+				|| combinedEnabled) {
+			return false;
+		}
 		return true;
 	}
 	
 	private static boolean checkLess(Variant var, String key, double max) {
-		String score = var.getAnnotation(key);
-		if (score != null && (! score.equals("-"))) {
-			try {
-				Double val = Double.parseDouble(score);
-				if (val > max) {
-					return false;
-				}
-			}
-			catch (NumberFormatException nfe) {
-				//ignore for now
-			}
-		}
-		//Default is to return true
-		return true;
+		Double score = var.getAnnotationDouble(key);
+		return score != null ? score < max : false; 
 	}
 	
 	private static boolean checkMore(Variant var, String key, double max) {
-		String score = var.getAnnotation(key);
-		if (score != null && (! score.equals("-"))) {
-			try {
-				Double val = Double.parseDouble(score);
-				if (val < max) {
-					return false;
-				}
-			}
-			catch (NumberFormatException nfe) {
-				//ignore for now
-			}
-		}
-		//Default is to return true
-		return true;
+		Double score = var.getAnnotationDouble(key);
+		return score != null ? score > max : false; 
 	}
 	
 }

@@ -22,7 +22,7 @@ public class VarPage extends CellTable<Variant> {
 
 	private ListDataProvider<Variant> varData = new ListDataProvider<Variant>();
 	private List<VariantSelectionListener> varListeners = new ArrayList<VariantSelectionListener>(); 
-	private List<VarAnnotation> displayedAnnotations = new ArrayList<VarAnnotation>();
+	private List<VarAnnotation<?>> displayedAnnotations = new ArrayList<VarAnnotation<?>>();
 	
 	
 	public VarPage(Resources resources) {
@@ -69,8 +69,9 @@ public class VarPage extends CellTable<Variant> {
 		
 		//We must add all column sorting handlers *after* the variants have been supplied
 		ListHandler<Variant> columnSortHandler = new ListHandler<Variant>(varData.getList());
-		for(VarAnnotation varAnno : displayedAnnotations) {
-			columnSortHandler.setComparator(varAnno.col, varAnno.getComparator());
+		for(VarAnnotation<?> varAnno : displayedAnnotations) {
+			if (varAnno.getComparator() != null)
+				columnSortHandler.setComparator(varAnno.col, varAnno.getComparator());
 		}
 		this.addColumnSortHandler(columnSortHandler);
 	}
@@ -89,7 +90,7 @@ public class VarPage extends CellTable<Variant> {
 	 * multiple times. 
 	 * @param varAnno
 	 */
-	public void addColumn(VarAnnotation varAnno) {
+	public void addColumn(VarAnnotation<?> varAnno) {
 		this.addColumn(varAnno.col, varAnno.userText);
 		displayedAnnotations.add(varAnno);
 	}
@@ -98,7 +99,7 @@ public class VarPage extends CellTable<Variant> {
 	 * Remove all displayed columns. The table will not draw any data after this call. 
 	 */
 	public void clearColumns() {
-		for(VarAnnotation varAnno : displayedAnnotations) {
+		for(VarAnnotation<?> varAnno : displayedAnnotations) {
 			this.removeColumn( varAnno.col );
 		}
 		displayedAnnotations.clear();

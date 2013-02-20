@@ -81,10 +81,10 @@ public class ColumnStore {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("gene");
+				String val = var.getAnnotationStr("gene");
 				return val != null ? val : "-";
 			}
-		}, 1.0, false));
+		}, 1.0));
 
 		VarAnnotation<String> chrAnno = new VarAnnotation<String>("contig", "Chr", new TextColumn<Variant>() {
 
@@ -92,7 +92,7 @@ public class ColumnStore {
 			public String getValue(Variant var) {
 				return var.getChrom();
 			}
-		}, 0.5, false); 
+		}, 0.5); 
 		chrAnno.setComparator(new Comparator<Variant>() {
 
 			@Override
@@ -108,7 +108,7 @@ public class ColumnStore {
 			public String getValue(Variant var) {
 				return "" + var.getPos();
 			}
-		}, 1.0, true); 
+		}, 1.0, new PositionComparator()); 
 		
 		posAnnotation.setComparator(new Comparator<Variant>() {
 
@@ -142,7 +142,7 @@ public class ColumnStore {
 
 			@Override
 			public ImageResource getValue(Variant var) {
-				String zyg = var.getAnnotation("zygosity");
+				String zyg = var.getAnnotationStr("zygosity");
 								
 				if (zyg == null || zyg.equals("ref"))
 					return resources.refImage();
@@ -154,47 +154,47 @@ public class ColumnStore {
 				return resources.refImage();
 			}
 			
-		}, 0.6, false));
+		}, 0.6));
 
 
 		addColumn(new VarAnnotation<String>("exon.function", "Exon effect", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("exon.function");
+				String val = var.getAnnotationStr("exon.function");
 				if (val == null || val.equals("-")) {
-					val = var.getAnnotation("variant.type");
+					val = var.getAnnotationStr("variant.type");
 				}
 				return val != null ? val : "-";
 			}
-		}, 2.0, false));
+		}, 2.0));
 
 		addColumn(new VarAnnotation<String>("nm.number", "NM Number", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("nm.number");
+				String val = var.getAnnotationStr("nm.number");
 				return val != null ? val : "-";
 			}
-		}, 2.0, false));
+		}, 2.0));
 
 		addColumn(new VarAnnotation<String>("cdot", "c.dot", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("cdot");
+				String val = var.getAnnotationStr("cdot");
 				return val != null ? val : "-";
 			}
-		}, 2.0, false));
+		}, 2.0));
 
 		addColumn(new VarAnnotation<String>("pdot", "p.dot", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("pdot");
+				String val = var.getAnnotationStr("pdot");
 				return val != null ? val : "-";
 			}
-		}, 2.0, false));
+		}, 2.0));
 
 		addColumn(new VarAnnotation<String>("ref", "Ref.", new TextColumn<Variant>() {
 
@@ -202,7 +202,7 @@ public class ColumnStore {
 			public String getValue(Variant var) {
 				return var.getRef();
 			}
-		}, 1.0, false));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("alt", "Alt.", new TextColumn<Variant>() {
 
@@ -210,75 +210,68 @@ public class ColumnStore {
 			public String getValue(Variant var) {
 				return var.getAlt();
 			}
-		}, 1.0, false));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("quality", "Quality", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("quality");
-				return val != null ? val : "-";
+				Double val = var.getAnnotationDouble("quality");
+				return val != null ? val.toString() : "-";
 			}
-		}, 1.0, true));
+		}, 1.0));
 
 		addColumn(new VarAnnotation<String>("depth", "Depth", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("depth");
-				return val != null ? val : "-";
+				Double val = var.getAnnotationDouble("depth");
+				return val != null ? val.toString() : "-";
 			}
-		}, 1.0, true));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("var.freq", "Alt. Freq", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String tot = var.getAnnotation("depth");
-				String alt = var.getAnnotation("var.depth");
-				if (tot != null && alt != null) {
-					try {
-						Double t = Double.parseDouble(tot);
-						Double a = Double.parseDouble(alt);
-						double freq = a / t;
+				Double tot = var.getAnnotationDouble("depth");
+				Double alt = var.getAnnotationDouble("var.depth");
+				if (tot != null && alt != null && tot > 0) {
+					
+						double freq = alt / tot;
 						String freqStr = "" + freq;
 						if (freqStr.length() > 5) {
 							freqStr = freqStr.substring(0, 4);
 						}
 						return freqStr;
-					}
-					catch (NumberFormatException nfe) {
-						
-					}
-					catch (RuntimeException ex) {
-						
-					}
+					
+					
 				}
 				return "-";
 			}
-		}, 1.0, true));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<SafeHtml>("varbin.bin", "VarBin", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
 
 			@Override
 			public SafeHtml getValue(Variant var) {
 				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
-				String val = var.getAnnotation("varbin.bin");
+				Double val = var.getAnnotationDouble("varbin.bin");
 				
-				if (val == null || val.equals("-")) {
+				if (val == null) {
 					bldr.appendEscaped("-");
 				}
 				else {
-					if (val.contains("1")) {
+					if (val.equals(1)) {
 						bldr.appendHtmlConstant("<span style=\"color: #003300;\"><b>1</b></span>");	
 					}
-					if (val.contains("2")) {
+					if (val.equals(2)) {
 						bldr.appendHtmlConstant("<span style=\"color: #996600;\"><b>2</b></span>");	
 					}
-					if (val.contains("3")) {
+					if (val.equals(3)) {
 						bldr.appendHtmlConstant("<span style=\"color: #990000;\"><b>3</b></span>");	
 					}
-					if (val.contains("4")) {
+					if (val.equals(4)) {
 						bldr.appendHtmlConstant("<span style=\"color: #FF0000;\"><b>4</b></span>");	
 					}
 					
@@ -286,64 +279,62 @@ public class ColumnStore {
 				return bldr.toSafeHtml();
 			}
 			
-		}, 1.0, false));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("pop.freq", "Pop. Freq.", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("pop.freq");
-				if (val.equals("-"))
-					val = "0";
-				return val != null ? val : "0";
+				Double val = var.getAnnotationDouble("pop.freq");
+				return val != null ? val.toString() : "0";
 			}
-		}, 1.0, true));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("arup.freq", "ARUP Freq.", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("ARUP.freq");
+				String val = var.getAnnotationStr("ARUP.freq");
 				if (val.equals("-"))
 					val = "0";
 				return val != null ? val : "0";
 			}
-		}, 2.0, true));
+		}, 2.0));
 
 		
 		addColumn(new VarAnnotation<String>("sift.score", "SIFT score", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("sift.score");
-				return val != null ? val : "NA";
+				Double val = var.getAnnotationDouble("sift.score");
+				return val != null ? val.toString() : "NA";
 			}
-		}, 1.0, false));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("mt.score", "MutationTaster score", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("mt.score");
-				return val != null ? val : "NA";
+				Double val = var.getAnnotationDouble("mt.score");
+				return val != null ? val.toString() : "NA";
 			}
-		}, 1.0, false));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("gerp.score", "GERP++ score", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("gerp.score");
-				return val != null ? val : "NA";
+				Double val = var.getAnnotationDouble("gerp.score");
+				return val != null ? val.toString() : "NA";
 			}
-		}, 1.0, false));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<SafeHtml>("rsnum", "dbSNP #", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
 
 			@Override
 			public SafeHtml getValue(Variant var) {
 				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
-				String val = var.getAnnotation("rsnum");
+				String val = var.getAnnotationStr("rsnum");
 				if (val == null || val.length() < 2) {
 					bldr.appendEscaped("-");
 				}
@@ -353,33 +344,33 @@ public class ColumnStore {
 				return bldr.toSafeHtml();
 			}
 			
-		}, 1.0, false));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("pp.score", "PolyPhen-2 score", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("pp.score");
-				return val != null ? val : "NA";
+				Double val = var.getAnnotationDouble("pp.score");
+				return val != null ? val.toString() : "NA";
 			}
-		}, 1.0, false));
+		}, 1.0));
 		
 		addColumn(new VarAnnotation<String>("omim.num", "OMIM #", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation("omim.disease.ids");
+				String val = var.getAnnotationStr("omim.disease.ids");
 				return val != null ? val : "0";
 			}
-		}, 2.0, false));
+		}, 2.0));
 		
 		addColumn(new VarAnnotation<ImageResource>("disease.pics", "HGMD & OMIM", new Column<Variant, ImageResource>(new ImageResourceCell()) {
 
 			@Override
 			public ImageResource getValue(Variant var) {
-				String hgmdExact = var.getAnnotation("hgmd.hit");
-				String hgmdGeneMatch = var.getAnnotation("hgmd.info");
-				String omimGeneMatch = var.getAnnotation("omim.disease");
+				String hgmdExact = var.getAnnotationStr("hgmd.hit");
+				String hgmdGeneMatch = var.getAnnotationStr("hgmd.info");
+				String omimGeneMatch = var.getAnnotationStr("omim.disease");
 				
 				boolean hasHGMDExact = hgmdExact != null && hgmdExact.length() > 3;
 				boolean hasHGMDGene = hgmdGeneMatch != null && hgmdGeneMatch.length() > 3;
@@ -420,7 +411,7 @@ public class ColumnStore {
 				return img;
 			}
 			
-		}, 1.0, false));
+		}, 1.0, null));
 		
 		
 		
@@ -434,7 +425,7 @@ public class ColumnStore {
 				return locus;
 			}
 			
-		}, 1.0, false));
+		}, 1.0, null));
 			
 	}
 	

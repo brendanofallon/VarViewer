@@ -24,7 +24,7 @@ public class PedigreeVarAnnotation extends VarAnnotation<String> {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotation(pedSample.getRelId() + "-zygosity");
+				String val = var.getAnnotationStr(pedSample.getRelId() + "-zygosity");
 			
 				if (val == null || val.length()<2)
 					return "?";

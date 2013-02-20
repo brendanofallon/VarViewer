@@ -103,7 +103,7 @@ public class SearchBoxVariantFilter implements VariantFilter {
 		
 		@Override
 		public boolean variantPasses(Variant var) {
-			String varGene = var.getAnnotation("gene");
+			String varGene = var.getAnnotationStr("gene");
 			if (varGene != null && varGene.startsWith(geneName)) {
 				return true;
 			}

@@ -65,7 +65,7 @@ public class DetailsPanel extends ScrollPanel implements VariantSelectionListene
 			selectGene(null);
 		}
 		
-		String geneName = selectedVar.getAnnotation("gene");
+		String geneName = selectedVar.getAnnotationStr("gene");
 		selectGene(geneName);		
 	}
 

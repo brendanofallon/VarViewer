@@ -147,7 +147,6 @@ public class VarTableHeader extends HorizontalPanel {
 	 */
 	public void setBAMLink(String bamLink) {
 		igvLinkText = bamLink;
-		
 	}
 	
 }
