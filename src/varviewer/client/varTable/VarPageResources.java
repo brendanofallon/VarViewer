@@ -5,6 +5,9 @@ import com.google.gwt.resources.client.ImageResource;
 
 interface VarPageResources extends ClientBundle {
 
+	@Source("comment-icon.png")
+	ImageResource commentImage();
+	
 	@Source("hetPic.png")
 	ImageResource hetImage();
 	

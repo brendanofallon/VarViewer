@@ -7,6 +7,9 @@ import java.util.Map;
 
 import varviewer.shared.Variant;
 
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.Column;
 
 /**
@@ -84,8 +87,29 @@ public class ColumnModel {
 		for(String key : getKeys()) {
 			Object val = getColumnForKey(key).getValue(var);
 			String valStr = "?";
-			if (val != null)
+			if (val != null) {
 				valStr = val.toString();
+				
+				if (val instanceof SafeHtml) {
+					SafeHtml html = (SafeHtml) val;
+					valStr = html.asString(). replaceAll("\\<.*?>","");
+				}
+				
+				if (val instanceof ImageResource) {
+					ImageResource imgRes = (ImageResource)val;
+					valStr = "(image)";
+					if (imgRes.equals(resources.refImage())) {
+						valStr = "ref";
+					}
+					if (imgRes.equals(resources.hetImage())) {
+						valStr = "het";
+					}
+					if (imgRes.equals(resources.homImage())) {
+						valStr = "hom";
+					}
+				}
+			}
+			
 			str.append( valStr + "\t");
 		}
 		return str.toString();
@@ -124,7 +148,7 @@ public class ColumnModel {
 	 * @param key
 	 * @return
 	 */
-	public VarAnnotation getVarAnnoForKey(String key) {
+	public VarAnnotation<?> getVarAnnoForKey(String key) {
 		return colMap.get(key);
 	}
 
@@ -145,4 +169,7 @@ public class ColumnModel {
 			l.columnStateChanged(this);
 		}
 	}
+	
+	VarPageResources resources = (VarPageResources) GWT.create(VarPageResources.class);
+
 }

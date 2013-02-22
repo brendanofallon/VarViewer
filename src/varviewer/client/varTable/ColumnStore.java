@@ -9,14 +9,17 @@ import varviewer.shared.Variant;
 
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.ui.Image;
 
 /**
  * Maintains a list of all available Columns that can potentially be used in a ColumnModel
@@ -412,7 +415,27 @@ public class ColumnStore {
 			}
 			
 		}, 1.0, null));
-		
+	
+		ButtonImageCell commentButton = new ButtonImageCell(new Image("images/comment-icon.png"));
+		VarAnnotation<String> commentVarAnno =new VarAnnotation<String>("comment", "Notes", new Column<Variant, String>(commentButton) {
+
+			@Override
+			public String getValue(Variant var) {
+				//Somehow get comment info from Variant - is it an annotation?
+				
+				return "huh?";
+			}
+			
+		}, 0.6);
+		commentVarAnno.col.setFieldUpdater(new FieldUpdater<Variant, String>() {
+
+			@Override
+			public void update(int index, Variant var, String value) {
+				//TODO Show comment popup? 
+			}
+			
+		});
+		addColumn(commentVarAnno);
 		
 		
 		IGVCell igvCell = new IGVCell();
@@ -429,6 +452,22 @@ public class ColumnStore {
 			
 	}
 	
+	public class ButtonImageCell extends ButtonCell{
+
+		final Image image;
+		
+		public ButtonImageCell(Image image) {
+			this.image = image;
+		}
+		
+	    @Override
+	    public void render(com.google.gwt.cell.client.Cell.Context context, 
+	            String value, SafeHtmlBuilder sb) {
+	        SafeHtml html = SafeHtmlUtils.fromTrustedString(image.toString());
+	        sb.append(html);
+	    }
+	}
+	
 	static class IGVCell extends ButtonCell {
 		
 		public void render(Cell.Context context, String value, SafeHtmlBuilder sb) {
@@ -436,7 +475,7 @@ public class ColumnStore {
 		}
 	}
 	
-	VarPageResources resources = (VarPageResources) GWT.create(VarPageResources.class);
+	static final VarPageResources resources = (VarPageResources) GWT.create(VarPageResources.class);
 	
 	
 }

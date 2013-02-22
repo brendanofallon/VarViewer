@@ -58,23 +58,12 @@
 
 .filterbox {
 	font-family: 'Open Sans', sans-serif;
-	width: 200px;
-	height: 50px;
 	outline: 0px;
-	padding: 10px;
 	margin: 2px;
-	margin-top: 10px;
-	border: 1px solid rgb(160, 160, 160);
-	border-radius: 3px;
-	-moz-box-shadow: 3px 3x 7px rgb(180, 180, 180);
-	-webkit-box-shadow: 3px 3px 7px rgb(180, 180, 180);
-	box-shadow: 3px 3px 7px rgb(180, 180, 180);
-	background : rgb(225, 225, 225);
-	background : -webkit-radial-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
-	background : -moz-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
-	background : -o-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%);
-	background : -ms-linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 61%, rgb(179, 179, 179) 97%); 
-	background : -linear-gradient(bottom right,ellipse cover, rgb(250, 250, 250) 51%, rgb(179, 179, 179) 96%);
+	width: 235px;
+	height: 90px;
+	background-image:url('images/filterboxImage.png');
+	background-repeat: no-repeat;
 }
 
 .filterboxheader {
