@@ -22,7 +22,7 @@ public class ActiveUsers {
 	
 	private ActiveUsers() {
 		//Private constructor to enforce singleton status
-		Logger.getLogger(ActiveUsers.class).info("Initializing active users object");
+		//Logger.getLogger(ActiveUsers.class).info("Initializing active users object");
 	}
 	
 	public static ActiveUsers getActiveUsers() {
@@ -31,6 +31,37 @@ public class ActiveUsers {
 		}
 		
 		return activeUsers;
+	}
+	
+	/**
+	 * Remove the given token / user from the list of logged in users. Returns true
+	 * if the user was currently logged in, false otherwise. 
+	 * @param tok
+	 * @return
+	 */
+	public boolean logOutUser(AuthToken tok) {
+		Logger.getLogger(ActiveUsers.class).info("Logging out user " + tok.getUsername());
+		if (isUserLoggedIn(tok.getUsername())) {
+			users.remove(tok.getUsername());
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Add the given token / user to the list of logged in users. If user is already
+	 * logged in returns false and does nothing. Returns true otherwise
+	 *  
+	 * @param tok
+	 * @return
+	 */
+	public boolean logInUser(AuthToken tok) {
+		Logger.getLogger(ActiveUsers.class).info("Logging out user " + tok.getUsername());
+		if (! isUserLoggedIn(tok.getUsername())) {
+			users.put(tok.getUsername(), tok);
+			return true;
+		}
+		return false;
 	}
 	
 	public boolean isUserLoggedIn(String username) {

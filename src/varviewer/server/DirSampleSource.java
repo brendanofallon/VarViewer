@@ -197,7 +197,7 @@ public class DirSampleSource implements SampleSource {
 		//Now attempt to find vcf, annotated csv, and .bam files...
 		File vcfFile = findVCF( new File(sampleRoot.getAbsolutePath() + "/var/") );
 		if (vcfFile != null) {
-			Logger.getLogger(getClass()).info("Found VCF file for sample " + info.getSampleID() + ": " + vcfFile.getAbsolutePath());
+			//Logger.getLogger(getClass()).info("Found VCF file for sample " + info.getSampleID() + ": " + vcfFile.getAbsolutePath());
 			info.setVcfFile(vcfFile.getAbsolutePath());
 		}
 		else {
@@ -206,7 +206,7 @@ public class DirSampleSource implements SampleSource {
 		
 		File csvFile = findCSV( new File(sampleRoot.getAbsolutePath() + "/var/") );
 		if (csvFile != null) {
-			Logger.getLogger(getClass()).info("Found annotated vars file for sample " + info.getSampleID() + ": " + csvFile.getAbsolutePath());
+			//Logger.getLogger(getClass()).info("Found annotated vars file for sample " + info.getSampleID() + ": " + csvFile.getAbsolutePath());
 			info.setAnnotatedVarsFile(csvFile.getAbsolutePath());
 		}
 		else {
@@ -215,7 +215,7 @@ public class DirSampleSource implements SampleSource {
 		
 		File bamFile = findBAM( new File(sampleRoot.getAbsolutePath() + "/bam/") );
 		if (bamFile != null) {
-			Logger.getLogger(getClass()).info("Found BAM file for sample " + info.getSampleID() + ": " + bamFile.getAbsolutePath());
+			//Logger.getLogger(getClass()).info("Found BAM file for sample " + info.getSampleID() + ": " + bamFile.getAbsolutePath());
 			info.setBamFile(bamFile.getAbsolutePath());
 		}
 		else {

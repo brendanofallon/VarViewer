@@ -1,12 +1,7 @@
 /** Add css rules here for your application. */
 
 
-.topbar {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 16pt;
-	font-style: italic;
-	font-weight: bold;
-	text-shadow: 1px 1px 1px rgba(250, 250, 250, 70); 
+.topbar { 
 	outline: 0px;
 	margin: 0px;
 	margin-top: -10px;
@@ -29,10 +24,25 @@
 	background : -linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%);
 }
 
+.topbarlabel {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16pt;
+	font-style: italic;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px rgba(250, 250, 250, 70);
+}
+
+.statuslabel {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 10pt;
+	text-right: center;
+	margin-top: 5px;
+	margin-right: 10px;
+}
+
 .maincontainer {
 	margin: 0px;
 }
-
 
 .footer {
 	font-family: 'Open Sans', sans-serif;
@@ -47,6 +57,11 @@
 	border-top: 1px solid rgb(200, 200, 200);
 	font-size: 12px;
 	text-align: center;	
+}
+
+.loginpanel {
+	margin-left: 20px;
+	margin-top: 30px;	
 }
 
 .filterspanel {

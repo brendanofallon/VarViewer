@@ -9,7 +9,6 @@ import varviewer.shared.Variant;
 
 import com.google.gwt.cell.client.ButtonCell;
 import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.ImageResourceCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.shared.GWT;
@@ -416,26 +415,27 @@ public class ColumnStore {
 			
 		}, 1.0, null));
 	
-		ButtonImageCell commentButton = new ButtonImageCell(new Image("images/comment-icon.png"));
-		VarAnnotation<String> commentVarAnno =new VarAnnotation<String>("comment", "Notes", new Column<Variant, String>(commentButton) {
-
-			@Override
-			public String getValue(Variant var) {
-				//Somehow get comment info from Variant - is it an annotation?
-				
-				return "huh?";
-			}
-			
-		}, 0.6);
-		commentVarAnno.col.setFieldUpdater(new FieldUpdater<Variant, String>() {
-
-			@Override
-			public void update(int index, Variant var, String value) {
-				//TODO Show comment popup? 
-			}
-			
-		});
-		addColumn(commentVarAnno);
+//		ButtonImageCell commentButton = new ButtonImageCell(new Image("images/comment-icon.png"));
+//		VarAnnotation<String> commentVarAnno =new VarAnnotation<String>("comment", "Notes", new Column<Variant, String>(commentButton) {
+//
+//			@Override
+//			public String getValue(Variant var) {
+//				//Somehow get comment info from Variant - is it an annotation?
+//				
+//				return "huh?";
+//			}
+//			
+//		}, 0.6);
+//		
+//		commentVarAnno.col.setFieldUpdater(new FieldUpdater<Variant, String>() {
+//
+//			@Override
+//			public void update(int index, Variant var, String value) {
+//				//TODO Show comment popup? 
+//			}
+//			
+//		});
+//		addColumn(commentVarAnno);
 		
 		
 		IGVCell igvCell = new IGVCell();

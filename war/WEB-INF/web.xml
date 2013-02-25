@@ -7,6 +7,16 @@
 
   <!-- Servlets -->
 
+ <servlet>
+    <servlet-name>logoutServlet</servlet-name>
+    <servlet-class>varviewer.server.auth.LogoutServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>logoutServlet</servlet-name>
+    <url-pattern>/varviewer/logout</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>checkTokenServlet</servlet-name>
     <servlet-class>varviewer.server.auth.CheckAuthTokenServiceImpl</servlet-class>

@@ -21,19 +21,23 @@ public class AuthServiceImpl extends RemoteServiceServlet implements AuthService
 	public AuthToken authenticate(String username, String password) {
 	
 		HttpServletRequest req = getThreadLocalRequest();
-		Logger.getLogger(PasswordStore.class).info("Authentication attempt for " + username + " from addr:" + req.getRemoteAddr() + " host:" + req.getRemoteHost());
+		Logger.getLogger(AuthServiceImpl.class).info("Authentication attempt for " + username + " from addr:" + req.getRemoteAddr() + " host:" + req.getRemoteHost());
 
 		boolean authOK = PasswordStore.checkPassword(username, password);
 		
 		if (authOK) {
-			Logger.getLogger(PasswordStore.class).info("User " + username + " authenticated successfully");
+			Logger.getLogger(AuthServiceImpl.class).info("User " + username + " authenticated successfully");
 			AuthToken token = new AuthToken();
 			token.setUsername(username);
 			token.setStartTime(System.currentTimeMillis());	
+			boolean success = ActiveUsers.getActiveUsers().logInUser(token);
+			if (! success) {
+				Logger.getLogger(AuthServiceImpl.class).warn("User " + username + " is already logged in, not adding user to active users list?");
+			}
 			return token;
 		}
 		
-		Logger.getLogger(PasswordStore.class).info("User " + username + " access denied");
+		Logger.getLogger(AuthServiceImpl.class).info("User " + username + " access denied");
 		return null;
 	}
 
