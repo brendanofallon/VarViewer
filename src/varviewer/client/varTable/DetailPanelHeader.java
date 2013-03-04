@@ -1,4 +1,5 @@
-package varviewer.client;
+package varviewer.client.varTable;
+
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;

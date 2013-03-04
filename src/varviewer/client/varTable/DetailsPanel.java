@@ -1,11 +1,10 @@
-package varviewer.client;
+package varviewer.client.varTable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.services.GeneDetailService;
 import varviewer.client.services.GeneDetailServiceAsync;
-import varviewer.client.varTable.VariantSelectionListener;
 import varviewer.shared.GeneInfo;
 import varviewer.shared.Variant;
 

@@ -17,10 +17,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * Wraps a VarPage with a few buttons and extra widgets, allows for some easy scrolling / paging
+ * Wraps a VarPage with a nice header with some buttons and a pager. Also contains implementations
+ * for a few of the buttons found in the header (export, search field updates, etc.)
  * @author brendan
  *
  */
@@ -115,7 +117,11 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 		header = new VarTableHeader(this);
 		
 		this.add(header);
-		this.add(varPage);
+		
+		ScrollPanel pageScrollPanel = new ScrollPanel(varPage);
+		pageScrollPanel.setWidth("100%");
+		pageScrollPanel.setHeight("100%");
+		this.add(pageScrollPanel);
 		
 		//Initialize column model
 		columnStateChanged(colModel);
