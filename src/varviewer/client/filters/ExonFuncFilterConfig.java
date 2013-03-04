@@ -46,13 +46,14 @@ public class ExonFuncFilterConfig extends FilterConfig {
 		panel.add( addType("Noncoding RNA", true) );
 		panel.add( addType("Non-frameshifting indels", false) );
 		panel.add( addType("Frameshifting indels",  false) );
+		panel.add( addType("Stop gains & losses",  false) );
 		panel.add( addType("Splicing", false) );
 		panel.add( addType("Missense", false) );
 		
 		updateInteriorLabelText(); //Set interior text in parental filterbox
 		interiorPanel.add(panel);
 		interiorPanel.setWidth("250px");
-		interiorPanel.setHeight("250px");
+		interiorPanel.setHeight("300px");
 	}
 
 	private CheckBox addType(String userText, boolean checked) {
@@ -110,14 +111,20 @@ public class ExonFuncFilterConfig extends FilterConfig {
 			if (key.equals( "Non-frameshifting indels")) 
 				this.filter.setExcludeNonFrameshift( box.getValue() ); 
 				
+			if (key.equals( "Frameshifting indels")) 
+				this.filter.setExcludeFrameshift( box.getValue() ); 
+			
 			if (key.equals( "Splicing")) 
 				this.filter.setExcludeSplicing( box.getValue() ); 
 				
 			if (key.equals( "Missense")) 
 				this.filter.setExcludeNonsynonymous( box.getValue() ); 
 				
-			if (key.equals( "Noncoding RNA")) 
-				this.filter.setExcludeNCRNA( box.getValue() ); 
+			if (key.equals( "Noncoding RNA"))
+				this.filter.setExcludeNCRNA( box.getValue() );
+			
+			if (key.equals( "Stop gains & losses")) 
+				this.filter.setExcludeStopGainsLosses( box.getValue() ); 
 				
 		}
 		

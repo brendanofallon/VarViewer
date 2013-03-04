@@ -17,6 +17,7 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 	private boolean excludeSynonymous = true;
 	private boolean excludeNonsynonymous = false;
 	private boolean excludeNonFrameshift = false;
+	private boolean excludeStopGainsLosses = false;
 	private boolean excludeFrameshift = false;
 	private boolean excludeSplicing = false;
 	private boolean excludeUTR = true;
@@ -74,6 +75,9 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 			return false;
 		}
 		
+		if (excludeStopGainsLosses && exonFunc.contains("stop")) {
+			return false;
+		}
 
 		
 		if (excludeFrameshift && exonFunc.startsWith("frameshift")) {
@@ -138,6 +142,14 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 
 	public void setExcludeSplicing(boolean excludeSplicing) {
 		this.excludeSplicing = excludeSplicing;
+	}
+
+	public boolean isExcludeStopGainsLosses() {
+		return excludeStopGainsLosses;
+	}
+
+	public void setExcludeStopGainsLosses(boolean excludeStopGainsLosses) {
+		this.excludeStopGainsLosses = excludeStopGainsLosses;
 	}
 
 	public boolean isExcludeUTR() {

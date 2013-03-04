@@ -10,17 +10,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class LoginPanel extends FlowPanel {
+public class LoginPanel extends VerticalPanel {
 
 	private TextBox usernameField;
 	private PasswordTextBox passwordField;
@@ -33,28 +30,14 @@ public class LoginPanel extends FlowPanel {
 	
 	private void initComponents() {
 		this.setStylePrimaryName("loginpanel");
-		this.add(new HTML("<h2>Please log in</h2>"));
 		
-		HorizontalPanel usernamePanel = new HorizontalPanel();
 		usernameField = new TextBox();
-		usernameField.setHeight("14px");
-		HTML usernameText = new HTML("<b>User name:<b>"); 
-		usernameText.addStyleName("vertaligncenter");
-		usernameText.setWidth("100px");
-		usernamePanel.add(usernameText);
-		usernamePanel.add(usernameField);
-		this.add(usernamePanel);
+		usernameField.setStylePrimaryName("usernamefield");
+		this.add(usernameField);
 		
 		passwordField = new PasswordTextBox();
-		passwordField.setHeight("14px");
-		HorizontalPanel passwdPanel = new HorizontalPanel();
-		HTML passwdText = new HTML("<b>Password:</b>");
-		passwdText.addStyleName("vertaligncenter");
-		passwdText.setWidth("100px");
-		passwdPanel.add(passwdText);
-		passwdPanel.add(passwordField);
-		
-		this.add(passwdPanel);
+		passwordField.setStylePrimaryName("passwordfield");
+		this.add(passwordField);
 		passwordField.addKeyDownHandler(new KeyDownHandler() {
 
 			@Override
@@ -74,6 +57,7 @@ public class LoginPanel extends FlowPanel {
 			}
 		});
 		goButton.setFocus(true);
+		goButton.setStylePrimaryName("loginbutton");
 		
 		this.add(goButton);
 		
@@ -104,27 +88,10 @@ public class LoginPanel extends FlowPanel {
 	}
 	
 	
-	
-	
 	protected void showAccessDeniedLabel() {
-		this.add(accessDeniedLabel);
-		
-		Timer t = new Timer() {
-			public void run() {
-				removeAccessDeniedLabel();
-			}
-		};
-
-		// Schedule the timer to run once in 5 seconds.
-		t.schedule(5000);
+		Window.alert("Invalid username or password, please try again");
 	}
 
-
-	protected void removeAccessDeniedLabel() {
-		this.remove(accessDeniedLabel);
-	}
-
-
-	private HTML accessDeniedLabel = new HTML("<b>Incorrect username / password, please try again</b>");
+	//private HTML accessDeniedLabel = new HTML("<b>Incorrect username / password, please try again</b>");
 	private final AuthServiceAsync authService = GWT.create(AuthService.class);
 }

@@ -110,7 +110,7 @@ public class ColumnModel {
 				}
 			}
 			
-			str.append( valStr + "\t");
+			str.append( valStr + ",");
 		}
 		return str.toString();
 	}

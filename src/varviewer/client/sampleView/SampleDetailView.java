@@ -12,6 +12,7 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -83,7 +84,7 @@ public class SampleDetailView extends FlowPanel {
 			VarListManager.getManager().reloadIfRequired();
 			String bamLinkText = null;
 			if (currentSample.getBamLink() != null) {
-				bamLinkText = IGVInterface.baseURL + "load?file=http://genseqar01.aruplab.net/" + currentSample.getBamLink();
+				bamLinkText = IGVInterface.baseURL + "load?file=http://" + Location.getHostName() + "/" + currentSample.getBamLink();
 			}
 			VarViewer.getViewer().getVarDisplay().setBamLink(bamLinkText);
 			VarViewer.getViewer().getVarDisplay().clearPedAnnotations();
@@ -97,7 +98,8 @@ public class SampleDetailView extends FlowPanel {
 		}
 		
 		if (currentSample.getQCLink() != null) {
-			String url = "http://genseqar01.aruplab.net/" + currentSample.getQCLink();
+			
+			String url = "http://" + Location.getHostName() + "/" + currentSample.getQCLink();
 			System.out.println("Showing qc metrics sample " + currentSample.getSampleID() + " at url: " + url);
 			Window.open(url, "_blank", "");
 		}
@@ -109,7 +111,7 @@ public class SampleDetailView extends FlowPanel {
 		}
 		
 		if (currentSample.getVcfLink() != null) {
-			String url = "http://genseqar01.aruplab.net/" + currentSample.getVcfLink();
+			String url = "http://" + Location.getHostName() + "/" + currentSample.getVcfLink();
 			Window.open(url, "_self", "");
 		}
 	}
