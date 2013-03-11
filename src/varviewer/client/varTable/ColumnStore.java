@@ -341,7 +341,7 @@ public class ColumnStore {
 					bldr.appendEscaped("-");
 				}
 				else {
-					bldr.appendHtmlConstant("<a href=\"http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=1063736\" target=\"_blank\">" + val + "</a>" );
+					bldr.appendHtmlConstant("<a href=\"http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=" + val.replace("rs",  "") + "\" target=\"_blank\">" + val + "</a>" );
 				}
 				return bldr.toSafeHtml();
 			}
