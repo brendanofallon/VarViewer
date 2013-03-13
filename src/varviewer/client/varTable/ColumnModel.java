@@ -77,6 +77,21 @@ public class ColumnModel {
 	}
 	
 	/**
+	 * Obtain a String with the user text for each column separated by commas, suitable as a header
+	 * for the variants written by writeVarian(var)  
+	 * @return
+	 */
+	public String writeHeader() {
+		StringBuilder str = new StringBuilder();
+		for(String key : getKeys()) {
+			String txt = this.getUserTextForKey(key);
+			str.append(txt + ",");
+		}
+		
+		return str.toString();
+	}
+	
+	/**
 	 * Creates a string representing the given Variant using the currently active columns
 	 * in this model
 	 * @param var

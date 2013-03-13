@@ -139,6 +139,10 @@ public class VarTableHeader extends HorizontalPanel {
 	public void setSampleName(String sample) {
 		this.sampleLabel.setText(sample);
 	}
+	
+	public String getSampleLabel() {
+		return this.sampleLabel.getText();
+	}
 
 	/**
 	 * To use IGV we must have the link to the bam file, which is displayed 

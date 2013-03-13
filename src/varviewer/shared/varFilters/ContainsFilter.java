@@ -85,4 +85,13 @@ public class ContainsFilter implements VariantFilter, Serializable {
 		return false;
 	}
 
+	@Override
+	public String getUserDescription() {
+		String termStr = terms.get(0);
+		for(int i=1; i<terms.size(); i++) {
+			termStr = termStr + ", " + terms.get(i);
+		}
+		return "All variants whose annotation " + annotation + " does not include any of the following terms " + termStr;
+	}
+
 }

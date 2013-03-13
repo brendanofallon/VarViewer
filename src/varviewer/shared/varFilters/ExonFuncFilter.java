@@ -1,6 +1,8 @@
 package varviewer.shared.varFilters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
@@ -174,6 +176,52 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 
 	public void setExcludeNCRNA(boolean excludeNCRNA) {
 		this.excludeNCRNA = excludeNCRNA;
+	}
+
+	@Override
+	public String getUserDescription() {
+		StringBuilder str = new StringBuilder("Variants of the following types were excluded: ");
+		List<String> strs = new ArrayList<String>();
+		if (isExcludeIntergenic()) {
+			strs.add("intergenic");
+		}
+		if (isExcludeIntronic()) {
+			strs.add("intronic");
+		}
+		if (isExcludeNCRNA()) {
+			strs.add("non-coding RNA");
+		}
+		if (isExcludeNonFrameshift()) {
+			strs.add("non-frameshifting");
+		}
+		if (isExcludeFrameshift()) {
+			strs.add("frameshifting");
+		}
+		if (isExcludeSplicing()) {
+			strs.add("splicing");
+		}
+		if (isExcludeStopGainsLosses()) {
+			strs.add("stop gains and losses");
+		}
+		if (isExcludeSynonymous()) {
+			strs.add("synonymous SNPs");
+		}
+		if (isExcludeNonsynonymous()) {
+			strs.add("nonsynonymous SNPs");
+		}
+		if (isExcludeUTR()) {
+			strs.add("UTR");
+		}
+		
+		if (strs.size()==0) {
+			return "No filtering based on variant type was performed.";
+		}
+		str.append(strs.get(0));
+		for(int i=0; i<strs.size(); i++) {
+			str.append(", " + strs.get(i));
+		}
+		
+		return str.toString();
 	}
 
 	

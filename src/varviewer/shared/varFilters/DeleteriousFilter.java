@@ -1,6 +1,8 @@
 package varviewer.shared.varFilters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
@@ -187,6 +189,41 @@ public class DeleteriousFilter implements VariantFilter, Serializable {
 	private static boolean checkMore(Variant var, String key, double max) {
 		Double score = var.getAnnotationDouble(key);
 		return score != null ? score > max : false; 
+	}
+
+	@Override
+	public String getUserDescription() {
+		StringBuilder str = new StringBuilder("Variants with ");
+		List<String> bits = new ArrayList<String>();
+		
+		if (isSiftEnabled()) {
+			bits.add("SIFT > " + getSiftMax() );
+		}
+		if (isGerpEnabled()) {
+			bits.add("GERP++ < " + getGerpMin());
+		}
+		if (isPhyloPEnabled()) {
+			bits.add("PhyloP < " + getPhyloPMin());
+		}
+		if (isPolyphenEnabled()) {
+			bits.add("Polyphen-2 < " + getPolyphenMin());
+		}
+		if (isMutationTasterEnabled()) {
+			bits.add("MutationTaster < " + getMutationTasterMin());
+		}
+		
+		if (bits.size()==0) {
+			return "No filtering by predicted deleteriousness was performed.";
+		}
+		else {
+			str.append(bits.get(0));
+			for(int i=1; i<bits.size()-1; i++) {
+				str.append(", " + bits.get(i));
+			}
+			str.append(" and " + bits.get( bits.size()-1));
+		}
+		str.append(" were excluded.");
+		return str.toString();
 	}
 	
 }

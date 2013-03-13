@@ -50,6 +50,19 @@ public class FiltersPanel extends FlowPanel {
 		return filters;
 	}
 	
+	/**
+	 * Obtain a user-readable description of all currently active filters. 
+	 * @return
+	 */
+	public String getFilterUserText() {
+		StringBuilder str = new StringBuilder("Variant filters in use: \n");
+		for(VariantFilter filter : getFilters()) {
+			String desc = filter.getUserDescription();
+			str.append(desc + "\n");
+		}
+		return str.toString();
+	}
+	
 	public void addFilter(String name, VariantFilter filter) {
 		FilterBox filterBox = new FilterBox(this, name, filter);
 		addFilter(filterBox);

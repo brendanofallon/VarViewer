@@ -47,5 +47,11 @@ public class MinFreqFilter implements VariantFilter, Serializable {
 
 	}
 
+	@Override
+	public String getUserDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

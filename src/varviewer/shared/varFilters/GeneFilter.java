@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +45,22 @@ public class GeneFilter implements VariantFilter, Serializable {
 		List<String> names = new ArrayList<String>();
 		names.addAll(geneNames);
 		return names;
+	}
+
+	@Override
+	public String getUserDescription() {
+		if (geneNames.size()==0) {
+			return "No filtering based on gene name was performed.";
+		}
+		
+		StringBuilder str = new StringBuilder();
+		str.append("Variants not in the following genes were excluded: " );
+		Iterator<String> git = geneNames.iterator();
+		str.append( git.next() );
+		while(git.hasNext()) {
+			str.append(", " + git.next());
+		}
+		return str.toString();
 	}
 
 }

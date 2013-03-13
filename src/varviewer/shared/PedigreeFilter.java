@@ -126,4 +126,10 @@ public class PedigreeFilter implements VariantFilter, Serializable {
 		PedigreeFilter pf = (PedigreeFilter)o;
 		return pf.getPedSample().equals(sample);
 	}
+
+	@Override
+	public String getUserDescription() {
+		//TODO : Should have a user-readable description for filtering text
+		return null;
+	}
 }

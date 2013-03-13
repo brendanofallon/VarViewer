@@ -74,6 +74,11 @@ public class QualityDepthFilter implements VariantFilter, Serializable {
 		this.missingDataPasses = missingDataPasses;
 	}
 
+	@Override
+	public String getUserDescription() {
+		return "Variants with quality less than " + minQuality + ", read depth (coverage) less than " + minDepth + ", or allele balance less than " + minVarFreq + " were excluded.";
+	}
+
 	
 	
 }

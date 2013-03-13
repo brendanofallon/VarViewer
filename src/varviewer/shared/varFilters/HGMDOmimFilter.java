@@ -60,4 +60,18 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 		return true;
 	}
 
+	@Override
+	public String getUserDescription() {
+		if (excludeNonExactHits==false && excludeNonGeneHits == false) {
+			return "No filtering based on HGMD and OMIM data was performed.";
+		}
+		if (excludeNonExactHits) {
+			return "Variants not exactly matching a mutation documented in HGMD were excluded."; 
+		}
+		if (excludeNonGeneHits) {
+			return "Variants not in genes associated with disease in HGMD or OMIM were excluded.";
+		}
+		return "?";
+	}
+
 }

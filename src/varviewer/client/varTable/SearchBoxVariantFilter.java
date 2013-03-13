@@ -109,6 +109,13 @@ public class SearchBoxVariantFilter implements VariantFilter {
 			}
 			return false;
 		}
+
+		/**
+		 * Not ever used to generate user text, so nothing required here
+		 */
+		public String getUserDescription() {
+			return null;
+		}
 		
 	}
 	
@@ -135,6 +142,25 @@ public class SearchBoxVariantFilter implements VariantFilter {
 			return var.getChrom().equals(chr) && var.getPos() >= startPos && var.getPos() <= endPos; 
 			
 		}
+
+		@Override
+		/**
+		 * Not ever used to generate user text, so nothing required here
+		 */
+		public String getUserDescription() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		
+	}
+
+
+	@Override
+	/**
+	 * Not ever used to generate user text, so nothing required here
+	 */
+	public String getUserDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

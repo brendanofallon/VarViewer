@@ -9,4 +9,12 @@ public interface VariantFilter {
 	 * @return
 	 */
 	public boolean variantPasses(Variant var);
+	
+	/**
+	 * A user-readable description of the current settings of this filter. This is required
+	 * for report generation, which needs automated & plainly written text describing all
+	 * filtering settings. 
+	 * @return
+	 */
+	public String getUserDescription();
 }

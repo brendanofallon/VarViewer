@@ -38,8 +38,10 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	SearchBoxVariantFilter searchBoxFilter = new SearchBoxVariantFilter();
 	List<Variant> fullVariantList = null; //Stores all variants passed in from VarListManager, but does not reflect filtering from the SearchBoxFilter
 	List<PedigreeVarAnnotation> pedAnnotations = new ArrayList<PedigreeVarAnnotation>(); //Stores pedigree 
+	VariantDisplay displayParent;
 	
-	public VarTable() {
+	public VarTable(VariantDisplay display) {
+		displayParent = display;
 		this.setStylePrimaryName("vartable");
 		initComponents();
 	}
@@ -83,7 +85,18 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	 * to write the data to a file on the server, then downloads the file
 	 */
 	protected void exportData() {
+		//TODO : This should be moved to it's own class (Exporter?) soon
+		//Prepare a small header
 		List<String> varStrs = new ArrayList<String>();
+		
+		varStrs.add("Variant list for sample " + header.getSampleLabel());
+		
+		//Sadly, Calendar not support on client side GWT
+		//varStrs.add("List generated on " + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR) + " at " + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + " " + cal.get(Calendar.AM_PM));
+		
+		varStrs.add( displayParent.getFilterUserText() + "\n");
+		
+		varStrs.add( colModel.writeHeader() );
 		for(Variant var : varPage.getVariantList()) {
 			varStrs.add( colModel.writeVariant(var));
 		}

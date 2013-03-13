@@ -106,4 +106,9 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		return true;
 	}
 
+	@Override
+	public String getUserDescription() {
+		return "Excluding variants with population frequency (from 1000 Genomes) greater than " + maxFreq + ", ARUP count greater than " + arupMax + ", and varbin bin# greater than " + varBinMin; 
+	}
+
 }
