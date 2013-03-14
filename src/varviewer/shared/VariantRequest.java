@@ -34,7 +34,7 @@ public class VariantRequest implements Serializable {
 		for(VariantFilter filter : filters) {
 			newReq.addFilter(filter);
 		}
-		
+		newReq.setAnnotations(annotations);
 		
 		return newReq;
 	}

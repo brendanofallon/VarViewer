@@ -1,7 +1,6 @@
 package varviewer.client.sampleView;
 
 import varviewer.client.IGVInterface;
-import varviewer.client.VarListManager;
 import varviewer.client.VarViewer;
 import varviewer.shared.SampleInfo;
 
@@ -72,22 +71,16 @@ public class SampleDetailView extends FlowPanel {
 				doDownloadVCF();
 			}
 		}));
-		
-
-		
 	}
 	
 	protected void doShowVariants() {
 		if (currentSample != null) {
-			VarListManager.getManager().setSample( currentSample.getSampleID() );
-			VarListManager.getManager().setFilters( sampleViewParent.getVarViewer().getVarDisplay().getActiveFilters() );
-			VarListManager.getManager().reloadIfRequired();
+			VarViewer.getViewer().getVarDisplay().setSample(currentSample.getSampleID());
 			String bamLinkText = null;
 			if (currentSample.getBamLink() != null) {
 				bamLinkText = IGVInterface.baseURL + "load?file=http://" + Location.getHostName() + "/" + currentSample.getBamLink();
 			}
 			VarViewer.getViewer().getVarDisplay().setBamLink(bamLinkText);
-			VarViewer.getViewer().getVarDisplay().clearPedAnnotations();
 			sampleViewParent.getVarViewer().showVariantDisplay();
 		}
 	}

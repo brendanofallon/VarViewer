@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.HighlightButton;
-import varviewer.client.VarListManager;
 import varviewer.client.VarViewer;
 import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.DeleteriousFilter;
@@ -109,7 +108,6 @@ public class FiltersPanel extends FlowPanel {
 		for(FilterListener fl : listeners) {
 			fl.filtersUpdated(filters);
 		}
-		VarListManager.getManager().reloadIfRequired();
 	}
 	
 	/**

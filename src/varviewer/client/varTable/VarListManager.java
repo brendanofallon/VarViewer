@@ -1,9 +1,9 @@
-package varviewer.client;
+package varviewer.client.varTable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.client.filters.FilterListener;
+import varviewer.client.VarListListener;
 import varviewer.client.services.VarRequestService;
 import varviewer.client.services.VarRequestServiceAsync;
 import varviewer.shared.IntervalList;
@@ -18,13 +18,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * The VarListManager is responsible for sensibly handling requests for variants from the server.
- * It maintains information about the current sample, intervals and filters, and issues
+ * It maintains information about a single "current" sample, intervals and filters, and issues
  * requests for updated lists as necessary. This thing also maintains a list of VarListListeners
  * to be notified of var-list-updating events.  
  * @author brendan
  *
  */
-public class VarListManager implements FilterListener {
+public class VarListManager {
 
 	private VariantRequest req = new VariantRequest();
 	private List<Variant> currentList = new ArrayList<Variant>();
@@ -33,22 +33,15 @@ public class VarListManager implements FilterListener {
 	
 	private List<VarListListener> listeners = new ArrayList<VarListListener>();
 	
-	private static VarListManager manager;
-	
-	public static VarListManager getManager() {
-		if (manager == null)
-			manager = new VarListManager();
-		return manager;
-	}
-
-	private VarListManager() {
-		//private constructor to enforce singleton status
-	}
-	
 	public void setSample(String sampleID) {
 		req.clearSamples();
 		req.addSample(sampleID);
 		pedigreeFilters.clear();
+		reloadRequired = true;
+	}
+	
+	public void setAnnotations(List<String> annotationKeys) {
+		req.setAnnotations(annotationKeys);
 		reloadRequired = true;
 	}
 	
@@ -64,11 +57,6 @@ public class VarListManager implements FilterListener {
 	public void setIntervals(IntervalList intervals) {
 		req.setIntervals(intervals);
 		reloadRequired = true;
-	}
-	
-	@Override
-	public void filtersUpdated(List<VariantFilter> newFilters) {
-		setFilters(newFilters);
 	}
 	
 	/**

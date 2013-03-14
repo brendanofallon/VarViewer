@@ -195,7 +195,6 @@ public class VarViewer implements EntryPoint {
 	FlowPanel centerPanel; //Central container, does not include topbar or footer
 	VariantDisplay varDisplay = new VariantDisplay(); //Displays variant table and related panels
 	SamplesView sampleView = new SamplesView(this); //UI element that displays sample list	  
-	VarListManager varManager = VarListManager.getManager(); //client-side store of current variant data
 	private final LogoutServiceAsync logoutService = GWT.create(LogoutService.class);
 	private final CheckAuthTokenServiceAsync authCheckService = GWT.create(CheckAuthTokenService.class);
 }

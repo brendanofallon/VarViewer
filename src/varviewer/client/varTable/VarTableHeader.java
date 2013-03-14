@@ -27,16 +27,19 @@ public class VarTableHeader extends HorizontalPanel {
 	final HighlightButton exportButton; 
 	final HighlightButton colMenuButton;
 	final HeaderSearchBox searchBox;
-	PedigreePopup pedPopup = null;
+	final PedigreePopup pedPopup;
+	final ColPickerPopup popup;
+	
 	private String igvLinkText = null;
 	private VarTable tableParent;
 	
-	public VarTableHeader(final VarTable tableParent) {
+	public VarTableHeader(final VarTable tableParent, ColumnModel colModel, PedigreePopup pedPopup, ColPickerPopup colPopup) {
 		this.tableParent = tableParent;
 		this.setStylePrimaryName("vartableheader");
 		this.add(sampleLabel);
 		sampleLabel.setStylePrimaryName("samplelabel");
-		
+		this.pedPopup = pedPopup;
+		this.popup = colPopup;
 		searchBox = new HeaderSearchBox(tableParent);
 		this.add(searchBox);
 		
@@ -84,7 +87,7 @@ public class VarTableHeader extends HorizontalPanel {
 		exportButton.setHeight("24px");
 		
 		
-		final ColPickerPopup popup = new ColPickerPopup(tableParent.colModel);
+		final ColPickerPopup popup = new ColPickerPopup(colModel);
 		popup.hide();
 		
 		Image colMenuImage = new Image("images/config-icon.png");
@@ -116,9 +119,6 @@ public class VarTableHeader extends HorizontalPanel {
 	 * user to do a pedigree analysis
 	 */
 	protected void showPedigreePanel() {
-		if (pedPopup == null) {
-			pedPopup = new PedigreePopup(tableParent);
-		}
 		pedPopup.setPopupPosition(200, 100);
 		pedPopup.show();
 	}

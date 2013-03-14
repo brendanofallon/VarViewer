@@ -3,8 +3,7 @@ package varviewer.client.varTable.pedigree;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.client.VarListManager;
-import varviewer.client.varTable.VarTable;
+import varviewer.client.varTable.VariantDisplay;
 import varviewer.shared.PedigreeFilter;
 import varviewer.shared.PedigreeSample;
 import varviewer.shared.PedigreeSample.OperationType;
@@ -34,11 +33,11 @@ public class PedigreePopup extends PopupPanel {
 	private HorizontalPanel bottomPanel = new HorizontalPanel();
 	private SampleChooserPanel includesPanel = new SampleChooserPanel("Intersect");
 	private SampleChooserPanel excludesPanel = new SampleChooserPanel("Subtract");
-	private VarTable varTable;
+	private VariantDisplay varDisplay;
 	 
-	public PedigreePopup(VarTable table) {
+	public PedigreePopup(VariantDisplay display) {
 		super(false);
-		this.varTable = table;
+		this.varDisplay = display;
 		initComponents();
 		setWidth("700px");
 		setHeight("350px");
@@ -114,22 +113,22 @@ public class PedigreePopup extends PopupPanel {
 		//Two things need to happen here. First, we need to add the pedigreeFilters to the list of
 		//filters used.
 
-		VarListManager.getManager().setPedigreeFilters(filters);
+		varDisplay.getVarListManager().setPedigreeFilters(filters);
 
 		//Second, we need to add columns to the current column model so that the zygosities of 
 		//the filtered samples are displayed in the table
 		//Clear existing PedigreeVarAnnotations from column model, then add the new ones
-		varTable.getColumnModel().removeColumnsByClass(PedigreeVarAnnotation.class);
+		varDisplay.getVarTable().getColumnModel().removeColumnsByClass(PedigreeVarAnnotation.class);
 		for(PedigreeSample sample : includesPanel.getSampleSettings()) {
 			PedigreeVarAnnotation pedAnnotation = new PedigreeVarAnnotation(sample);
-			varTable.getColumnModel().addColumn(pedAnnotation);	
+			varDisplay.getVarTable().getColumnModel().addColumn(pedAnnotation);	
 		}
 		for(PedigreeSample sample : excludesPanel.getSampleSettings()) {
 			PedigreeVarAnnotation pedAnnotation = new PedigreeVarAnnotation(sample);
-			varTable.getColumnModel().addColumn(pedAnnotation);
+			varDisplay.getVarTable().getColumnModel().addColumn(pedAnnotation);
 		}
 		
-		VarListManager.getManager().reloadIfRequired();
+		varDisplay.getVarListManager().reloadIfRequired();
 		
 	}
 

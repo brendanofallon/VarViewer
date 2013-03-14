@@ -5,6 +5,7 @@ import java.util.List;
 
 import varviewer.client.services.ExportService;
 import varviewer.client.services.ExportServiceAsync;
+import varviewer.client.varTable.pedigree.PedigreePopup;
 import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
 import varviewer.shared.Variant;
 
@@ -34,14 +35,15 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	VarPage varPage = new VarPage( (Resources)GWT.create(VarTableResources.class) );
 	
 	VarTableHeader header = null;
-	ColumnModel colModel = new ColumnModel();
+	ColumnModel colModel = null;
 	SearchBoxVariantFilter searchBoxFilter = new SearchBoxVariantFilter();
 	List<Variant> fullVariantList = null; //Stores all variants passed in from VarListManager, but does not reflect filtering from the SearchBoxFilter
 	List<PedigreeVarAnnotation> pedAnnotations = new ArrayList<PedigreeVarAnnotation>(); //Stores pedigree 
 	VariantDisplay displayParent;
 	
-	public VarTable(VariantDisplay display) {
+	public VarTable(VariantDisplay display, ColumnModel colModel) {
 		displayParent = display;
+		this.colModel = colModel;
 		this.setStylePrimaryName("vartable");
 		initComponents();
 	}
@@ -91,9 +93,6 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 		
 		varStrs.add("Variant list for sample " + header.getSampleLabel());
 		
-		//Sadly, Calendar not support on client side GWT
-		//varStrs.add("List generated on " + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR) + " at " + cal.get(Calendar.HOUR) + ":" + cal.get(Calendar.MINUTE) + " " + cal.get(Calendar.AM_PM));
-		
 		varStrs.add( displayParent.getFilterUserText() + "\n");
 		
 		varStrs.add( colModel.writeHeader() );
@@ -127,7 +126,9 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	 * Create and initialize a few UI components
 	 */
 	private void initComponents() {
-		header = new VarTableHeader(this);
+		PedigreePopup pedPopup = new PedigreePopup(displayParent);
+		ColPickerPopup colPopup = new ColPickerPopup(colModel);
+		header = new VarTableHeader(this, colModel, pedPopup, colPopup);
 		
 		this.add(header);
 		
