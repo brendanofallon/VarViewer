@@ -15,6 +15,7 @@ public class VariantRequest implements Serializable {
 	private List<String> sampleIDs = new ArrayList<String>();
 	private IntervalList intervals = new AllIntervals();
 	private List<VariantFilter> filters = new ArrayList<VariantFilter>();
+	private List<String> annotations = new ArrayList<String>();
 	
 	public VariantRequest() {
 		//blank on purpose, must have a no-arg constructor
@@ -71,6 +72,16 @@ public class VariantRequest implements Serializable {
 		this.intervals = intervals;
 	}
 	
+	
+	
+	public List<String> getAnnotations() {
+		return annotations;
+	}
+
+	public void setAnnotations(List<String> annotations) {
+		this.annotations = annotations;
+	}
+
 	public void addFilter(VariantFilter filter) {
 		if (filters == null)
 			filters = new ArrayList<VariantFilter>();

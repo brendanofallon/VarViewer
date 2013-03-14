@@ -26,11 +26,15 @@ public class Variant implements Comparable<Variant>, Serializable {
 	}
 	
 	public void addAnnotation(String key, String value) {
-		annotations.put(key, new Annotation(value));
+		addAnnotation(key, new Annotation(value));
 	}
 	
 	public void addAnnotation(String key, Double value) {
-		annotations.put(key, new Annotation(value));
+		addAnnotation(key, new Annotation(value));
+	}
+	
+	public void addAnnotation(String key, Annotation anno) {
+		annotations.put(key, anno);
 	}
 	
 	public Annotation getAnnotation(String key) {

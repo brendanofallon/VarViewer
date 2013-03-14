@@ -44,7 +44,7 @@ public interface SampleSource extends HasSamples {
 	public SampleTreeNode getSampleTreeRoot();
 	
 	/**
-	 * Obtain sampleInfo for the given sample 
+	 * Obtain a sampleInfo object that contains some basic information about the given sample 
 	 * @param sampleID
 	 * @return
 	 */

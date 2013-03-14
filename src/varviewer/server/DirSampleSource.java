@@ -67,19 +67,6 @@ public class DirSampleSource implements SampleSource {
 		samples.clear();
 		root = new SampleTreeNode("root", new ArrayList<SampleTreeNode>());
 		attachChildSamples(root, rootDir);
-//		File[] subdirs = rootDir.listFiles();
-//		for(int i=0; i<subdirs.length; i++) {
-//			if (subdirs[i].isDirectory()) {
-//				SampleInfoFile sampleInfo = createInfoForFile(subdirs[i]);
-//				if (sampleInfo != null) {
-//					Logger.getLogger(getClass()).info("Loading sample info from file " + subdirs[i].getAbsolutePath() + ", found sample id: " + sampleInfo.info.getSampleID());
-//					samples.put(sampleInfo.info.getSampleID(), sampleInfo);
-//				}
-//				else {
-//					Logger.getLogger(getClass()).warn("Could not parse sample info from directory " + subdirs[i].getAbsolutePath());
-//				}
-//			}
-//		}
 	}
 
 	private void attachChildSamples(SampleTreeNode parentNode, File parentDir) {

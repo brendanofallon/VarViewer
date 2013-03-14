@@ -6,6 +6,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import varviewer.client.services.VarRequestService;
+import varviewer.server.annotation.AnnotationKeyIndex;
+import varviewer.server.annotation.AnnotationProvider;
+import varviewer.server.annotation.TestAnnotationProvider;
+import varviewer.server.variant.VariantCollection;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantRequest;
 
@@ -20,7 +24,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRequestService {
 
-	AbstractVariantServer variantSource = null;
+	SampleSource variantSource = null;
+	AnnotationProvider annoSource = null;
 
 	@Override
 	public List<Variant> queryVariant(VariantRequest req)
@@ -44,10 +49,31 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 			DirSampleSource samplesSource = new DirSampleSource();
 			samplesSource.initialize(new File(sampleDir));
 			Logger.getLogger(getClass()).info("Initializing new sampleSource from file " + sampleDir);
-			variantSource = new CachingVariantServer(samplesSource);
+			variantSource = new CachingSampleSource(samplesSource); //Caches variants
 		}
 		
-		return variantSource.getVariants(req);
+		if (annoSource == null) {
+			annoSource = new TestAnnotationProvider();
+		}
+
+		//First: Obtain the "raw" list of variants, unfiltered and (mostly) unannotated
+		VariantCollection vars = variantSource.getVariantsForSample(req.getSampleIDs().get(0));
+
+		//Second: Annotate the variants according to the annotations requested
+		if (req.getAnnotations().size() > 0) {
+			AnnotationKeyIndex[] index = annoSource.getKeyIndices(req.getAnnotations());
+			for(String contig : vars.getContigs()) {
+				for(Variant var : vars.getVariantsForContig(contig)) {
+					annoSource.annotateVariant(var, index);
+				}
+			}
+		}
+	
+		//Third : Apply filters to the variants and return only those passing all filters
+		FilterExecutor filterExec = new SimpleFilterExecutor();
+		List<Variant> passingVars = filterExec.filterAll(vars, req.getFilters());
+		
+		return passingVars;
 	}
 
 }
