@@ -1,6 +1,7 @@
 package varviewer.server;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -31,6 +32,8 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 	public List<Variant> queryVariant(VariantRequest req)
 			throws IllegalArgumentException {
 
+		Date begin = new Date();
+		
 		//If variantSource has not been initialized, try to create one by reading "sample.dir" from
 		//the properties and creating a 'DirSampleSource' to provide a list of samples
 		if (variantSource == null) {
@@ -52,13 +55,20 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 			variantSource = new CachingSampleSource(samplesSource); //Caches variants
 		}
 		
+		Date init = new Date();
+		System.out.println("Time to initialize: " + (init.getTime()-begin.getTime())/1000.0);
+		
 		if (annoSource == null) {
 			annoSource = new TestAnnotationProvider();
 		}
+		
 
 		//First: Obtain the "raw" list of variants, unfiltered and (mostly) unannotated
 		VariantCollection vars = variantSource.getVariantsForSample(req.getSampleIDs().get(0));
 
+		Date readVars = new Date();
+		System.out.println("Time to read: " + (readVars.getTime()-init.getTime())/1000.0);
+		
 		//Second: Annotate the variants according to the annotations requested
 		if (req.getAnnotations().size() > 0) {
 			AnnotationKeyIndex[] index = annoSource.getKeyIndices(req.getAnnotations());
@@ -69,10 +79,15 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 			}
 		}
 	
+		Date annotate = new Date();
+		System.out.println("Time to annotate: " + (annotate.getTime()-readVars.getTime())/1000.0);
+		
 		//Third : Apply filters to the variants and return only those passing all filters
 		FilterExecutor filterExec = new SimpleFilterExecutor();
 		List<Variant> passingVars = filterExec.filterAll(vars, req.getFilters());
 		
+		Date filter = new Date();
+		System.out.println("Time to filter: " + (filter.getTime()-annotate.getTime())/1000.0);
 		return passingVars;
 	}
 

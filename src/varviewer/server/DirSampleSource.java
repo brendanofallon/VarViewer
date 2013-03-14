@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import varviewer.server.variant.AbstractVariantReader;
 import varviewer.server.variant.TabixCSVReader;
 import varviewer.server.variant.UncompressedCSVReader;
+import varviewer.server.variant.VCFReader;
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.HasVariants;
 import varviewer.shared.SampleInfo;
@@ -134,7 +135,7 @@ public class DirSampleSource implements SampleSource {
 			}
 			reader.close();
 		} catch (IOException e) {
-			Logger.getLogger(getClass()).warn("IO error reading sample informatoin from file: " + subFile.getAbsolutePath() + " cause: " + e.getLocalizedMessage());
+			Logger.getLogger(getClass()).warn("IO error reading sample information from file: " + subFile.getAbsolutePath() + " cause: " + e.getLocalizedMessage());
 			e.printStackTrace();
 			return null;
 		}
@@ -184,7 +185,6 @@ public class DirSampleSource implements SampleSource {
 		//Now attempt to find vcf, annotated csv, and .bam files...
 		File vcfFile = findVCF( new File(sampleRoot.getAbsolutePath() + "/var/") );
 		if (vcfFile != null) {
-			//Logger.getLogger(getClass()).info("Found VCF file for sample " + info.getSampleID() + ": " + vcfFile.getAbsolutePath());
 			info.setVcfFile(vcfFile.getAbsolutePath());
 		}
 		else {
@@ -193,7 +193,6 @@ public class DirSampleSource implements SampleSource {
 		
 		File csvFile = findCSV( new File(sampleRoot.getAbsolutePath() + "/var/") );
 		if (csvFile != null) {
-			//Logger.getLogger(getClass()).info("Found annotated vars file for sample " + info.getSampleID() + ": " + csvFile.getAbsolutePath());
 			info.setAnnotatedVarsFile(csvFile.getAbsolutePath());
 		}
 		else {
@@ -202,14 +201,12 @@ public class DirSampleSource implements SampleSource {
 		
 		File bamFile = findBAM( new File(sampleRoot.getAbsolutePath() + "/bam/") );
 		if (bamFile != null) {
-			//Logger.getLogger(getClass()).info("Found BAM file for sample " + info.getSampleID() + ": " + bamFile.getAbsolutePath());
 			info.setBamFile(bamFile.getAbsolutePath());
 		}
 		else {
 			Logger.getLogger(getClass()).warn("No BAM file for sample " + info.getSampleID() );
 		}
 
-		
 		return info;
 	}
 
@@ -295,29 +292,31 @@ public class DirSampleSource implements SampleSource {
 		if ( containsSample(sampleID)) {
 			File sampleDir = samples.get(sampleID).source;
 			SampleInfo info = samples.get(sampleID).info;
-			String annoVarsPath =  info.getAnnotatedVarsFile();
-			if (annoVarsPath == null || annoVarsPath.length()==0) {
+			String varsPath =  info.getVcfFile();
+			if (varsPath == null || varsPath.length()==0) {
 				return null;
 			}
 			
 			File varsFile = null;
-			if (annoVarsPath.startsWith("/"))
-				varsFile = new File(annoVarsPath);
+			if (varsPath.startsWith("/"))
+				varsFile = new File(varsPath);
 			else 
-				varsFile = new File(sampleDir + "/" + annoVarsPath);
+				varsFile = new File(sampleDir + "/" + varsPath);
 			
 			if (!varsFile.exists()) {
 				Logger.getLogger(getClass()).warn("IO error reading variants for " + sampleID + " annotated vars file " + varsFile.getAbsolutePath() + " does not exist" );
 				return null;
 			}
 			
-			
 			try {
 				AbstractVariantReader reader = null;
 				if (varsFile.getName().endsWith(".gz")) {
 					reader = new TabixCSVReader(varsFile.getAbsolutePath());
 				}
-				else {
+				if (varsFile.getName().endsWith(".vcf")) {
+					reader = new VCFReader(new File(varsFile.getAbsolutePath()));
+				}
+				if (varsFile.getName().endsWith(".csv")) {
 					reader = new UncompressedCSVReader(varsFile.getAbsolutePath());
 				}
 				

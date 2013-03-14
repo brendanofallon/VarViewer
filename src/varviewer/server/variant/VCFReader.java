@@ -4,17 +4,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import varviewer.shared.Variant;
 
-public class VCFReader {
+public class VCFReader extends AbstractVariantReader {
 
 	private BufferedReader reader;
-	private int currentLineNumber = -1;
-	private String currentLine = null;
-	protected String[] lineToks = null;
 	private String[] formatToks = null; //Tokenized format string, produced as needed
 	private int gtCol = -1; //Format column which contains genotype info
 	private int gqCol = -1; //Format column which contains genotype quality info 
@@ -23,64 +22,35 @@ public class VCFReader {
 			
 	private String sample = null; //Emit information for only this sample if specified (when not given, defaults to first sample)
 	private int sampleColumn = -1; //Column that stores information for the given sample
-	protected final File sourceFile;
+
 	
 	private String currentFormatStr = null;
 	
 	public VCFReader(File file, String sample) throws IOException {
+		super(file);
 		this.reader = new BufferedReader(new FileReader(file));
-		this.sourceFile = file;
-		currentLine = reader.readLine();
 		this.sample = sample; //Sample must be specified before header is read
 		readHeader();
 	}
 	
-	/**
-	 * Create a VCFLineReader to read variants from the given input stream
-	 * @param stream
-	 * @throws IOException
-	 */
-	public VCFReader(InputStream stream) throws IOException {
-		this.reader = new BufferedReader(new InputStreamReader(stream));
-		sourceFile = null;
-		currentLine = reader.readLine();
-		sampleColumn = 9; //First column with info, this is the default when no sample is specified
-		readHeader();
-	}
-	
 	public VCFReader(File file) throws IOException {
+		super(file);
 		this.reader = new BufferedReader(new FileReader(file));
-		this.sourceFile = file;
-		currentLine = reader.readLine();
 		sampleColumn = 9; //First column with info, this is the default when no sample is specified
 		readHeader();
 	}
 	
-	public String getHeader() throws IOException {
-		if (sourceFile == null) {
-			return null;
-		}
-		
-		BufferedReader headReader = new BufferedReader(new FileReader(sourceFile));
-		String line = headReader.readLine();
-		StringBuilder strB = new StringBuilder();
-		while(line != null && line.trim().startsWith("#")) {
-			strB.append(line + "\n");
-			line = headReader.readLine();
-		}
-		headReader.close();
-		return strB.toString();
-	}
 	
 	private void readHeader() throws IOException {
+		String currentLine = reader.readLine();
 		while (currentLine != null && currentLine.startsWith("#")) {
-			advanceLine();
+			currentLine = reader.readLine();
 			
 			if (currentLine == null) {
 				throw new IOException("Could not find start of data");
 			}
 			
-			if (currentLine.startsWith("#CHROM")) {
+			if (currentLine.toUpperCase().startsWith("#CHROM")) {
 				String[] toks = currentLine.split("\t");
 				if (sample == null) {
 					sampleColumn = 9;
@@ -110,146 +80,68 @@ public class VCFReader {
 	}
 	
 	/**
-	 * Advance the current line until the contig found is the given contig. If
-	 * already at the given contig, do nothing
-	 * @param contig
-	 * @throws IOException 
-	 */
-	public void advanceToContig(String contig) throws IOException {
-		while (hasLine() && (!getContig().equals(contig))) {
-			advanceLine();
-		}
-		if (! hasLine()) {
-			throw new IllegalArgumentException("Could not find contig " + contig + " in vcf");
-		}
-	}
-	
-	/**
-	 * Advance the current line until we reach a contig whose name matches the contig arg,
-	 * and we find a variant whose position is equal to or greater than the given position
-	 * @throws IOException 
-	 */
-	public void advanceTo(String contig, int pos) throws IOException {
-		advanceToContig(contig);
-		while(hasLine() && getPosition() < pos) {
-			advanceLine();
-			if (! hasLine()) {
-				throw new IllegalArgumentException("Advanced beyond end file looking for pos: " + pos);
-			}
-			if (! getContig().equals(contig)) {
-				throw new IllegalArgumentException("Could not find position " + pos + " in contig " + contig);
-			}
-		}
-	}
-	
-	public boolean isPassing() {
-		return currentLine.contains("PASS");
-	}
-	
-	/**
 	 * Convert current line into a variant record
 	 * @param stripChr If true, strip 'chr' from contig name, if false do not alter contig name
 	 * @return A new variant record containing the information in this vcf line
 	 */
-	public Variant toVariant() {
-		if (currentLine == null || currentLine.trim().length()==0)
-			return null;
-		else {
-			
-			Variant rec = null;
-			try {
-				String contig = getContig();
-				if (contig == null)
-					return null;
+	protected Variant variantFromString(String str) {
+		Variant rec = null;
+		try {
+			String[] lineToks = str.split("\t");
+			String contig = getContig(lineToks);
+			if (contig == null)
+				return null;
 
-				String ref = getRef();
-				String alt = getAlt();
-				int start = getStart();
-				int end = ref.length();
+			String ref = getRef(lineToks);
+			String alt = getAlt(lineToks);
+			int start = getStart(lineToks);
+			int end = ref.length();
 
-				if (alt.length() != ref.length()) {
-					//Remove initial characters if they are equal and add one to start position
-					if (alt.charAt(0) == ref.charAt(0)) {
-						alt = alt.substring(1);
-						ref = ref.substring(1);
-						if (alt.length()==0)
-							alt = "-";
-						if (ref.length()==0)
-							ref = "-";
-						start++;
-					}
-
-					if (ref.equals("-"))
-						end = start;
-					else
-						end = start + ref.length();
+			if (alt.length() != ref.length()) {
+				//Remove initial characters if they are equal and add one to start position
+				if (alt.charAt(0) == ref.charAt(0)) {
+					alt = alt.substring(1);
+					ref = ref.substring(1);
+					if (alt.length()==0)
+						alt = "-";
+					if (ref.length()==0)
+						ref = "-";
+					start++;
 				}
 
-				rec = new Variant(contig, start, ref, alt);
-//				Integer depth = getDepth();
-//				if (depth != null)
-//					rec.addProperty(Variant.DEPTH, new Double(depth));
-//
-//				Integer altDepth = getVariantDepth();
-//				if (altDepth != null) {
-//					rec.addProperty(Variant.VAR_DEPTH, new Double(altDepth));
-//				}
-//
-//				if (rec.isMultiAllelic()) {
-//					Integer altDepth2 = getVariantDepth(1);
-//					if (altDepth2 != null) {
-//						rec.addProperty(Variant.VAR2_DEPTH, new Double(altDepth2));
-//					}
-//				}
-//				
-//				Double genotypeQuality = getGenotypeQuality();
-//				if (genotypeQuality != null) 
-//					rec.addProperty(Variant.GENOTYPE_QUALITY, genotypeQuality);
-
-
+				if (ref.equals("-"))
+					end = start;
+				else
+					end = start + ref.length();
 			}
-			catch (Exception ex) {
-				System.err.println("ERROR: could not parse variant from line : " + currentLine + "\n Exception: " + ex.getCause() + " " + ex.getMessage());
-				
-				return null;
+
+			rec = new Variant(contig, start, ref, alt);
+			Integer depth = getDepth(lineToks);
+			if (depth != null)
+				rec.addAnnotation("depth", new Double(depth));
+			
+			Double quality = getQuality(lineToks);
+			if (quality != null) {
+				rec.addAnnotation("quality", quality);
 			}
-			return rec;
-		}
-	}
+			
+			Integer varDepth = getVariantDepth(lineToks);
+			if (varDepth != null) {
+				rec.addAnnotation("var.depth", new Double(varDepth));
+			}		
 	
-
-
-
-
-	/**
-	 * Read one more line of input, returns false if line cannot be read
-	 * @return
-	 * @throws IOException
-	 */
-	public boolean advanceLine() throws IOException {
-		currentLine = reader.readLine();
-		while(currentLine != null && currentLine.startsWith("#")) {
-			currentLine = reader.readLine();
-			currentLineNumber++;
 		}
+		catch (Exception ex) {
+			System.err.println("ERROR: could not parse variant from line : " + str + "\n Exception: " + ex.getCause() + " " + ex.getMessage());
+			return null;
+		}
+		return rec;
 		
-		if (currentLine == null)
-			lineToks = null;
-		else
-			lineToks = currentLine.split("\\t");
-
-		return currentLine != null;
-	}
-
-	/**
-	 * Returns true if the current line is not null. 
-	 * @return
-	 */
-	public boolean hasLine() {
-		return currentLine != null;
 	}
 	
-	public String getContig() {
+
+
+	public String getContig(String[] lineToks) {
 		if (lineToks != null) {
 			return lineToks[0];
 		}
@@ -261,7 +153,7 @@ public class VCFReader {
 	 * Return the (starting) position item for current line
 	 * @return
 	 */
-	public int getPosition() {
+	public int getPosition(String[] lineToks) {
 		if (lineToks != null) {
 			return Integer.parseInt(lineToks[1]);
 		}
@@ -274,14 +166,14 @@ public class VCFReader {
 	 * the following number
 	 * @return
 	 */
-	public Integer getDepth() {
+	public Integer getDepth(String[] lineToks) {
 		String info = lineToks[7];
 		
 		String target = "DP";
 		int index = info.indexOf(target);
 		if (index < 0) {
 			//Attempt to get DP from INFO tokens...
-			Integer dp = getDepthFromInfo();
+			Integer dp = getDepthFromInfo(lineToks);
 			return dp;
 		}
 		
@@ -298,15 +190,15 @@ public class VCFReader {
 	
 
 	
-	public int getStart() {
-		return getPosition();
+	public int getStart(String[] lineToks) {
+		return getPosition(lineToks);
 	}
 	
 	/**
 	 * Return the end of this variant
 	 * @return
 	 */
-	public int getEnd() {
+	public int getEnd(String[] lineToks) {
 		if (lineToks != null) {
 			return Integer.parseInt(lineToks[2]);
 		}
@@ -314,7 +206,7 @@ public class VCFReader {
 			return -1;
 	}
 	
-	public Double getQuality() {
+	public Double getQuality(String[] lineToks) {
 		if (lineToks != null) {
 			return Double.parseDouble(lineToks[5]);
 		}
@@ -322,7 +214,7 @@ public class VCFReader {
 			return -1.0;
 	}
 	
-	public String getRef() {
+	public String getRef(String[] lineToks) {
 		if (lineToks != null) {
 			return lineToks[3];
 		}
@@ -330,7 +222,7 @@ public class VCFReader {
 			return "?";
 	}
 	
-	public String getAlt() {
+	public String getAlt(String[] lineToks) {
 		if (lineToks != null) {
 			return lineToks[4];
 		}
@@ -338,11 +230,7 @@ public class VCFReader {
 			return "?";
 	}
 	
-	public int getLineNumber() {
-		return currentLineNumber;
-	}
-	
-	private void updateFormatIfNeeded() {
+	private void updateFormatIfNeeded(String[] lineToks) {
 		if (lineToks.length > 7) {
 			if (formatToks == null) {
 				createFormatString(lineToks);
@@ -357,8 +245,8 @@ public class VCFReader {
 	/**
 	 * 
 	 */
-	public boolean isHetero() {
-		updateFormatIfNeeded();
+	public boolean isHetero(String[] lineToks) {
+		updateFormatIfNeeded(lineToks);
 		
 		if (formatToks == null)
 			return false;
@@ -382,20 +270,17 @@ public class VCFReader {
 		
 	}
 	
-	public boolean isHomo() {
-		return ! isHetero();
+	public boolean isHomo(String[] lineToks) {
+		return ! isHetero(lineToks);
 	}
 
-	public String getCurrentLine() {
-		return currentLine;
-	}
 	
 	/**
 	 * Returns true if the phasing separator is "|" and not "/" 
 	 * @return
 	 */
-	public boolean isPhased() {
-		updateFormatIfNeeded();
+	public boolean isPhased(String[] lineToks) {
+		updateFormatIfNeeded(lineToks);
 		
 		if (formatToks == null)
 			return false;
@@ -414,8 +299,8 @@ public class VCFReader {
 	 * True if the first item in the genotype string indicates an 'alt' allele
 	 * @return
 	 */
-	public boolean firstIsAlt() {
-		updateFormatIfNeeded();
+	public boolean firstIsAlt(String[] lineToks) {
+		updateFormatIfNeeded(lineToks);
 		if (formatToks == null)
 			return false;
 		
@@ -433,8 +318,8 @@ public class VCFReader {
 	 * True if the second item in the genotype string indicates an 'alt' allele
 	 * @return
 	 */
-	public boolean secondIsAlt() {
-		updateFormatIfNeeded();
+	public boolean secondIsAlt(String[] lineToks) {
+		updateFormatIfNeeded(lineToks);
 		
 		if (formatToks == null)
 			return false;
@@ -453,8 +338,8 @@ public class VCFReader {
 	 * Obtain the genotype quality score for this variant
 	 * @return
 	 */
-	public Double getGenotypeQuality() {
-		updateFormatIfNeeded();
+	public Double getGenotypeQuality(String[] lineToks) {
+		updateFormatIfNeeded(lineToks);
 		
 		if (formatToks == null || gqCol < 0)
 			return 0.0;
@@ -472,7 +357,7 @@ public class VCFReader {
 		
 	}
 	
-	private Double getVQSR() {
+	private Double getVQSR(String[] lineToks) {
 		String[] infoToks = lineToks[7].split(";");
 		for(int i=0; i<infoToks.length; i++) {
 			String tok = infoToks[i];
@@ -483,36 +368,9 @@ public class VCFReader {
 		}
 				
 		return null;
-	}
+	}	
 	
-	private Double getLogFSScore() {
-		String[] infoToks = lineToks[7].split(";");
-		for(int i=0; i<infoToks.length; i++) {
-			String tok = infoToks[i];
-			if (tok.startsWith("LOGFS=")) {
-				Double val = Double.parseDouble(tok.replace("LOGFS=", ""));
-				return val;
-			}
-		}
-		return null;
-	}
-
-	
-	private Double getTauFPScore() {
-		String[] infoToks = lineToks[7].split(";");
-		for(int i=0; i<infoToks.length; i++) {
-			String tok = infoToks[i];
-			if (tok.startsWith("TAUFP=")) {
-				Double val = Double.parseDouble(tok.replace("TAUFP=", ""));
-				return val;
-			}
-		}
-				
-		return null;
-	}
-	
-	
-	private Double getStrandBiasScore() {
+	private Double getStrandBiasScore(String[] lineToks) {
 		String[] infoToks = lineToks[7].split(";");
 		for(int i=0; i<infoToks.length; i++) {
 			String tok = infoToks[i];
@@ -530,8 +388,8 @@ public class VCFReader {
 	 * Depth may appear in format OR INFO fields, this searches the latter for depth
 	 * @return
 	 */
-	public Integer getDepthFromInfo() {
-		updateFormatIfNeeded();
+	public Integer getDepthFromInfo(String[] lineToks) {
+		updateFormatIfNeeded(lineToks);
 		
 		if (formatToks == null)
 			return 1;
@@ -549,16 +407,16 @@ public class VCFReader {
 	 * Returns the depth of the first variant allele, as parsed from the INFO string for this sample
 	 * @return
 	 */
-	public Integer getVariantDepth() {
-		return getVariantDepth(0);
+	public Integer getVariantDepth(String[] lineToks) {
+		return getVariantDepth(0, lineToks);
 	}
 	
 	/**
 	 * Returns the depth of the whichth variant allele, as parsed from the INFO string for this sample
 	 * @return
 	 */
-	public Integer getVariantDepth(int which) {
-		updateFormatIfNeeded();
+	public Integer getVariantDepth(int which, String[] lineToks) {
+		updateFormatIfNeeded(lineToks);
 		
 		if (formatToks == null)
 			return 1;
@@ -616,5 +474,40 @@ public class VCFReader {
 		}
 		
 		currentFormatStr = formatStr;
+	}
+
+	@Override
+	public VariantCollection toVariantCollection() throws IOException {
+		List<Variant> vars = new ArrayList<Variant>(2048);
+		BufferedReader reader = new BufferedReader( new FileReader(varFile));
+		String line = reader.readLine();
+		initializeHeader(line);
+		line = reader.readLine(); //read next line, don't try to parse a variant from the header
+		while(line != null) {
+			if (! line.startsWith("#")) {
+				Variant var = variantFromString(line);
+				if (var != null)
+					vars.add(var);
+			}
+			line = reader.readLine();
+		}
+		reader.close();
+		if (vars.size()>0)
+			Logger.getLogger(getClass()).info("Read in " + vars.size() + " variants from " + varFile);
+		else {
+			Logger.getLogger(getClass()).warn("Read in " + vars.size() + " variants from " + varFile);
+		}
+		return new VariantCollection(vars);
+	}
+	
+	
+	public static void main(String[] args) throws IOException {
+		VCFReader vr = new VCFReader(new File("/home/brendan/jobwrangler_samples/tiny.reviewdir/var/medtest17_all_variants.vcf"));
+		VariantCollection col = vr.toVariantCollection();
+		for(String contig : col.getContigs()) {
+			for(Variant var : col.getVariantsForContig(contig)) {
+				System.out.println(var + " quality: " + var.getAnnotation("quality") + " depth: "  + var.getAnnotation("depth"));
+			}
+		}
 	}
 }

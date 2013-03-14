@@ -1,6 +1,5 @@
 package varviewer.server.variant;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,19 +35,6 @@ public class VariantCollection implements HasVariants {
 			}
 			contig.add(v);
 		}
-	}
-	
-	public VariantCollection(VCFReader reader) throws IOException {
-		do {
-			Variant rec = reader.toVariant();
-			if (rec == null) {
-				System.err.println("Warning, could not import variant from line: " + reader.getCurrentLine() );
-			}
-			else {
-				this.addRecordNoSort(rec);
-			}
-		} while (reader.advanceLine());
-		sortAllContigs();
 	}
 	
 	/**
