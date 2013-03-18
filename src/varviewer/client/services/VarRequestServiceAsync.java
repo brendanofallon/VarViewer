@@ -1,9 +1,7 @@
 package varviewer.client.services;
 
-import java.util.List;
-
-import varviewer.shared.Variant;
 import varviewer.shared.VariantRequest;
+import varviewer.shared.VariantRequestResult;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -13,6 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  *
  */
 public interface VarRequestServiceAsync {
-	void queryVariant(VariantRequest req, AsyncCallback<List<Variant>> callback)
+	void queryVariant(VariantRequest req, AsyncCallback<VariantRequestResult> callback)
 			throws IllegalArgumentException;
 }

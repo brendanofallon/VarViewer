@@ -11,6 +11,7 @@ import varviewer.shared.PedigreeFilter;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
 import varviewer.shared.VariantRequest;
+import varviewer.shared.VariantRequestResult;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -138,7 +139,7 @@ public class VarListManager {
 		for(PedigreeFilter pedFilter : pedigreeFilters) {
 			newReq.addFilter(pedFilter);
 		}
-		varRequestService.queryVariant(newReq, new AsyncCallback<List<Variant>>() {
+		varRequestService.queryVariant(newReq, new AsyncCallback<VariantRequestResult>() {
 
 			@Override
 		public void onFailure(Throwable caught) {
@@ -148,8 +149,8 @@ public class VarListManager {
 			}
 
 			@Override
-			public void onSuccess(List<Variant> result) {
-				currentList = result;
+			public void onSuccess(VariantRequestResult result) {
+				currentList = result.getVars();
 				if (currentList != null) 
 					fireVarListChanged();
 				else {

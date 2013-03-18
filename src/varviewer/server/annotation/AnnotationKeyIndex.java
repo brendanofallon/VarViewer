@@ -14,4 +14,11 @@ public interface AnnotationKeyIndex {
 	 */
 	public int getIndex();
 	
+	/**
+	 * Whether or no the Annotation should be treated as a (floating point) number. 
+	 * If not, the Annotation will be a String
+	 * @return
+	 */
+	public boolean isNumeric();
+	
 }
