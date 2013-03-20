@@ -49,7 +49,7 @@
     
   <servlet>
     <servlet-name>geneDetailsServlet</servlet-name>
-    <servlet-class>varviewer.server.GeneDetailServiceImpl</servlet-class>
+    <servlet-class>varviewer.server.geneDetails.GeneDetailServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>

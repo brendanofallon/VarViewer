@@ -9,43 +9,97 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import varviewer.server.geneDetails.GeneDetailHandler;
+import varviewer.shared.GeneInfo;
+
 /**
  * Temporary interface for info from dbNSFP-gene
  * @author brendan
  *
  */
-public class DBNSFPGeneDB {
+public class DBNSFPGeneDB implements GeneDetailHandler {
 
-	private static DBNSFPGeneDB db = null;
 	private Map<String, DBNSFPInfo> map = null;
-
-	public static DBNSFPGeneDB getDB() {	
-		return db;
-	}
-	
-	public static DBNSFPGeneDB getDB(File sourceFile) throws IOException {
-		if (db == null) {
-			if (! sourceFile.exists()) {
-				Logger.getLogger(DBNSFPGeneDB.class).warn("GeneDB file " + sourceFile.getAbsolutePath() + " does not exist");
-				return null;
-			}
-			db = new DBNSFPGeneDB(sourceFile);
-		}
+	File sourceFile = null;
 		
-		return db;
-	}
-
-	private DBNSFPGeneDB(File sourceFile) throws IOException {
-		readFile(sourceFile);
+	public DBNSFPGeneDB(File sourceFile) throws IOException {
+		if (! sourceFile.exists()) {
+			Logger.getLogger(DBNSFPGeneDB.class).warn("GeneDB file " + sourceFile.getAbsolutePath() + " does not exist");
+		}
+		this.sourceFile = sourceFile;
+		readFile(sourceFile);	
 	}
 	
+	public DBNSFPGeneDB() {
+		//OK to use setter for source file
+	}
+	
+	
+	
+	public File getSourceFile() {
+		return sourceFile;
+	}
+
+
+
+	public void setSourceFile(File sourceFile) {
+		this.sourceFile = sourceFile;
+		try {
+			readFile(sourceFile);
+		} catch (IOException e) {
+			Logger.getLogger(DBNSFPGeneDB.class).warn("Error reading geneDB source file: " + sourceFile.getAbsolutePath() + " : " + e.getMessage());
+		}
+	}
+
+
+
 	/**
 	 * Obtain a geneInfo object for the gene with the given name
 	 * @param geneName
 	 * @return
 	 */
-	public DBNSFPInfo getInfoForGene(String geneName) {
+	public DBNSFPInfo getDBNSFPInfoForGene(String geneName) {
 		return map.get(geneName);
+	}
+	
+	public GeneInfo getInfoForGene(String geneName) {
+		DBNSFPInfo dbInfo = getDBNSFPInfoForGene(geneName);
+		GeneInfo geneInfo = new GeneInfo();
+		if (dbInfo != null) {
+			String mimDisease = dbInfo.mimDisease;
+			if (mimDisease != null) {
+				geneInfo.setOmimDiseaseIDs(mimDisease.split(";"));
+			}
+
+			String diseaseDesc = dbInfo.diseaseDesc;
+			if (diseaseDesc != null) {
+				geneInfo.setDbNSFPDisease(diseaseDesc);
+			}
+
+			String summary = dbInfo.summary;
+			if (summary != null) {
+				geneInfo.setSummary(summary);
+			}
+			
+			String hgmdHits = dbInfo.hgmdHits;
+			if (hgmdHits != null) {
+				String[] hgmdVars = hgmdHits.split(";");
+				geneInfo.setHgmdVars( hgmdVars );
+			}
+			
+			String omimPhenos = dbInfo.omimPhenos;
+			if (omimPhenos != null) {
+				String[] phenos = omimPhenos.split(",");
+				geneInfo.setOmimPhenos(phenos);
+			}
+			
+			String omimInheritance = dbInfo.omimInheritance;
+			if (omimInheritance != null) {
+				geneInfo.setOmimInheritance(new String[]{omimInheritance});
+			}
+		}
+		
+		return geneInfo;
 	}
 	
 

@@ -42,22 +42,20 @@ public class DirSampleSource implements SampleSource {
 		initialize();
 	}
 	
-	/**
-	 * Set the root directory to the given file and read all samples from it. 
-	 * @param rootDir
-	 */
-	public void initialize(File rootDir) {
+	
+	
+	public File getRootDir() {
+		return rootDir;
+	}
+
+
+
+	public void setRootDir(File rootDir) {
 		this.rootDir = rootDir;
-		if (! rootDir.exists()) {
-			Logger.getLogger(getClass()).error("Sample info directory "  + rootDir.getAbsolutePath() + " does not exist");
-			throw new IllegalArgumentException("Sample info directory " + rootDir.getAbsolutePath() + " does not exist");
-		}
-		if (! rootDir.isDirectory()) {
-			Logger.getLogger(getClass()).error("Sample info directory "  + rootDir.getAbsolutePath() + " is not a directory");
-			throw new IllegalArgumentException("Sample info directory " + rootDir.getAbsolutePath() + " is not a directory");
-		}
 		initialize();
 	}
+
+
 	
 	public void initialize() {
 		if (rootDir == null) {
@@ -292,7 +290,7 @@ public class DirSampleSource implements SampleSource {
 		if ( containsSample(sampleID)) {
 			File sampleDir = samples.get(sampleID).source;
 			SampleInfo info = samples.get(sampleID).info;
-			String varsPath =  info.getVcfFile();
+			String varsPath =  info.getAnnotatedVarsFile();
 			if (varsPath == null || varsPath.length()==0) {
 				return null;
 			}

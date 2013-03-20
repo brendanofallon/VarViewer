@@ -72,27 +72,13 @@ public class TestAnnotationProvider implements AnnotationProvider {
 		public int getIndex() {
 			return index;
 		}
+
+		@Override
+		public boolean isNumeric() {
+			return false;
+		}
 		
 	}
 	
-//	Map<Integer, Annotation[]> annoMap = new HashMap<Integer, Annotation[]>();
-	
-//	public static void main(String[] args) {
-//		AnnotationProvider ap = new TestAnnotationProvider();
-//		AnnotationKeyIndex[] kIdx = ap.getKeyIndices(Arrays.asList(new String[]{"some.anno", "another.anno"}));
-//		Variant var = new Variant("1", 1, "N", "N");
-//		Variant var2 = new Variant("1", 2, "N", "N");
-//		Variant var3 = new Variant("1", 3, "N", "N");
-//		Variant var4 = new Variant("1", 11, "N", "N");
-//		ap.annotateVariant(var, kIdx);
-//		ap.annotateVariant(var2, kIdx);
-//		ap.annotateVariant(var3, kIdx);
-//		ap.annotateVariant(var4, kIdx);
-//		
-//		System.out.println("Annotation " + kIdx[0].getKey() + " : " + var.getAnnotation(kIdx[0].getKey()) + "\t\t another: " + var.getAnnotationStr("another.anno"));
-//		System.out.println("Annotation " + kIdx[0].getKey() + " : " + var2.getAnnotation(kIdx[0].getKey()) + "\t\t another: " + var2.getAnnotationStr("another.anno"));
-//		System.out.println("Annotation " + kIdx[0].getKey() + " : " + var3.getAnnotation(kIdx[0].getKey()) + "\t\t another: " + var3.getAnnotationStr("another.anno"));
-//		System.out.println("Annotation " + kIdx[0].getKey() + " : " + var4.getAnnotation(kIdx[0].getKey()) + "\t\t another: " + var4.getAnnotationStr("another.anno"));
-//		
-//	}
+
 }

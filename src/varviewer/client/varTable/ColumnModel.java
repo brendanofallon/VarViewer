@@ -27,20 +27,20 @@ public class ColumnModel {
 	List<ColumnModelListener> listeners = new ArrayList<ColumnModelListener>();
 	
 	public ColumnModel() {
-		addColumn( ColumnStore.getStore().getColumnForID("contig"));
-		addColumn( ColumnStore.getStore().getColumnForID("pos"));
-		addColumn( ColumnStore.getStore().getColumnForID("some.annotation"));
-		addColumn( ColumnStore.getStore().getColumnForID("another.annotation"));
-		addColumn( ColumnStore.getStore().getColumnForID("quality"));
-//		addColumn( ColumnStore.getStore().getColumnForID("gene"));
-//		addColumn( ColumnStore.getStore().getColumnForID("exon.function"));
-//		addColumn( ColumnStore.getStore().getColumnForID("zygosity"));
-//		addColumn( ColumnStore.getStore().getColumnForID("cdot"));
-//		addColumn( ColumnStore.getStore().getColumnForID("pdot"));
-//		addColumn( ColumnStore.getStore().getColumnForID("pop.freq"));
-//		addColumn( ColumnStore.getStore().getColumnForID("disease.pics"));
-//		addColumn( ColumnStore.getStore().getColumnForID("rsnum"));
-//		addColumn( ColumnStore.getStore().getColumnForID("igv.link"));
+//		addColumn( ColumnStore.getStore().getColumnForID("contig"));
+//		addColumn( ColumnStore.getStore().getColumnForID("pos"));
+//		addColumn( ColumnStore.getStore().getColumnForID("some.annotation"));
+//		addColumn( ColumnStore.getStore().getColumnForID("another.annotation"));
+//		addColumn( ColumnStore.getStore().getColumnForID("quality"));
+		addColumn( ColumnStore.getStore().getColumnForID("gene"));
+		addColumn( ColumnStore.getStore().getColumnForID("exon.function"));
+		addColumn( ColumnStore.getStore().getColumnForID("zygosity"));
+		addColumn( ColumnStore.getStore().getColumnForID("cdot"));
+		addColumn( ColumnStore.getStore().getColumnForID("pdot"));
+		addColumn( ColumnStore.getStore().getColumnForID("pop.freq"));
+		addColumn( ColumnStore.getStore().getColumnForID("disease.pics"));
+		addColumn( ColumnStore.getStore().getColumnForID("rsnum"));
+		addColumn( ColumnStore.getStore().getColumnForID("igv.link"));
 	}
 	
 	public void addColumn(VarAnnotation varAnno) {

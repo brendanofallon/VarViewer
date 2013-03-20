@@ -46,7 +46,6 @@ public class VarViewer implements EntryPoint {
 
 	private void initComponents() {
 		mainPanel = new FlowPanel();
-		mainPanel.setStylePrimaryName("maincontainer");
 		topBar = new HorizontalPanel();
 		Label topLabel = new Label("ARUP NGS Variant Viewer");
 		topBar.setStylePrimaryName("topbar");
@@ -60,7 +59,8 @@ public class VarViewer implements EntryPoint {
 		footer.setStylePrimaryName("footer");
 		mainPanel.add(footer);
 		showLoginPanel();
-		RootPanel.get().add(mainPanel);		  
+		RootPanel.get().add(mainPanel);
+		RootPanel.getBodyElement().setId("maincontainer");
 	}
 
 	private void showLoginPanel() {

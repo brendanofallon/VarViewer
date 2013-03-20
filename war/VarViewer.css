@@ -1,5 +1,12 @@
-/** Add css rules here for your application. */
 
+
+#maincontainer {
+	margin: 0px;
+	outline: 0px;
+	padding: 0px;
+	width: 100%;
+	background-image: url('images/cream-dust.png');
+}
 
 .topbar { 
 	outline: 0px;
@@ -38,14 +45,6 @@
 	text-right: center;
 	margin-top: 5px;
 	margin-right: 10px;
-}
-
-.maincontainer {
-	margin: 0px;
-	outline: 0px;
-	padding: 0px;
-	width: 100%;
-	background-image: url('images/handmadepaper.png');
 }
 
 .footer {

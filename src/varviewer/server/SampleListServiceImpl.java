@@ -33,7 +33,7 @@ public class SampleListServiceImpl extends RemoteServiceServlet implements Sampl
 			}
 			sampleDir = new DirSampleSource();
 			Logger.getLogger(getClass()).info("Initializing sample source directory on path: " + dirFile.getAbsolutePath());
-			sampleDir.initialize( dirFile );
+			sampleDir.setRootDir(dirFile);
 		}
 		
 		//re-initialize every time

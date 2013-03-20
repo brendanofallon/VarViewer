@@ -8,19 +8,19 @@ import MySQLdb as mdb
 
 separator = "\t"
 
-if ((len(sys.argv) < 5) or sys.argv[1]=="help"):
+if ((len(sys.argv) < 4) or sys.argv[1]=="help"):
 	print
 	print "Import variant annotation data into the sql database"
 	print
-	print "Usage: sqlImport.py [datafile.csv] [database name] [tablename] [columnname]"
+	print "Usage: sqlImportGene.py [datafile.csv] [database name] [columnname]"
 	print
 	print " ARG count: " + str(len(sys.argv))
 	exit()
 
 infile = sys.argv[1]
 dbname = sys.argv[2]
-tablename = sys.argv[3]
-column = sys.argv[4]
+tablename = "geneInfo"
+column = sys.argv[3]
 newcolumnName = column;
 if (column.count(":") > 0):
 	idx = column.index(":")
@@ -49,13 +49,22 @@ except ValueError:
 con = mdb.connect('localhost', 'arup', 'arup', dbname)
 cur = con.cursor()
 
-#Add new column to the table
-colType = "VARCHAR(255)"
-if (len(sys.argv) > 5):
-	colType = sys.argv[5]
 
+#Determine if a column with the given name already exists. If so, use it. If not, create a new one.
+colType = "VARCHAR(256)"
+if (len(sys.argv) > 4):
+	colType = sys.argv[4]
 
-cur.execute("alter table " + tablename + " add `" + newcolumnName + "` " + colType)
+cur.execute("show columns from " + tablename)
+rows = cur.fetchall()
+found = False
+for row in rows:
+	if (newcolumnName == row[0]):
+		found = True
+
+if (not found):
+	print "Creating new column " + newcolumnName + " of type " + colType
+	cur.execute("alter table " + tablename + " add `" + newcolumnName + "` " + colType)
 
 #Add each row to the table, blank lines and those starting with # are ignored
 
@@ -73,9 +82,7 @@ while(line):
 		line = fh.readline()
 		continue
 
-	pos = int(toks[1])
-	ref = toks[2]
-	alt = toks[3]
+	gene = toks[0]
 
 	value = toks[columnIndex]
 	if (colType.count("DECIMAL") > 0):
@@ -89,21 +96,20 @@ while(line):
 		else:
 			value = int(toks[columnIndex])
 	if (colType.count("VARCHAR") > 0):
-		value = "\"" + value + "\""
+		value = "\"" + value.replace("\"", "\\\"") + "\""
 
 	#If variant at position already exists, we 'update', otherwise, make a new row
-	cur.execute("select pos from " + dbname + "." + tablename + " where pos=" + str(pos))
+	cur.execute("select gene from " + dbname + "." + tablename + " where gene=\"" + gene + "\"")
 	data = cur.fetchone()
 
 	if (data == None):
-		cur.execute("insert into " + dbname + "." + tablename + "(pos, ref, alt, `" + newcolumnName + "`) values(" + str(pos) + ", \"" + ref + "\", \"" + alt + "\", " + str(value) + ")")
+		cur.execute("insert into " + dbname + "." + tablename + "(gene, `" + newcolumnName + "`) values(\"" + gene + "\", " + str(value) + ")")
 		added = added + 1
 	else:
-		cur.execute("update " + tablename + " set `" + newcolumnName + "`=" + str(value) + " where pos=" + str(pos))
+		cur.execute("update " + tablename + " set `" + newcolumnName + "`=" + str(value) + " where gene=\"" + gene + "\"")
 		updated = updated + 1
 	line = fh.readline()
-
-con.commit()
+	con.commit()
 
 print " Created new column with name " + newcolumnName + " of type " + colType + " from column " + column + " in " + dbname + "." + tablename
 print " Added " + str(added) + " new rows"
