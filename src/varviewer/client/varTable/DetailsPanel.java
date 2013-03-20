@@ -89,7 +89,7 @@ public class DetailsPanel extends ScrollPanel implements VariantSelectionListene
 	}
 
 	protected void displayGeneInfo(GeneInfo result) {
-		header.updateLabel();
+		header.updateLabel(getCurrentGene() + " : " + result.getFullName());
 		
 		String hgmdStr = "None found";
 		if (result.getHgmdVars() != null && result.getHgmdVars().length > 0 && result.getHgmdVars()[0].length()>3) {
@@ -148,10 +148,13 @@ public class DetailsPanel extends ScrollPanel implements VariantSelectionListene
 		omimDiseases.setHTML("<p><b>OMIM Diseases:</b> " + omimStr +"</p>" );
 		
 		
-		String summaryStr = "None";
-		if (result.getSummary() != null)
+		String summaryStr = "None found";
+		if (result.getSummary() != null) {
 			summaryStr = result.getSummary();
-		
+		}
+		if (summaryStr.equals("null")) {
+			summaryStr = "None found";
+		}
 		summary.setHTML("<p><b>Summary:</b> " + summaryStr + "</p>");
 	}
 

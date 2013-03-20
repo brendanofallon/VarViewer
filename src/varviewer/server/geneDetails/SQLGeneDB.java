@@ -39,6 +39,8 @@ public class SQLGeneDB implements GeneDetailHandler {
 				info.setOmimInheritance( rs.getString("omim.inheritance").split(",") );
 				info.setOmimPhenos( rs.getString("omim.phenotypes").split(",") );
 				info.setOmimDiseaseIDs( rs.getString("omim.numbers").split(";"));
+				info.setHgmdVars( rs.getString("hgmd.info").split(":") );
+				info.setFullName( rs.getString("full_name") );
 				return info;
 			}
 		});

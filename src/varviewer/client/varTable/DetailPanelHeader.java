@@ -16,7 +16,7 @@ public class DetailPanelHeader extends FlowPanel {
 		this.add(label);
 	}
 
-	public void updateLabel() {
-		label.setText(parentPanel.getCurrentGene());
+	public void updateLabel(String text) {
+		label.setText(text);
 	}
 }

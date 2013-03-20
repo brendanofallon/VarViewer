@@ -16,7 +16,18 @@ public class GeneInfo implements Serializable {
 	String dbNSFPDisease;
 	String[] hgmdVars;
 	String[] omimPhenos;
+	String fullName;
 	
+	
+	
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
 	public String[] getOmimPhenos() {
 		return omimPhenos;
 	}
