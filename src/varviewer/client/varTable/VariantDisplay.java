@@ -45,7 +45,7 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 	}
 	
 	private void initComponents() {
-		//TODO : These should be passed to the contructor, not instantiated here
+		//TODO : These should be obtained from a factory or something, not instantiated here
 		filtersPanel = new FiltersPanel();
 		detailsPanel = new DetailsPanel();
 		
@@ -59,6 +59,7 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 		varTable.addVariantSelectionListener(detailsPanel); 
 		varManager.addListener(this);
 		colModel.addListener(this);
+		filtersPanel.addListener(this);
 		
 		this.addSouth(detailsPanel, 300.0);
 		this.add(varTable);
