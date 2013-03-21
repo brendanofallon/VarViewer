@@ -139,6 +139,7 @@ public class VarViewer implements EntryPoint {
 				@Override
 				public void onSuccess(Void result) {
 					showLoginPanel();
+					topBar.remove(statusPanel);
 				}
 				
 			});

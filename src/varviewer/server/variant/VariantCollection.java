@@ -23,6 +23,13 @@ public class VariantCollection implements HasVariants {
 	protected Map<String, List<Variant>>  vars = new HashMap<String, List<Variant>>();
 	
 	/**
+	 * Create an empty variant collection with no contigs or variants
+	 */
+	public VariantCollection() {
+		//Blank on purpose
+	}
+	
+	/**
 	 * Build a new variant pool from the given list of variants
 	 * @param varList
 	 */
@@ -37,6 +44,8 @@ public class VariantCollection implements HasVariants {
 		}
 	}
 	
+
+
 	/**
 	 * Sort all variant records in each contig
 	 */

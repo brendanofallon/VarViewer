@@ -316,6 +316,7 @@ public class DirSampleSource implements SampleSource {
 				}
 				if (varsFile.getName().endsWith(".csv")) {
 					reader = new UncompressedCSVReader(varsFile.getAbsolutePath());
+					//reader = new ConcurrentVariantReader(varsFile);
 				}
 				
 				return reader.toVariantCollection();

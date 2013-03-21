@@ -23,7 +23,7 @@ public class TabixCSVReader extends AbstractVariantReader {
 		initializeHeader(line);
 		line = reader.readLine();
 		while(line != null) {
-			Variant var = variantFromString(line);
+			Variant var = variantFromString(line.split("\t"), headerToks, numericFlags);
 			if (var != null)
 				vars.add(var);
 			line = reader.readLine();
@@ -49,7 +49,7 @@ public class TabixCSVReader extends AbstractVariantReader {
 			if(iter != null) {
 				String val = iter.next();
 				while(val != null) {
-					Variant var = variantFromString(val);
+					Variant var = variantFromString(val.split("\t"), headerToks, numericFlags);
 					vars.add(var);
 					val = iter.next();
 				}

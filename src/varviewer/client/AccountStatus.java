@@ -4,6 +4,14 @@ import varviewer.shared.AuthToken;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.i18n.client.HasDirection.Direction;
+import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -13,7 +21,7 @@ import com.google.gwt.user.client.ui.Label;
  * @author brendan
  *
  */
-public class AccountStatus extends HorizontalPanel {
+public class AccountStatus extends FocusPanel {
 
 	private HighlightButton logoutButton;
 	private Label usernameLabel;
@@ -26,10 +34,33 @@ public class AccountStatus extends HorizontalPanel {
 
 	public void setStatus(AuthToken tok) {
 		String username = tok.getUsername();
-		usernameLabel.setText("User: " + username);
+		usernameLabel.setText(username);
 	}
 	
 	private void initComponents() {
+		this.setStylePrimaryName("accountstatus");
+		final HorizontalPanel internalPanel = new HorizontalPanel();
+		this.add(internalPanel);
+		
+		this.addMouseOverHandler(new MouseOverHandler() {
+
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+				internalPanel.add(logoutButton);
+				internalPanel.setCellHorizontalAlignment(logoutButton, HorizontalAlignmentConstant.endOf(Direction.LTR));
+			}	
+		});
+		
+		this.addMouseOutHandler(new MouseOutHandler() {
+
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				internalPanel.remove(logoutButton);
+			}
+		});
+		
+
+		
 		Image logoutImage = new Image("images/logoutIcon24.png");
 		logoutButton = new HighlightButton(logoutImage);
 		logoutButton.addClickHandler( new ClickHandler() {
@@ -46,7 +77,7 @@ public class AccountStatus extends HorizontalPanel {
 		
 		usernameLabel = new Label("User: no one!");
 		usernameLabel.setStylePrimaryName("statuslabel");
-		this.add(usernameLabel);
-		this.add(logoutButton);
+		internalPanel.add(usernameLabel);
+		internalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 	}
 }

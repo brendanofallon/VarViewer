@@ -11,7 +11,6 @@
 .topbar { 
 	outline: 0px;
 	margin: 0px;
-	margin-top: -10px;
 	margin-left: -10px;
 	margin-bottom: 10px;
 	padding: 0px;
@@ -23,12 +22,8 @@
 	-webkit-box-shadow: 0px 0px 10px #202020;
 	box-shadow: 0px 0px 10px #202020;
 	border-bottom: 1px solid gray;
-	background : "images/topbarBkgd.png" repeat-x;
-	background : -webkit-linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%); 
-	background : -moz-linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%);
-	background : -o-linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%);
-	background : -ms-linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%); 
-	background : -linear-gradient(bottom, rgb(162, 162, 162) 10%, rgb(232, 232, 232) 77%);
+	background-image : url('images/topbarBkgd2.png');
+	background-repeat: repeat-x;
 }
 
 .topbarlabel {
@@ -42,10 +37,24 @@
 .statuslabel {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 10pt;
-	text-right: center;
-	margin-top: 5px;
-	margin-right: 10px;
+	margin-right: 5px;
+	text-shadow: 1px 1px 1px rgba(250, 250, 250, 0.5);
+	text-color: gray;
 }
+
+.accountstatus {
+	position: absolute;
+	right:0px;
+	top: 0px;
+	padding-top: 10px;
+	padding-left: 20px;
+	outline: 0px;
+	width: 115px;
+	height: 40px;
+	background-image: url('images/bullet5.png');
+	background-repeat: no-repeat;
+}
+
 
 .footer {
 	font-family: 'Open Sans', sans-serif;
