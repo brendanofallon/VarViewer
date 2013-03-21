@@ -1,12 +1,22 @@
 package varviewer.util.concurrentBuffer;
 
+/**
+ * Consumes elements off the head of a ConcurrentBuffer. See ConcurrentBuffer for details.
+ * @author brendan
+ *
+ * @param <T>
+ */
 public interface Consumer<T> {
 
 	/**
-	 * Gets called when the Producer is done producing and the buffer size is zero.
+	 * Unimplemented
 	 */
 	public void done();
 	
+	/**
+	 * 
+	 * @param item
+	 */
 	public void processItem(T item);
 	
 }

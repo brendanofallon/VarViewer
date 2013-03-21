@@ -13,8 +13,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import varviewer.server.variant.AbstractVariantReader;
+import varviewer.server.variant.ConcurrentVariantReader;
 import varviewer.server.variant.TabixCSVReader;
-import varviewer.server.variant.UncompressedCSVReader;
 import varviewer.server.variant.VCFReader;
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.HasVariants;
@@ -315,8 +315,8 @@ public class DirSampleSource implements SampleSource {
 					reader = new VCFReader(new File(varsFile.getAbsolutePath()));
 				}
 				if (varsFile.getName().endsWith(".csv")) {
-					reader = new UncompressedCSVReader(varsFile.getAbsolutePath());
-					//reader = new ConcurrentVariantReader(varsFile);
+					//reader = new UncompressedCSVReader(varsFile.getAbsolutePath());
+					reader = new ConcurrentVariantReader(varsFile);
 				}
 				
 				return reader.toVariantCollection();
