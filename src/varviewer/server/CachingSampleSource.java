@@ -1,6 +1,7 @@
 package varviewer.server;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -18,11 +19,10 @@ import varviewer.shared.SampleTreeNode;
  */
 public class CachingSampleSource implements SampleSource {
 
-	
-	//TODO : This should be able to store a handful of samples ... maybe we can cache 3-5 samples? 
-	private String currentSampleID = null; //
-	private VariantCollection currentVariants = null;
+	int samplesToCache = 4;
 	private SampleSource source;
+	
+	private List<CachedSample> cache = new LinkedList<CachedSample>();
 	
 	public CachingSampleSource(SampleSource sampleSource) {
 		this.source = sampleSource;
@@ -30,122 +30,41 @@ public class CachingSampleSource implements SampleSource {
 	
 	@Override
 	public VariantCollection getVariantsForSample(String sampleID) {
-		if (currentVariants == null || (!currentSampleID.equals(sampleID))) {
-			Logger.getLogger(CachingSampleSource.class).info("No variant list currently loaded, reading new list from file");
-			loadVariants(sampleID);
+		CachedSample sample = getCachedSampleForID(sampleID);
+		
+		if (sample != null) {
+			//Sweet, cache hit
+			bumpToFront(sampleID);
+			return sample.vars;
 		}
 		
-		if (currentVariants == null) {
-			Logger.getLogger(CachingSampleSource.class).warn("Could not find or load variants for sample " + sampleID);
-		}
-		return currentVariants;
-	}
-	
-	private void loadVariants(String id) {
+		Logger.getLogger(CachingSampleSource.class).info("Cache miss for sample " + sampleID + ", loading new set of variants");
+		loadVariants(sampleID);
+		
 		try {
 			//Force re-loading of sample info
 			source.initialize();
+			addToCache(sampleID, source.getVariantsForSample(sampleID));
 		} catch (IOException e) {
 			Logger.getLogger(CachingSampleSource.class).warn("IOError re-loading variants: " + e.getMessage());
 			e.printStackTrace();
 		}
 		
-		
-		currentVariants = source.getVariantsForSample(id);
-		currentSampleID = id;
-		return;
+		sample = getCachedSampleForID(sampleID);
+		if (sample != null) {
+			return sample.vars;
+		}
+		else {
+			return null;
+		}
 	}
 	
-//	public List<Variant> getVariants(VariantRequest req) {
-//		StringBuilder msg = new StringBuilder();
-//		for(String id : req.getSampleIDs()) {
-//			msg.append(id + ", ");
-//		}
-//		
-//		Logger.getLogger(CachingSampleSource.class).info("Processing request for variants for sample(s) " + msg);
-//		
-//		//No variants loaded, automatically attempt to load
-//		if (currentVariants == null) {
-//			Logger.getLogger(CachingSampleSource.class).info("No variant list currently loaded, reading new list from file");
-//			loadVariants(req.getSampleIDs());
-//		}
-//		
-//		//Check to see if current sample ID matches the loaded sample, if so filter and return the variants 
-//		if (currentSampleID != null && req.getSampleIDs().contains(currentSampleID)) {
-//			Logger.getLogger(CachingSampleSource.class).info("Returning variants for sample(s): " + msg);
-//			List<Variant> vars = currentVariants.getVariantsInIntervals(req.getIntervals());
-//			if (req.getFilters() != null && req.getFilters().size()>0) {
-//				vars = applyFilters(vars, req.getFilters());
-//			}
-//			return vars;
-//		}
-//		
-//		//Current variants is not null but sample IDs don't match, so try to load new variants
-//		loadVariants(req.getSampleIDs());
-//		
-//		//if variant load failed (bad sample id) then current variants may still be null
-//		if (currentVariants != null) {
-//			Logger.getLogger(CachingSampleSource.class).info("Returning variants for sample(s): " + msg);
-//			List<Variant> vars = currentVariants.getVariantsInIntervals(req.getIntervals());
-//			if (req.getFilters() != null && req.getFilters().size()>0) {
-//				vars = applyFilters(vars, req.getFilters());
-//			}
-//			return vars;
-//		}
-//		
-//		
-//		Logger.getLogger(CachingSampleSource.class).warn("Could not find or load variants for sample(s): " + msg);
-//		return null;		
-//	}
+	private void loadVariants(String id) {
+		
+		
+		
+	}
 
-
-	
-	/**
-	 * Returns a new list of variants containing only those variants that pass ALL 
-	 * filters in the list
-	 * @param vars
-	 * @param filters
-	 * @return
-	 */
-//	private List<Variant> applyFilters(List<Variant> vars, List<VariantFilter> filters) {
-//		List<Variant> passingVars = new ArrayList<Variant>(1024);
-//		
-//		//Kind of a hack here... pedigree-based filters need to be 'initialized' with a SampleSource
-//		//before they work, right now we do this here. 
-//		
-//		for(VariantFilter filter : filters) {
-//			if (filter instanceof PedigreeFilter) {
-//				PedigreeFilter pedFilter = (PedigreeFilter)filter;
-//				pedFilter.setVariantSource(source);
-//			}
-//		}
-//		
-//		for(Variant var : vars) {
-//			boolean passes = true;
-//			for(VariantFilter filter : filters) {
-//				if (! filter.variantPasses(var)) {
-//					passes = false;
-//					break;
-//				}
-//			}
-//			if (passes)
-//				passingVars.add(var);
-//		}
-//		
-//		//Similar hack here, PedigreeFilters also apply an annotation, but they need to be told
-//		//to do so to a given list of variants. We do this here so they don't waste time annotating
-//		//variants that will be filtered out, but this functionality should be encapsulated somewhere
-//		//else at some point
-//		for(VariantFilter filter : filters) {
-//			if (filter instanceof PedigreeFilter) {
-//				PedigreeFilter pedFilter = (PedigreeFilter)filter;
-//				pedFilter.applyAnnotations(passingVars);
-//			}
-//		}
-//		
-//		Logger.getLogger(CachingSampleSource.class).info(passingVars.size() + " of " + vars.size() + " total vars passed filters");
-//		return passingVars;
-//	}
 
 
 	@Override
@@ -183,7 +102,52 @@ public class CachingSampleSource implements SampleSource {
 		return source.getInfoForSample(sampleID);
 	}
 
-
+	/**
+	 * Returns true if a sample with the given id is current in the cache
+	 * @param sampleID
+	 * @return
+	 */
+	private boolean isInCache(String sampleID) {
+		return getCachedSampleForID(sampleID) != null;
+	}
 	
+	private CachedSample getCachedSampleForID(String id) {
+		for(CachedSample sample : cache) {
+			if (sample.sampleID.equals(id))
+				return sample;
+		}
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param sampleID
+	 */
+	private void bumpToFront(String sampleID) {
+		CachedSample cs = getCachedSampleForID(sampleID);
+		if (cs != null) {
+			cache.remove(cs);
+			cache.add(cs);
+		}
+	}
+	
+	private void addToCache(String sampleID, VariantCollection vars) {
+		CachedSample cs = new CachedSample(sampleID, vars);
+		cache.add(cs);
+		if (cache.size() > samplesToCache) {
+			CachedSample removed = cache.remove(0);
+			Logger.getLogger(CachingSampleSource.class).info("Added sample " + sampleID + " to cache, bumped " + removed.sampleID + " from cache since it was full");
+		}
+	}
+	
+	class CachedSample {
+		final String sampleID;
+		final VariantCollection vars;
+		
+		public CachedSample(String id, VariantCollection vars) {
+			this.sampleID = id;
+			this.vars = vars;
+		}
+	}
 
 }
