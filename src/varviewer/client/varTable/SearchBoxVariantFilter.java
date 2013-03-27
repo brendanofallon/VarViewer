@@ -6,6 +6,7 @@ import java.util.List;
 import varviewer.shared.Variant;
 import varviewer.shared.VariantFilter;
 
+
 /**
  * A VariantFilter associated with the 'search box' in the var table header. Text changes in that box
  * are reflected as filters here 
@@ -30,6 +31,17 @@ public class SearchBoxVariantFilter implements VariantFilter {
 	public void clearFilters() {
 		filters.clear();
 	}
+	
+	/**
+	 * Clear current filters and add one new filter that only passes variants
+	 * with gene names in the given list
+	 * @param geneNames
+	 */
+	//Unused currently. Maybe useful at some point. 
+//	public void setMultiGeneNameFilter(List<String> geneNames) {
+//		clearFilters();
+//		filters.add(new MultiGeneFilter(geneNames));
+//	}
 	
 	/**
 	 * Convert a single term (e.g. "ENG" or "chrX:5-17") into a variant filter
@@ -89,6 +101,30 @@ public class SearchBoxVariantFilter implements VariantFilter {
 		return filters.size();
 	}
 
+//	class MultiGeneFilter implements VariantFilter {
+//
+//		final List<String> genes = new ArrayList<String>();
+//		
+//		public MultiGeneFilter(List<String> genes) {
+//			this.genes.addAll(genes);
+//		}
+//		
+//		@Override
+//		public boolean variantPasses(Variant var) {
+//			String varGene = var.getAnnotationStr("gene");
+//			if (varGene != null && genes.contains(varGene)) {
+//				return true;
+//			}
+//			return false;
+//		}
+//
+//		@Override
+//		public String getUserDescription() {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
+//		
+//	}
 	/**
 	 * Sub-filter for gene names
 	 * @author brendan

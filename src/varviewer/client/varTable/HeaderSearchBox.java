@@ -68,8 +68,12 @@ public class HeaderSearchBox extends HorizontalPanel {
 			first = false;
 		}
 	}
+	
+	public void setText(String text) {
+		textBox.setText(text);
+	}
 
-	protected void handleTextChange() {
+	public void handleTextChange() {
 		varTable.handleSearchBoxTextChange(textBox.getText().trim());
 	}
 }

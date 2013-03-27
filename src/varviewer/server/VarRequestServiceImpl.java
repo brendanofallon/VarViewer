@@ -1,5 +1,8 @@
 package varviewer.server;
 
+
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
@@ -25,12 +28,17 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 	public VariantRequestResult queryVariant(VariantRequest req)
 			throws IllegalArgumentException {
 
+		LogFactory lf = null;
+		
 		if (reqHandler == null) {
-			ApplicationContext context = new FileSystemXmlApplicationContext("spring-test.xml");
+			String springFullPath = "spring.xml";
+			Logger.getLogger(getClass()).info("Loading spring config from " + springFullPath);
+			ApplicationContext context = new FileSystemXmlApplicationContext(springFullPath);
 			if (! context.containsBean("variantRequestHandler")) {
 				throw new IllegalArgumentException("No VariantRequestHandler found in configuration");
 			}
 			reqHandler = (VariantRequestHandler) context.getBean("variantRequestHandler");
+			
 		}
 		
 		if (reqHandler != null)

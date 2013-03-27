@@ -25,7 +25,7 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 	public GeneInfo getDetails(String geneID) {
 		
 		if (geneDetailHandler == null) {
-			ApplicationContext context = new FileSystemXmlApplicationContext("spring-test.xml");
+			ApplicationContext context = new FileSystemXmlApplicationContext("spring.xml");
 			if (! context.containsBean("geneDetailHandler")) {
 				throw new IllegalArgumentException("No GeneDetailHandler found in configuration");
 			}

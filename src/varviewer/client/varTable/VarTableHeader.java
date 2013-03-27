@@ -2,19 +2,23 @@ package varviewer.client.varTable;
 
 
 import varviewer.client.HighlightButton;
+import varviewer.client.services.TextFetchService;
+import varviewer.client.services.TextFetchServiceAsync;
 import varviewer.client.varTable.pedigree.PedigreePopup;
+import varviewer.shared.TextFetchResult;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 /**
- * Header of a VarTable with some controls, right now just a pager, export button, and 
- * column config button.
+ * Header of a VarTable with some controls, right now just a pager, and a few buttons.
  * @author brendan
  *
  */
@@ -25,6 +29,7 @@ public class VarTableHeader extends HorizontalPanel {
 	final HighlightButton pedigreeButton; 
 	final HighlightButton igvButton; 
 	final HighlightButton exportButton; 
+	final HighlightButton incidentalsButton;
 	final HighlightButton colMenuButton;
 	final HeaderSearchBox searchBox;
 	final PedigreePopup pedPopup;
@@ -87,6 +92,20 @@ public class VarTableHeader extends HorizontalPanel {
 		exportButton.setHeight("24px");
 		
 		
+		Image incidentalImage = new Image("images/incidentalHitsImage.png");
+		incidentalsButton = new HighlightButton(incidentalImage, new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				doIncidentalsFilter();
+			}
+			
+		});
+		incidentalsButton.setTitle("Show hits in incidental genes only");
+		this.add(incidentalsButton);
+		incidentalsButton.setWidth("24px");
+		incidentalsButton.setHeight("24px");
+		
 		final ColPickerPopup popup = new ColPickerPopup(colModel);
 		popup.hide();
 		
@@ -112,6 +131,30 @@ public class VarTableHeader extends HorizontalPanel {
 		this.setCellHorizontalAlignment(pager, ALIGN_RIGHT);
 		
 		pager.setDisplay(tableParent.getVarPage());
+	}
+
+	protected void doIncidentalsFilter() {
+		//Fetch list of incidentals genes using a textFetchService
+		textFetchService.fetchText("incidentalsGenes.csv", new AsyncCallback<TextFetchResult>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.out.println("Aargh, failure!");
+			}
+
+			@Override
+			public void onSuccess(TextFetchResult result) {
+				StringBuilder strB = new StringBuilder();
+				for(String line : result.getLinesOfText()) {
+					String gene = line.trim().toUpperCase();
+					if (gene.length()>0)
+						strB.append(gene + ", ");
+				}
+				searchBox.setText(strB.toString());
+				searchBox.handleTextChange();
+			}
+			
+		});
 	}
 
 	/**
@@ -153,4 +196,6 @@ public class VarTableHeader extends HorizontalPanel {
 		igvLinkText = bamLink;
 	}
 	
+	
+	private final TextFetchServiceAsync textFetchService = GWT.create(TextFetchService.class);
 }

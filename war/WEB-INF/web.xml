@@ -8,6 +8,17 @@
   <!-- Servlets -->
 
  <servlet>
+    <servlet-name>textFetchServlet</servlet-name>
+    <servlet-class>varviewer.server.textFetch.TextFetchServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>textFetchServlet</servlet-name>
+    <url-pattern>/varviewer/textfetch</url-pattern>
+  </servlet-mapping>
+  
+
+ <servlet>
     <servlet-name>logoutServlet</servlet-name>
     <servlet-class>varviewer.server.auth.LogoutServiceImpl</servlet-class>
   </servlet>
