@@ -7,10 +7,12 @@
 	<bean name="sampleSource" class="varviewer.server.DirSampleSource">
 	    <property name="rootDir" value="/home/brendan/jobwrangler_samples" />
 	</bean>
-		
+	<!--  Variant annotations come from the annotated_vars file, not from a db.  -->
 	<bean name="variantRequestHandler" class="varviewer.server.variant.PreAnnotatedVarReqHandler">
 		<property name="variantSource" ref="sampleSource"/>
 	</bean>
+	
+	
 	
 	
 	<!--  GeneDetails configuration -->
