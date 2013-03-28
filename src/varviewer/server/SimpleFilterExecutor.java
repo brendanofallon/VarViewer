@@ -21,15 +21,6 @@ public class SimpleFilterExecutor implements FilterExecutor {
 	public List<Variant> filterAll(VariantCollection vars,	List<VariantFilter> filters) {
 		List<Variant> passingVars = new ArrayList<Variant>(1024);
 		
-		//Kind of a hack here... pedigree-based filters need to be 'initialized' with a SampleSource
-		//before they work, right now we do this here. 
-//		for(VariantFilter filter : filters) {
-//			if (filter instanceof PedigreeFilter) {
-//				PedigreeFilter pedFilter = (PedigreeFilter)filter;
-//				pedFilter.setVariantSource(source);
-//			}
-//		}
-		
 		for(String contig : vars.getContigs()) {
 			for(Variant var : vars.getVariantsForContig(contig)) {
 				boolean passes = true;
@@ -43,17 +34,6 @@ public class SimpleFilterExecutor implements FilterExecutor {
 					passingVars.add(var);
 			}
 		}
-		
-		//Similar hack here, PedigreeFilters also apply an annotation, but they need to be told
-		//to do so to a given list of variants. We do this here so they don't waste time annotating
-		//variants that will be filtered out, but this functionality should be encapsulated somewhere
-		//else at some point
-//		for(VariantFilter filter : filters) {
-//			if (filter instanceof PedigreeFilter) {
-//				PedigreeFilter pedFilter = (PedigreeFilter)filter;
-//				pedFilter.applyAnnotations(passingVars);
-//			}
-//		}
 		
 		Logger.getLogger(getClass()).info(passingVars.size() + " of " + vars.size() + " total vars passed filters");
 		return passingVars;

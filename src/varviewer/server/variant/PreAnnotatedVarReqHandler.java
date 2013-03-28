@@ -8,7 +8,9 @@ import varviewer.server.FilterExecutor;
 import varviewer.server.SampleSource;
 import varviewer.server.SimpleFilterExecutor;
 import varviewer.server.VariantRequestHandler;
+import varviewer.shared.PedigreeFilter;
 import varviewer.shared.Variant;
+import varviewer.shared.VariantFilter;
 import varviewer.shared.VariantRequest;
 import varviewer.shared.VariantRequestResult;
 
@@ -56,9 +58,29 @@ public class PreAnnotatedVarReqHandler implements VariantRequestHandler {
 		else {
 			VariantCollection vars = variantSource.getVariantsForSample(req.getSampleIDs().get(0));
 
+			//Kind of a hack here... pedigree-based filters need to be 'initialized' with a SampleSource
+			//before they work, right now we do this here. 
+			for(VariantFilter filter : req.getFilters()) {
+				if (filter instanceof PedigreeFilter) {
+					PedigreeFilter pedFilter = (PedigreeFilter)filter;
+					pedFilter.setVariantSource(variantSource);
+				}
+			}
+			
 			FilterExecutor filterExec = new SimpleFilterExecutor();
 			List<Variant> passingVars = filterExec.filterAll(vars, req.getFilters());
 
+			//Similar hack here, PedigreeFilters also apply an annotation, but they need to be told
+			//to do so to a given list of variants. We do this here so they don't waste time annotating
+			//variants that will be filtered out, but this functionality should be encapsulated somewhere
+			//else at some point
+			for(VariantFilter filter : req.getFilters()) {
+				if (filter instanceof PedigreeFilter) {
+					PedigreeFilter pedFilter = (PedigreeFilter)filter;
+					pedFilter.applyAnnotations(passingVars);
+				}
+			}
+			
 			VariantRequestResult result = new VariantRequestResult();
 			result.setSampleID(req.getSampleIDs().get(0));
 			result.setVars(passingVars);
