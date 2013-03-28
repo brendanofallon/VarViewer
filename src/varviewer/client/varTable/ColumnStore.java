@@ -80,24 +80,24 @@ public class ColumnStore {
 	 */
 	private void initialize() {
 		
-		addColumn(new VarAnnotation<String>("some.annotation", "TEST", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotationStr("some.annotation");
-				return val != null ? val : "-";
-			}
-		}, 1.0));
-		
-		
-		addColumn(new VarAnnotation<String>("another.annotation", "TEST2", new TextColumn<Variant>() {
-
-			@Override
-			public String getValue(Variant var) {
-				String val = var.getAnnotationStr("another.annotation");
-				return val != null ? val : "-";
-			}
-		}, 1.0));
+//		addColumn(new VarAnnotation<String>("some.annotation", "TEST", new TextColumn<Variant>() {
+//
+//			@Override
+//			public String getValue(Variant var) {
+//				String val = var.getAnnotationStr("some.annotation");
+//				return val != null ? val : "-";
+//			}
+//		}, 1.0));
+//		
+//		
+//		addColumn(new VarAnnotation<String>("another.annotation", "TEST2", new TextColumn<Variant>() {
+//
+//			@Override
+//			public String getValue(Variant var) {
+//				String val = var.getAnnotationStr("another.annotation");
+//				return val != null ? val : "-";
+//			}
+//		}, 1.0));
 		
 		
 		addColumn(new VarAnnotation<String>("gene", "Gene", new TextColumn<Variant>() {
