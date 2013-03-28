@@ -89,7 +89,13 @@ public class DetailsPanel extends ScrollPanel implements VariantSelectionListene
 	}
 
 	protected void displayGeneInfo(GeneInfo result) {
-		header.updateLabel(getCurrentGene() + " : " + result.getFullName());
+		String fullName = result.getFullName();
+		if (fullName != null) {
+			header.updateLabel(getCurrentGene() + " : " + result.getFullName());
+		}
+		else {
+			header.updateLabel(getCurrentGene());
+		}
 		
 		String hgmdStr = "None found";
 		if (result.getHgmdVars() != null && result.getHgmdVars().length > 0 && result.getHgmdVars()[0].length()>3) {

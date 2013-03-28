@@ -129,8 +129,11 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 	
 	@Override
 	public void columnStateChanged(ColumnModel model) {
-		List<String> annotationKeys = model.getKeys();
-		varManager.setAnnotations(annotationKeys);
+		//If we want to switch to on-the-fly annotations then we'll need to ask for new
+		//annotations everytime they change. In that case uncomment the next two lines and
+		//the varManager will reload with the new annotations. 
+		//List<String> annotationKeys = model.getKeys();
+		//varManager.setAnnotations(annotationKeys);
 		varManager.reloadIfRequired();
 	}
 
@@ -145,8 +148,5 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 	FiltersPanel filtersPanel;
 	DetailsPanel detailsPanel;
 	VarTable varTable = null;
-
-	
-	
 
 }
