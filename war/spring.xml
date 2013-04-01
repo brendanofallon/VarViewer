@@ -8,8 +8,12 @@
 	</bean>
 	
     <!--  Variant annotation and reading configuration -->
+    <bean name="variantReader" class="varviewer.server.variant.ConcurrentVariantReader">
+    </bean>
+    
 	<bean name="sampleSource" class="varviewer.server.DirSampleSource">
 	    <property name="rootDir" value="/home/brendan/jobwrangler_samples" />
+	    <property name="variantReader" ref="variantReader" />
 	</bean>
 	
 	<!--  Variant annotations come from the annotated_vars file, not from a db.  -->

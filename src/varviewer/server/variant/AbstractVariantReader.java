@@ -21,7 +21,7 @@ import varviewer.shared.variant.Variant;
  * @author brendan
  *
  */
-public abstract class AbstractVariantReader {
+public abstract class AbstractVariantReader implements VariantReader {
 
 	public static final int COLS_TO_IGNORE = 5; //Skip first X columns when parsing variants
 	protected File varFile = null;
@@ -34,7 +34,17 @@ public abstract class AbstractVariantReader {
 	//protected Set<String> numericAnnotations = new HashSet<String>();
 	
 	public AbstractVariantReader(File source) throws IOException {
-		this.varFile = source;
+		setSource(source.getAbsolutePath());
+	}
+	
+	public AbstractVariantReader() {
+		//blank on purpose, must call setSource before variant collection can be generated
+	}
+	
+	
+	@Override
+	public void setSource(String sourceURL) throws IOException {
+		this.varFile = new File(sourceURL);
 		if (!varFile.exists()) {
 			Logger.getLogger(getClass()).error("Cannot read variants from file " + varFile.getAbsolutePath() + ", it does not exist");
 			throw new IllegalArgumentException("File " + varFile.getAbsolutePath() + " does not exist");
@@ -43,17 +53,14 @@ public abstract class AbstractVariantReader {
 			Logger.getLogger(getClass()).error("Cannot read variants from file " + varFile.getAbsolutePath() + ", it is not readable");
 			throw new IllegalArgumentException("File " + varFile.getAbsolutePath() + " exists but is not readable");
 		}
-		
 	}
 	
-	
-
 	/**
 	 * Returns all variants in a VariantCollection
 	 * @return
 	 * @throws IOException 
 	 */
-	public abstract VariantCollection toVariantCollection() throws IOException;
+	public abstract VariantCollection toVariantCollection();
 	
 	protected void initializeHeader(String header) {
 		header = header.substring(1); //Trim off leading #
@@ -110,7 +117,7 @@ public abstract class AbstractVariantReader {
 			
 			if (numericFlags[i]) {
 				try {
-					Double val = Double.parseDouble( toks[i]);
+					double val = Double.parseDouble( toks[i]);
 					annotations[i-COLS_TO_IGNORE] = new Annotation(val);
 				}
 				catch (NumberFormatException nfe) {

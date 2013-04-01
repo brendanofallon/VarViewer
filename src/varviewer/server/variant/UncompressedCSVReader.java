@@ -20,29 +20,29 @@ public class UncompressedCSVReader extends AbstractVariantReader {
 	 * @return
 	 * @throws IOException 
 	 */
-	public VariantCollection toVariantCollection() throws IOException {
-		
+	public VariantCollection toVariantCollection() {
 		VariantCollection vars = new VariantCollection();
-		BufferedReader reader = new BufferedReader( new FileReader(varFile));
-		String line = reader.readLine();
-		initializeHeader(line);
-		line = reader.readLine(); //read next line, don't try to parse a variant from the header
-		while(line != null) {
-			Variant var = variantFromString(line.split("\t"), getAnnotationIndex(), numericFlags);
-			if (var != null)
-				vars.addRecordNoSort(var);
-			line = reader.readLine();
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader(varFile));
+			String line = reader.readLine();
+			initializeHeader(line);
+			line = reader.readLine(); //read next line, don't try to parse a variant from the header
+			while(line != null) {
+				Variant var = variantFromString(line.split("\t"), getAnnotationIndex(), numericFlags);
+				if (var != null)
+					vars.addRecordNoSort(var);
+				line = reader.readLine();
+			}
+
+			vars.sortAllContigs();
+			vars.setAnnoIndex(getAnnotationIndex());
+			reader.close();
+		}
+		catch (IOException ex) {
+			Logger.getLogger(getClass()).error("IO error reading variant file " + varFile.getAbsolutePath() + " exception: " + ex.getMessage());
 		}
 		
-		vars.sortAllContigs();
-		vars.setAnnoIndex(getAnnotationIndex());
-		reader.close();
 		
-		if (vars.size()>0)
-			Logger.getLogger(getClass()).info("Read in " + vars.size() + " variants from " + varFile);
-		else {
-			Logger.getLogger(getClass()).warn("Read in " + vars.size() + " variants from " + varFile);
-		}
 		return vars;
 	}
 	

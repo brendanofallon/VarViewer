@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.broad.tribble.readers.TabixReader;
 
 import varviewer.shared.Interval;
@@ -16,22 +17,27 @@ public class TabixCSVReader extends AbstractVariantReader {
 		super(new File(path));
 	}
 	
-	public VariantCollection toVariantCollection() throws IOException {
-		List<Variant> vars = new ArrayList<Variant>(1024);
-		TabixReader reader = new TabixReader(varFile.getAbsolutePath());
-		String line = reader.readLine();
-		initializeHeader(line);
-		line = reader.readLine();
-		while(line != null) {
-			Variant var = variantFromString(line.split("\t"), getAnnotationIndex(), numericFlags);
-			if (var != null)
-				vars.add(var);
+	public VariantCollection toVariantCollection() {
+		VariantCollection vars = new VariantCollection();
+		try {
+			TabixReader reader = new TabixReader(varFile.getAbsolutePath());
+			String line = reader.readLine();
+			initializeHeader(line);
 			line = reader.readLine();
+			while(line != null) {
+				Variant var = variantFromString(line.split("\t"), getAnnotationIndex(), numericFlags);
+				if (var != null)
+					vars.addRecordNoSort(var);
+				line = reader.readLine();
+			}
+			reader.close();
+			vars.sortAllContigs();
+			vars.setAnnoIndex(getAnnotationIndex());
 		}
-		reader.close();
-		VariantCollection varCol = new VariantCollection(vars);
-		varCol.setAnnoIndex(getAnnotationIndex());
-		return varCol;
+		catch (IOException ex) {
+			Logger.getLogger(getClass()).error("IO error reading variant file " + varFile.getAbsolutePath() + " exception: " + ex.getMessage());
+		}
+		return vars;
 	}
 	
 	/**

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import varviewer.shared.variant.AnnotationIndex;
 import varviewer.shared.variant.Variant;
 import varviewer.util.concurrentBuffer.ConcurrentBuffer;
@@ -23,24 +25,33 @@ public class ConcurrentVariantReader extends AbstractVariantReader {
 	public ConcurrentVariantReader(File source) throws IOException {
 		super(source);
 	}
-
+	
+	public ConcurrentVariantReader() {
+		//for happy bean-ness
+	}
+	
 	@Override
-	public VariantCollection toVariantCollection() throws IOException {
+	public VariantCollection toVariantCollection() {
 		VariantCollection vars = new VariantCollection();
-		
-		BufferedReader reader = new BufferedReader( new FileReader(varFile));
-		String line = reader.readLine();
-		initializeHeader(line); //Header must be initialized before we create the StringConverter
-		
-		StringProducer prod = new StringProducer(reader);
-		StringConverter converter = new StringConverter(vars, getAnnotationIndex(), numericFlags);
-		
-		ConcurrentBuffer<String[]> processor = new ConcurrentBuffer<String[]>(prod, converter, null);
-		
-		processor.start();
-		
-		vars.sortAllContigs();
-		vars.setAnnoIndex(getAnnotationIndex());
+				
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader(varFile));
+			String line = reader.readLine();
+			initializeHeader(line); //Header must be initialized before we create the StringConverter
+
+			StringProducer prod = new StringProducer(reader);
+			StringConverter converter = new StringConverter(vars, getAnnotationIndex(), numericFlags);
+
+			ConcurrentBuffer<String[]> processor = new ConcurrentBuffer<String[]>(prod, converter, null);
+
+			processor.start();
+
+			vars.sortAllContigs();
+			vars.setAnnoIndex(getAnnotationIndex());
+		}
+		catch (IOException ex) {
+			Logger.getLogger(getClass()).error("IO error reading variant file " + varFile.getAbsolutePath() + " exception: " + ex.getMessage());
+		}
 		return vars;
 	}
 
@@ -121,6 +132,8 @@ public class ConcurrentVariantReader extends AbstractVariantReader {
 			return linesRead;
 		}
 		
-	};
+	}
+
+
 
 }

@@ -12,10 +12,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import varviewer.server.variant.AbstractVariantReader;
-import varviewer.server.variant.ConcurrentVariantReader;
-import varviewer.server.variant.TabixCSVReader;
 import varviewer.server.variant.VariantCollection;
+import varviewer.server.variant.VariantReader;
 import varviewer.shared.HasVariants;
 import varviewer.shared.SampleInfo;
 import varviewer.shared.SampleTreeNode;
@@ -32,6 +30,7 @@ public class DirSampleSource implements SampleSource {
 	private File rootDir = null;
 	private Map<String, SampleInfoFile> samples = new HashMap<String, SampleInfoFile>();
 	private SampleTreeNode root = null; //null until initialized
+	private VariantReader variantReader = null;
 	
 	public DirSampleSource() {
 		String rootPath = VVProps.getProperty("sample.dir");
@@ -41,6 +40,20 @@ public class DirSampleSource implements SampleSource {
 		initialize();
 	}
 	
+	
+	
+	public VariantReader getVariantReader() {
+		return variantReader;
+	}
+
+
+
+	public void setVariantReader(VariantReader variantReader) {
+		this.variantReader = variantReader;
+	}
+
+
+
 	public File getRootDir() {
 		return rootDir;
 	}
@@ -302,19 +315,13 @@ public class DirSampleSource implements SampleSource {
 			}
 			
 			try {
-				AbstractVariantReader reader = null;
-				if (varsFile.getName().endsWith(".gz")) {
-					reader = new TabixCSVReader(varsFile.getAbsolutePath());
-				}
-//				if (varsFile.getName().endsWith(".vcf")) {
-//					reader = new VCFReader(new File(varsFile.getAbsolutePath()));
-//				}
-				if (varsFile.getName().endsWith(".csv")) {
-					//reader = new UncompressedCSVReader(varsFile.getAbsolutePath());
-					reader = new ConcurrentVariantReader(varsFile);
+				if (variantReader == null) {
+					throw new IllegalStateException("No variant reader specified, cannot load variants");
 				}
 				
-				return reader.toVariantCollection();
+				variantReader.setSource(varsFile.getAbsolutePath());
+				
+				return variantReader.toVariantCollection();
 			} catch (IOException e) {
 				Logger.getLogger(getClass()).warn("IO error reading variants for " + sampleID + " from " + varsFile.getAbsolutePath() + " Message: " + e.getMessage() );
 				e.printStackTrace();
