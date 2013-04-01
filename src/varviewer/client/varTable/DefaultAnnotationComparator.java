@@ -2,6 +2,7 @@ package varviewer.client.varTable;
 
 import java.util.Comparator;
 
+import varviewer.shared.variant.Annotation;
 import varviewer.shared.variant.Variant;
 
 /**
@@ -24,8 +25,8 @@ public class DefaultAnnotationComparator implements Comparator<Variant> {
 			return 0;
 		}
 		
-		Object a0 = v0.getAnnotation(key);
-		Object a1 = v1.getAnnotation(key);
+		Annotation a0 = v0.getAnnotation(key);
+		Annotation a1 = v1.getAnnotation(key);
 		
 		if (a0 == null && a1 == null) {
 			return 0;
@@ -37,11 +38,11 @@ public class DefaultAnnotationComparator implements Comparator<Variant> {
 			return -1;
 		}
 		
-		if (a0 instanceof Double && a1 instanceof Double) {
-			return ((Double)a0).compareTo((Double)a1);
+		if (a0.getDoubleValue() != null && a1.getDoubleValue() != null) {
+			return (a0.getDoubleValue()).compareTo(a1.getDoubleValue());
 		}
 		else {
-			return ((String)a0).compareTo((String)a1);
+			return a0.toString().compareTo(a1.toString());
 		}
 	}
 }

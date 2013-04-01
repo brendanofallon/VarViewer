@@ -83,7 +83,6 @@ public abstract class AbstractVariantReader {
 		//Create annotationIndex. First five columns (chrom, start, end, ref, alt) are ignored
 		String[] annoKeys = Arrays.copyOfRange(headerToks, COLS_TO_IGNORE, headerToks.length);
 		annoIndex = new SimpleAnnotationIndex(annoKeys, numericAnnotations);
-		
 	}
 	
 	/**
