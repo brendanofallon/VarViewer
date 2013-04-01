@@ -13,8 +13,13 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
+/**
+ * CURRENTLY BROKEN - as of update to new annotation model. Wasn't ever used anyway. 
+ * @author brendan
+ *
+ */
 public class SQLAnnotationSource implements AnnotationProvider {
 
 	String sqlUsername;
@@ -134,32 +139,32 @@ public class SQLAnnotationSource implements AnnotationProvider {
 
 	@Override
 	public void annotateVariant(Variant var, AnnotationKeyIndex[] annotationKeys) {		
-		try {
-			if (conn == null) {
-				initializeConnection();
-			}	
-
-			Statement stmt = null;
-			String query = "SELECT * FROM " + getDbName() + ".varChr" + var.getChrom() + " " + " where pos = " + var.getPos() + " and alt=\"" + var.getAlt() + "\"";
-		
-			stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next()) {
-				for(int i=0; i<annotationKeys.length; i++) {
-					if (annotationKeys[i].isNumeric()) {
-						Double anno = rs.getDouble(annotationKeys[i].getIndex());
-						var.addAnnotation(annotationKeys[i].getKey(), anno);
-					}
-					else {
-						String anno = rs.getString(annotationKeys[i].getIndex());
-						var.addAnnotation(annotationKeys[i].getKey(), anno);
-					}
-				}
-
-			}
-		} catch (SQLException e ) {
-			System.err.println("uh oh: " + e.toString());
-		} 	
+//		try {
+//			if (conn == null) {
+//				initializeConnection();
+//			}	
+//
+//			Statement stmt = null;
+//			String query = "SELECT * FROM " + getDbName() + ".varChr" + var.getChrom() + " " + " where pos = " + var.getPos() + " and alt=\"" + var.getAlt() + "\"";
+//		
+//			stmt = conn.createStatement();
+//			ResultSet rs = stmt.executeQuery(query);
+//			while (rs.next()) {
+//				for(int i=0; i<annotationKeys.length; i++) {
+//					if (annotationKeys[i].isNumeric()) {
+//						Double anno = rs.getDouble(annotationKeys[i].getIndex());
+//						var.addAnnotation(annotationKeys[i].getKey(), anno);
+//					}
+//					else {
+//						String anno = rs.getString(annotationKeys[i].getIndex());
+//						var.addAnnotation(annotationKeys[i].getKey(), anno);
+//					}
+//				}
+//
+//			}
+//		} catch (SQLException e ) {
+//			System.err.println("uh oh: " + e.toString());
+//		} 	
 	}
 
 	class SQLAnnotationKey implements AnnotationKeyIndex {

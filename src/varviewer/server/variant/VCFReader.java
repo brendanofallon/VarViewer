@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 public class VCFReader extends AbstractVariantReader {
 
@@ -115,20 +115,20 @@ public class VCFReader extends AbstractVariantReader {
 					end = start + ref.length();
 			}
 
-			rec = new Variant(contig, start, ref, alt);
-			Integer depth = getDepth(lineToks);
-			if (depth != null)
-				rec.addAnnotation("depth", new Double(depth));
-			
-			Double quality = getQuality(lineToks);
-			if (quality != null) {
-				rec.addAnnotation("quality", quality);
-			}
-			
-			Integer varDepth = getVariantDepth(lineToks);
-			if (varDepth != null) {
-				rec.addAnnotation("var.depth", new Double(varDepth));
-			}		
+//			rec = new Variant(contig, start, ref, alt);
+//			Integer depth = getDepth(lineToks);
+//			if (depth != null)
+//				rec.addAnnotation("depth", new Double(depth));
+//			
+//			Double quality = getQuality(lineToks);
+//			if (quality != null) {
+//				rec.addAnnotation("quality", quality);
+//			}
+//			
+//			Integer varDepth = getVariantDepth(lineToks);
+//			if (varDepth != null) {
+//				rec.addAnnotation("var.depth", new Double(varDepth));
+//			}		
 	
 		}
 		catch (Exception ex) {
@@ -500,14 +500,4 @@ public class VCFReader extends AbstractVariantReader {
 		return new VariantCollection(vars);
 	}
 	
-	
-	public static void main(String[] args) throws IOException {
-		VCFReader vr = new VCFReader(new File("/home/brendan/jobwrangler_samples/tiny.reviewdir/var/medtest17_all_variants.vcf"));
-		VariantCollection col = vr.toVariantCollection();
-		for(String contig : col.getContigs()) {
-			for(Variant var : col.getVariantsForContig(contig)) {
-				System.out.println(var + " quality: " + var.getAnnotation("quality") + " depth: "  + var.getAnnotation("depth"));
-			}
-		}
-	}
 }

@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import varviewer.server.variant.VariantCollection;
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 /**
  * The simplest type of filter, just look at each variant and, if it passes, add it to the outgoing list.

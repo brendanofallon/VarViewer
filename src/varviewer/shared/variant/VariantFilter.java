@@ -1,4 +1,5 @@
-package varviewer.shared;
+package varviewer.shared.variant;
+
 
 public interface VariantFilter {
 
@@ -9,6 +10,13 @@ public interface VariantFilter {
 	 * @return
 	 */
 	public boolean variantPasses(Variant var);
+	
+	/**
+	 * Set pre-computed table of which annotation keys are associated with which indices
+	 * for faster filtering. 
+	 * @param index
+	 */
+	public void setAnnotationIndex(AnnotationIndex index);
 	
 	/**
 	 * A user-readable description of the current settings of this filter. This is required

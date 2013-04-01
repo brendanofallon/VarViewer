@@ -16,9 +16,9 @@ import varviewer.server.VariantRequestHandler;
 import varviewer.server.annotation.AnnotationKeyIndex;
 import varviewer.server.annotation.AnnotationProvider;
 import varviewer.server.annotation.TestAnnotationProvider;
-import varviewer.shared.Variant;
-import varviewer.shared.VariantRequest;
-import varviewer.shared.VariantRequestResult;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantRequest;
+import varviewer.shared.variant.VariantRequestResult;
 
 public class TestVarRequestHandler implements VariantRequestHandler {
 

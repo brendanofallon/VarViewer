@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 public class DeleteriousFilter implements VariantFilter, Serializable {
 
@@ -23,7 +24,25 @@ public class DeleteriousFilter implements VariantFilter, Serializable {
 	boolean phyloPEnabled = false;
 	boolean combinedEnabled = false;
 	
+	private AnnotationIndex index = null;
+	private int siftIndex = -1;
+	private int polyphenIndex = -1;
+	private int mtIndex = -1;
+	private int gerpIndex = -1;
+	private int phylopIndex = -1;
+	private int combinedIndex = -1;
 	
+	public void setAnnotationIndex(AnnotationIndex index) {
+		this.index = index;
+		if (index != null) {
+			siftIndex = index.getIndexForKey("sift.score");
+			polyphenIndex = index.getIndexForKey("pp.score");
+			mtIndex = index.getIndexForKey("mt.score");
+			gerpIndex = index.getIndexForKey("gerp.score");
+			phylopIndex = index.getIndexForKey("phylop.score");
+			combinedIndex = index.getIndexForKey("svm.effect.prediction");
+		}
+	}
 	
 	public boolean isSiftEnabled() {
 		return siftEnabled;
@@ -127,42 +146,42 @@ public class DeleteriousFilter implements VariantFilter, Serializable {
 		//SIFT score
 		boolean passes = true;
 		if (siftEnabled) {
-			passes = checkLess(var, "sift.score", siftMax);
+			passes = checkLess(var, siftIndex, siftMax);
 			if (passes) {
 				return true;
 			}
 		}
 		
 		if (polyphenEnabled) {
-			passes = checkMore(var, "pp.score", polyphenMin);
+			passes = checkMore(var, polyphenIndex, polyphenMin);
 			if (passes) {
 				return true;
 			}
 		}
 		
 		if (mutationTasterEnabled) {
-			passes = checkMore(var, "mt.score", mutationTasterMin);
+			passes = checkMore(var, mtIndex, mutationTasterMin);
 			if (passes) {
 				return true;
 			}
 		}
 		
 		if (gerpEnabled) {
-			passes = checkMore(var, "gerp.score", gerpMin);
+			passes = checkMore(var, gerpIndex, gerpMin);
 			if (passes) {
 				return true;
 			}
 		}
 		
 		if (phyloPEnabled) {
-			passes = checkMore(var, "phylop.score", phyloPMin);
+			passes = checkMore(var, phylopIndex, phyloPMin);
 			if (passes) {
 				return true;
 			}
 		}
 		
 		if (combinedEnabled) {
-			passes = checkMore(var, "svm.effect.prediction", combinedMin);
+			passes = checkMore(var, combinedIndex, combinedMin);
 			if (passes) {
 				return true;
 			}
@@ -181,13 +200,13 @@ public class DeleteriousFilter implements VariantFilter, Serializable {
 		return true;
 	}
 	
-	private static boolean checkLess(Variant var, String key, double max) {
-		Double score = var.getAnnotationDouble(key);
+	private static boolean checkLess(Variant var, int index, double max) {
+		Double score = var.getAnnotationDouble(index);
 		return score != null ? score < max : false; 
 	}
 	
-	private static boolean checkMore(Variant var, String key, double max) {
-		Double score = var.getAnnotationDouble(key);
+	private static boolean checkMore(Variant var, int index, double max) {
+		Double score = var.getAnnotationDouble(index);
 		return score != null ? score > max : false; 
 	}
 

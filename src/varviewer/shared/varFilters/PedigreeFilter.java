@@ -1,7 +1,14 @@
-package varviewer.shared;
+package varviewer.shared.varFilters;
 
 import java.io.Serializable;
 import java.util.List;
+
+import varviewer.shared.HasSamples;
+import varviewer.shared.HasVariants;
+import varviewer.shared.PedigreeSample;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 /**
  * A type of filter that excludes variants based on their presence and zygosity
@@ -44,21 +51,21 @@ public class PedigreeFilter implements VariantFilter, Serializable {
 	 * @param vars
 	 */
 	public void applyAnnotations(List<Variant> vars) {
-		if (relVars == null) {
-			initializeRelVars();
-		}
-		
-		for(Variant var : vars) {
-			Variant relVar = relVars.getVariant(var.getChrom(), var.getPos());
-			String relZyg = null;
-			if (relVar != null) {
-				relZyg = relVar.getAnnotationStr("zygosity");
-				var.addAnnotation(sample.getRelId() + "-zygosity", relZyg);
-			}
-			else {
-				var.addAnnotation(sample.getRelId() + "-zygosity", "Ref");
-			}
-		}
+//		if (relVars == null) {
+//			initializeRelVars();
+//		}
+//		
+//		for(Variant var : vars) {
+//			Variant relVar = relVars.getVariant(var.getChrom(), var.getPos());
+//			String relZyg = null;
+//			if (relVar != null) {
+//				relZyg = relVar.getAnnotationStr("zygosity");
+//				var.addAnnotation(sample.getRelId() + "-zygosity", relZyg);
+//			}
+//			else {
+//				var.addAnnotation(sample.getRelId() + "-zygosity", "Ref");
+//			}
+//		}
 	}
 	
 	@Override
@@ -131,5 +138,10 @@ public class PedigreeFilter implements VariantFilter, Serializable {
 	public String getUserDescription() {
 		//TODO : Should have a user-readable description for filtering text
 		return null;
+	}
+
+	@Override
+	public void setAnnotationIndex(AnnotationIndex index) {
+		//I dont actually think we use this.
 	}
 }

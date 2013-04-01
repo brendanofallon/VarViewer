@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 public class UncompressedCSVReader extends AbstractVariantReader {
 	
@@ -28,13 +28,14 @@ public class UncompressedCSVReader extends AbstractVariantReader {
 		initializeHeader(line);
 		line = reader.readLine(); //read next line, don't try to parse a variant from the header
 		while(line != null) {
-			Variant var = variantFromString(line.split("\t"), headerToks, numericFlags);;
+			Variant var = variantFromString(line.split("\t"), getAnnotationIndex(), numericFlags);
 			if (var != null)
 				vars.addRecordNoSort(var);
 			line = reader.readLine();
 		}
 		
 		vars.sortAllContigs();
+		vars.setAnnoIndex(getAnnotationIndex());
 		reader.close();
 		
 		if (vars.size()>0)

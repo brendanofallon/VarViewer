@@ -1,7 +1,7 @@
 package varviewer.client.filters;
 
-import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.HGMDOmimFilter;
+import varviewer.shared.variant.VariantFilter;
 
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;

@@ -2,8 +2,9 @@ package varviewer.shared.varFilters;
 
 import java.io.Serializable;
 
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 public class MinFreqFilter implements VariantFilter, Serializable {
 
@@ -11,7 +12,7 @@ public class MinFreqFilter implements VariantFilter, Serializable {
 	private double maxVal = Double.MAX_VALUE;
 	
 	//Annotation key for value to filter on
-	private String annotation = null;
+	private int annotationIndex = -1;
 	
 	private boolean missingDataPasses = true;
 	
@@ -19,10 +20,12 @@ public class MinFreqFilter implements VariantFilter, Serializable {
 		//Required no-arg constructor
 	}
 	
-	public MinFreqFilter(String annotation, double maxVal) {
-		this.annotation = annotation;
+	public MinFreqFilter(int index, double maxVal) {
+		this.annotationIndex = index;
 		this.maxVal = maxVal;
 	}
+	
+	
 	
 	/**
 	 * Set the maximum frequency allowed by this filter
@@ -34,7 +37,7 @@ public class MinFreqFilter implements VariantFilter, Serializable {
 	
 	@Override
 	public boolean variantPasses(Variant var) {
-		Double freq = var.getAnnotationDouble(annotation);
+		Double freq = var.getAnnotationDouble(annotationIndex);
 		if (freq == null)
 			return missingDataPasses;
 
@@ -44,13 +47,17 @@ public class MinFreqFilter implements VariantFilter, Serializable {
 		else {
 			return false;
 		}
-
 	}
 
 	@Override
 	public String getUserDescription() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setAnnotationIndex(AnnotationIndex index) {
+		//don't believe this is actually used
 	}
 
 

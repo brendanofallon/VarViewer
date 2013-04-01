@@ -1,6 +1,6 @@
 package varviewer.client.varTable;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 /**
  * These objects are notified when a new variant is selected in the main variant table

@@ -5,7 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
 import varviewer.util.concurrentBuffer.ConcurrentBuffer;
 import varviewer.util.concurrentBuffer.Consumer;
 import varviewer.util.concurrentBuffer.Producer;
@@ -32,13 +33,14 @@ public class ConcurrentVariantReader extends AbstractVariantReader {
 		initializeHeader(line); //Header must be initialized before we create the StringConverter
 		
 		StringProducer prod = new StringProducer(reader);
-		StringConverter converter = new StringConverter(vars, headerToks, numericFlags);
+		StringConverter converter = new StringConverter(vars, getAnnotationIndex(), numericFlags);
 		
 		ConcurrentBuffer<String[]> processor = new ConcurrentBuffer<String[]>(prod, converter, null);
 		
 		processor.start();
 		
 		vars.sortAllContigs();
+		vars.setAnnoIndex(getAnnotationIndex());
 		return vars;
 	}
 
@@ -47,12 +49,12 @@ public class ConcurrentVariantReader extends AbstractVariantReader {
 
 		int itemsProcessed = 0;
 		final VariantCollection vars;
-		final String[] header;
+		final AnnotationIndex index;
 		final boolean[] numericFlags;
 		
-		public StringConverter(VariantCollection vars, String[] header, boolean[] numericFlags) {
+		public StringConverter(VariantCollection vars, AnnotationIndex index, boolean[] numericFlags) {
 			this.vars = vars;
-			this.header = header;
+			this.index = index;
 			this.numericFlags = numericFlags;
 		}
 		
@@ -67,7 +69,7 @@ public class ConcurrentVariantReader extends AbstractVariantReader {
 		
 		@Override
 		public void processItem(String[] str) {
-			Variant var = AbstractVariantReader.variantFromString(str, header, numericFlags);
+			Variant var = AbstractVariantReader.variantFromString(str, index, numericFlags);
 			vars.addRecordNoSort(var);
 		}
 		

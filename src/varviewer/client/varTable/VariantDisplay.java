@@ -7,8 +7,8 @@ import varviewer.client.VarListListener;
 import varviewer.client.filters.FilterListener;
 import varviewer.client.filters.FiltersPanel;
 import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 

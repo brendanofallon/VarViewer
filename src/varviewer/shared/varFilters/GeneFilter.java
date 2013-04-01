@@ -8,8 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 /**
  * Filters variants based on a set of genes
@@ -19,6 +20,13 @@ import varviewer.shared.VariantFilter;
 public class GeneFilter implements VariantFilter, Serializable {
 
 	Set<String> geneNames = new HashSet<String>();
+	private AnnotationIndex annoIndex = null;
+	private int geneIndex = -1;
+	
+	public void setAnnotationIndex(AnnotationIndex index) {
+		this.annoIndex = index;
+		geneIndex = annoIndex.getIndexForKey("gene");
+	}
 	
 	public void setGeneNames(Collection<String> geneNames) {
 		this.geneNames.clear();
@@ -30,7 +38,7 @@ public class GeneFilter implements VariantFilter, Serializable {
 		if (geneNames.size()==0) {
 			return true;
 		}
-		String name = var.getAnnotationStr("gene");
+		String name = var.getAnnotationStr(geneIndex);
 		if (name != null && geneNames.contains(name)) {
 			return true;
 		}

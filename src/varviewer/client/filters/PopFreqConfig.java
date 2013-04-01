@@ -1,7 +1,7 @@
 package varviewer.client.filters;
 
-import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.MaxFreqFilter;
+import varviewer.shared.variant.VariantFilter;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;

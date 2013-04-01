@@ -2,8 +2,9 @@ package varviewer.shared.varFilters;
 
 import java.io.Serializable;
 
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 /**
  * Filters out variants not in HGMD, OMIM, etc. 
@@ -15,8 +16,22 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 	private boolean excludeNonExactHits = false;
 	private boolean excludeNonGeneHits = false;
 	
+	private AnnotationIndex annoIndex = null;
+	private int hgmdInfoIndex = -1;
+	private int hgmdExactIndex = -1;
+	private int omimIndex = -1;
+	
+	
+	
 	public HGMDOmimFilter() {
 		//Required no-arg constructor
+	}
+
+	public void setAnnotationIndex(AnnotationIndex index) {
+		this.annoIndex = index;
+		hgmdInfoIndex = index.getIndexForKey("hgmd.info");
+		omimIndex = index.getIndexForKey("omim.disease");
+		hgmdExactIndex = index.getIndexForKey("hgmd.hit");
 	}
 	
 	public boolean isExcludeNonExactHits() {
@@ -43,9 +58,9 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 
 	@Override
 	public boolean variantPasses(Variant var) {
-		String hgmdExact = var.getAnnotationStr("hgmd.hit");
-		String hgmdInfo = var.getAnnotationStr("hgmd.info");
-		String omim = var.getAnnotationStr("omim.disease");
+		String hgmdExact = var.getAnnotationStr(hgmdExactIndex);
+		String hgmdInfo = var.getAnnotationStr(hgmdInfoIndex);
+		String omim = var.getAnnotationStr(omimIndex);
 		
 		if (excludeNonExactHits) {
 			if (hgmdExact == null || hgmdExact.length()<2) {

@@ -16,7 +16,7 @@ public interface AnnotationKeyIndex {
 	
 	/**
 	 * Whether or no the Annotation should be treated as a (floating point) number. 
-	 * If not, the Annotation will be a String
+	 * If not, the Annotation will be treated as a String
 	 * @return
 	 */
 	public boolean isNumeric();

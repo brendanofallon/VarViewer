@@ -8,7 +8,7 @@ import java.util.List;
 import org.broad.tribble.readers.TabixReader;
 
 import varviewer.shared.Interval;
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 public class TabixCSVReader extends AbstractVariantReader {
 	
@@ -23,13 +23,15 @@ public class TabixCSVReader extends AbstractVariantReader {
 		initializeHeader(line);
 		line = reader.readLine();
 		while(line != null) {
-			Variant var = variantFromString(line.split("\t"), headerToks, numericFlags);
+			Variant var = variantFromString(line.split("\t"), getAnnotationIndex(), numericFlags);
 			if (var != null)
 				vars.add(var);
 			line = reader.readLine();
 		}
 		reader.close();
-		return new VariantCollection(vars);
+		VariantCollection varCol = new VariantCollection(vars);
+		varCol.setAnnoIndex(getAnnotationIndex());
+		return varCol;
 	}
 	
 	/**
@@ -49,7 +51,7 @@ public class TabixCSVReader extends AbstractVariantReader {
 			if(iter != null) {
 				String val = iter.next();
 				while(val != null) {
-					Variant var = variantFromString(val.split("\t"), headerToks, numericFlags);
+					Variant var = variantFromString(val.split("\t"), getAnnotationIndex(), numericFlags);
 					vars.add(var);
 					val = iter.next();
 				}

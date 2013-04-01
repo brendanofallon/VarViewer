@@ -2,7 +2,7 @@ package varviewer.client;
 
 import java.util.List;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 /**
  * Anything that listens for changes to a list of variants should implement this

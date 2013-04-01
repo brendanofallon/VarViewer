@@ -1,8 +1,12 @@
-package varviewer.shared;
+package varviewer.shared.variant;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import varviewer.shared.AllIntervals;
+import varviewer.shared.Interval;
+import varviewer.shared.IntervalList;
 
 
 /**

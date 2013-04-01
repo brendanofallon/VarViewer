@@ -2,8 +2,9 @@ package varviewer.shared.varFilters;
 
 import java.io.Serializable;
 
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 /**
  * A variant filter that passes variants with a numeric value associated with the given
@@ -23,11 +24,21 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	//VarBin min
 	int varBinMin = 3;
 	
+	private AnnotationIndex annoIndex = null;
+	private int popFreqIndex = -1;
+	private int arupIndex = -1;
+	private int varbinIndex = -1;
+	
 	public MaxFreqFilter() {
 		//Required no-arg constructor
 	}
 	
-	
+	public void setAnnotationIndex(AnnotationIndex index) {
+		this.annoIndex = index;
+		this.popFreqIndex = index.getIndexForKey("pop.freq");
+		this.arupIndex = index.getIndexForKey("ARUP.freq");
+		this.varbinIndex = index.getIndexForKey("varbin.bin");
+	}
 	
 	public int getVarBinMin() {
 		return varBinMin;
@@ -65,9 +76,9 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 
 	@Override
 	public boolean variantPasses(Variant var) {
-		Double freq = var.getAnnotationDouble("pop.freq");
-		String arupStr = var.getAnnotationStr("ARUP.freq");
-		Double varbin = var.getAnnotationDouble("varbin.bin");
+		Double freq = var.getAnnotationDouble(popFreqIndex);
+		String arupStr = var.getAnnotationStr(arupIndex);
+		Double varbin = var.getAnnotationDouble(varbinIndex);
 		
 		
 		if (freq == null)

@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.ExonFuncFilter;
+import varviewer.shared.variant.VariantFilter;
 
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Label;

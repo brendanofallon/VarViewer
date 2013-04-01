@@ -1,7 +1,8 @@
-package varviewer.shared;
+package varviewer.shared.variant;
 
 import java.io.Serializable;
 import java.util.List;
+
 
 /**
  * These objects are returned as the result of a VariantRequest and do little

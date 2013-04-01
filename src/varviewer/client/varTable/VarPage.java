@@ -3,7 +3,7 @@ package varviewer.client.varTable;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;

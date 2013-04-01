@@ -1,8 +1,9 @@
-package varviewer.shared;
+package varviewer.shared.variant;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
 
 
 public class Variant implements Comparable<Variant>, Serializable {
@@ -12,7 +13,9 @@ public class Variant implements Comparable<Variant>, Serializable {
 	String ref = "X";
 	String alt = "X";
 	
-	Map<String, Annotation> annotations = new HashMap<String, Annotation>();
+	//Stores mapping of annotation keys (like "pop.freq") to their indices in the annotations list
+	AnnotationIndex annoIndex = null;
+	List<Annotation> annotations = new ArrayList<Annotation>(16);
 	
 	public Variant() {
 		//blank on purpose, must have a no-arg constructor for serialization
@@ -25,32 +28,49 @@ public class Variant implements Comparable<Variant>, Serializable {
 		this.alt = alt;
 	}
 	
-	public void addAnnotation(String key, String value) {
-		addAnnotation(key, new Annotation(value));
+//	public void addAnnotation(String key, String value) {
+//		addAnnotation(key, new Annotation(value));
+//	}
+//	
+//	public void addAnnotation(String key, Double value) {
+//		addAnnotation(key, new Annotation(value));
+//	}
+	
+	public void setAnnotationIndex(AnnotationIndex index) {
+		this.annoIndex = index;
 	}
 	
-	public void addAnnotation(String key, Double value) {
-		addAnnotation(key, new Annotation(value));
+	public void setAnnotations(List<Annotation> annos) {
+		annotations = annos;
 	}
 	
-	public void addAnnotation(String key, Annotation anno) {
-		annotations.put(key, anno);
+	public Annotation getAnnotation(int index) {
+		return index > -1 ? annotations.get(index) : null;
 	}
 	
 	public Annotation getAnnotation(String key) {
-		return annotations.get(key);
+		return getAnnotation( annoIndex.getIndexForKey(key));
 	}
 	
-	public String getAnnotationStr(String key) {
-		Annotation anno = getAnnotation(key);
+	public String getAnnotationStr(int index) {
+		Annotation anno = getAnnotation(index);
 		return anno == null ? null : anno.toString();
 	}
 	
+	public Double getAnnotationDouble(int index) {
+		Annotation anno = getAnnotation(index);
+		return anno == null ? null : anno.getDoubleValue();
+	}
+	
+	public String getAnnotationStr(String key) {
+		return getAnnotationStr( annoIndex.getIndexForKey(key));
+	}
+	
 	public Double getAnnotationDouble(String key) {
-		Annotation anno = getAnnotation(key);
-		return anno == null ? null : anno.doubleVal;
+		return getAnnotationDouble( annoIndex.getIndexForKey(key));
 	}
 
+	
 	public String getChrom() {
 		return chrom;
 	}

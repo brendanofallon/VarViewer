@@ -2,7 +2,7 @@ package varviewer.client.filters;
 
 import java.util.List;
 
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.VariantFilter;
 
 /**
  * FilterListers listen for changes to a series of VariantFilters, for instance, produced

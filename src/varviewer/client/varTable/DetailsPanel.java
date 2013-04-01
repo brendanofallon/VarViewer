@@ -6,7 +6,7 @@ import java.util.List;
 import varviewer.client.services.GeneDetailService;
 import varviewer.client.services.GeneDetailServiceAsync;
 import varviewer.shared.GeneInfo;
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;

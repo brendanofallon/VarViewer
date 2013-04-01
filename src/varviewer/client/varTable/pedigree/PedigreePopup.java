@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.varTable.VariantDisplay;
-import varviewer.shared.PedigreeFilter;
 import varviewer.shared.PedigreeSample;
 import varviewer.shared.PedigreeSample.OperationType;
+import varviewer.shared.varFilters.PedigreeFilter;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;

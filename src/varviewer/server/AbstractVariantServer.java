@@ -2,8 +2,8 @@ package varviewer.server;
 
 import java.util.List;
 
-import varviewer.shared.Variant;
-import varviewer.shared.VariantRequest;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantRequest;
 
 /**
  * Base class of things that can handle requests for list of Variants

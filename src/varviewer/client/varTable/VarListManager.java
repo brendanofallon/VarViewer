@@ -7,11 +7,11 @@ import varviewer.client.VarListListener;
 import varviewer.client.services.VarRequestService;
 import varviewer.client.services.VarRequestServiceAsync;
 import varviewer.shared.IntervalList;
-import varviewer.shared.PedigreeFilter;
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
-import varviewer.shared.VariantRequest;
-import varviewer.shared.VariantRequestResult;
+import varviewer.shared.varFilters.PedigreeFilter;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
+import varviewer.shared.variant.VariantRequest;
+import varviewer.shared.variant.VariantRequestResult;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
@@ -133,6 +133,7 @@ public class VarListManager {
 		reloadRequired = false;
 		fireVarUpdateBeginning();
 		
+		
 		//We actually send a copy of the usual variant request to which we append 
 		//all PedigreeFilters
 		VariantRequest newReq = req.clone();
@@ -145,7 +146,7 @@ public class VarListManager {
 		public void onFailure(Throwable caught) {
 				caught.printStackTrace();
 				fireVarUpdateError();
-				Window.alert("Error retrieving variants : " + caught.toString() + "Cause: " + caught.getCause());
+				Window.alert("Error retrieving variants : " + caught.toString() + " Cause: " + caught.getLocalizedMessage());
 			}
 
 			@Override

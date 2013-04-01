@@ -1,7 +1,7 @@
 package varviewer.server;
 
-import varviewer.shared.VariantRequest;
-import varviewer.shared.VariantRequestResult;
+import varviewer.shared.variant.VariantRequest;
+import varviewer.shared.variant.VariantRequestResult;
 
 public interface VariantRequestHandler {
 

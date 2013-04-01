@@ -1,5 +1,7 @@
 package varviewer.shared;
 
+import varviewer.shared.variant.Variant;
+
 public interface HasVariants {
 
 	/**

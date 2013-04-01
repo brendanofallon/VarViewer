@@ -3,7 +3,7 @@ package varviewer.server.annotation;
 import java.util.Collection;
 import java.util.List;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 /**
  * These objects are capable of annotating a variant

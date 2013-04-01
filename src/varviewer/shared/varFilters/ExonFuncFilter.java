@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 /**
  * A special-case filter used to filter by exon-function type
@@ -24,6 +25,11 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 	private boolean excludeSplicing = false;
 	private boolean excludeUTR = true;
 	private boolean excludeNCRNA = true;
+	private AnnotationIndex index = null;
+	//Pre-computed indices for the annotations we use. These get set when the annotationIndex is set. 
+	private int varTypeIndex = -1;
+	private int exonFuncIndex = -1;
+	private int geneIndex = -1;
 	
 	private boolean missingDataPasses = true;
 	
@@ -31,10 +37,19 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 		//Required no-arg constructor
 	}
 	
+	public void setAnnotationIndex(AnnotationIndex index) {
+		this.index = index;
+		if (index != null) {
+			varTypeIndex = index.getIndexForKey("variant.type");
+			exonFuncIndex = index.getIndexForKey("exon.function");
+			geneIndex = index.getIndexForKey("gene");
+		}
+	}
+	
 	@Override
 	public boolean variantPasses(Variant var) {
-		String varType = var.getAnnotationStr("variant.type");
-		String exonFunc = var.getAnnotationStr("exon.function");
+		String varType = var.getAnnotationStr(varTypeIndex);
+		String exonFunc = var.getAnnotationStr(exonFuncIndex);
 		
 		if (varType == null)
 			return missingDataPasses;
@@ -43,7 +58,7 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 				&& (varType.contains("intergenic") 
 						|| varType.contains("upstream") 
 						|| varType.contains("downstream"))
-						|| (var.getAnnotationStr("gene") != null && var.getAnnotationStr("gene").length() < 2)) {
+						|| (var.getAnnotationStr(geneIndex) != null && var.getAnnotationStr(geneIndex).length() < 2)) {
 			return false;
 		}
 		

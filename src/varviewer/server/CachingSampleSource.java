@@ -12,7 +12,7 @@ import varviewer.shared.SampleInfo;
 import varviewer.shared.SampleTreeNode;
 
 /**
- * A VariantServer that maintains the most recently requested variants in memory
+ * A VariantServer that just wraps the most recently requested variants in memory
  * for faster response times. 
  * @author brendan
  *
@@ -39,7 +39,6 @@ public class CachingSampleSource implements SampleSource {
 		}
 		
 		Logger.getLogger(CachingSampleSource.class).info("Cache miss for sample " + sampleID + ", loading new set of variants");
-		loadVariants(sampleID);
 		
 		try {
 			//Force re-loading of sample info
@@ -57,12 +56,6 @@ public class CachingSampleSource implements SampleSource {
 		else {
 			return null;
 		}
-	}
-	
-	private void loadVariants(String id) {
-		
-		
-		
 	}
 
 

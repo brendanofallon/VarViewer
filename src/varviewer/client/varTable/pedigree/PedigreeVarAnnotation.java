@@ -2,7 +2,7 @@ package varviewer.client.varTable.pedigree;
 
 import varviewer.client.varTable.VarAnnotation;
 import varviewer.shared.PedigreeSample;
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 import com.google.gwt.user.cellview.client.TextColumn;
 

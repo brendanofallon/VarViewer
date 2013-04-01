@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.shared.IntervalList;
-import varviewer.shared.Variant;
-import varviewer.shared.VariantRequest;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantRequest;
 
 /**
  * A very simple variant source for testing / debugging

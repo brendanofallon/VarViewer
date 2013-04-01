@@ -3,8 +3,9 @@ package varviewer.client.varTable;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.shared.Variant;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
+import varviewer.shared.variant.VariantFilter;
 
 
 /**
@@ -152,6 +153,13 @@ public class SearchBoxVariantFilter implements VariantFilter {
 		public String getUserDescription() {
 			return null;
 		}
+
+		@Override
+		public void setAnnotationIndex(AnnotationIndex index) {
+			//unused, we assume the variants filtered already have an annotation index attached
+			//and look up the index each time. This is slower than it would be if we used
+			//precumpted indices, but probably fine here. 
+		}
 		
 	}
 	
@@ -188,6 +196,10 @@ public class SearchBoxVariantFilter implements VariantFilter {
 			return null;
 		}
 		
+		@Override
+		public void setAnnotationIndex(AnnotationIndex index) {
+			//	unused, this thing doesn't actually use any annotations (only chr and pos) 
+		}
 	}
 
 
@@ -196,7 +208,12 @@ public class SearchBoxVariantFilter implements VariantFilter {
 	 * Not ever used to generate user text, so nothing required here
 	 */
 	public String getUserDescription() {
-		// TODO Auto-generated method stub
+		//unused, this isn't every used to generate user-readable descriptive phrases. 
 		return null;
+	}
+
+	@Override
+	public void setAnnotationIndex(AnnotationIndex index) {
+		//unused, no annotations required. 
 	}
 }

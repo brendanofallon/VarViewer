@@ -7,7 +7,7 @@ import varviewer.client.services.ExportService;
 import varviewer.client.services.ExportServiceAsync;
 import varviewer.client.varTable.pedigree.PedigreePopup;
 import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.Unit;

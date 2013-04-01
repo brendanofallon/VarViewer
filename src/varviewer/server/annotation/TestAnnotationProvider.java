@@ -4,8 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import varviewer.shared.Annotation;
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 public class TestAnnotationProvider implements AnnotationProvider {
 
@@ -27,20 +26,16 @@ public class TestAnnotationProvider implements AnnotationProvider {
 
 	@Override
 	public void annotateVariant(Variant var, AnnotationKeyIndex[] annotationKeys) {
-		Annotation[] annos = getAnnosForPosition(var.getChrom(), var.getPos());
-		if (annos == null) {
-			return;
-		}
-		for(int i=0; i<annotationKeys.length; i++) {
-			if (annotationKeys[i] != null)
-				var.addAnnotation(annotationKeys[i].getKey(), annos[annotationKeys[i].getIndex()]);
-		}
+//		Annotation[] annos = getAnnosForPosition(var.getChrom(), var.getPos());
+//		if (annos == null) {
+//			return;
+//		}
+//		for(int i=0; i<annotationKeys.length; i++) {
+//			if (annotationKeys[i] != null)
+//				var.addAnnotation(annotationKeys[i].getKey(), annos[annotationKeys[i].getIndex()]);
+//		}
 	}
-
-	private Annotation[] getAnnosForPosition(String chrom, int pos) {
-		return new Annotation[]{new Annotation(chrom + "-" + pos), new Annotation("blah: X" + pos)};
-	}
-
+	
 	@Override
 	public AnnotationKeyIndex[] getKeyIndices(List<String> annotations) {
 		AnnotationKeyIndex[] indices = new AnnotationKeyIndex[annotations.size()];

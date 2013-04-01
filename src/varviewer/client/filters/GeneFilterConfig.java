@@ -3,8 +3,8 @@ package varviewer.client.filters;
 import java.util.ArrayList;
 import java.util.List;
 
-import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.GeneFilter;
+import varviewer.shared.variant.VariantFilter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

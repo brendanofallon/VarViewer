@@ -1,7 +1,7 @@
 package varviewer.client.services;
 
-import varviewer.shared.VariantRequest;
-import varviewer.shared.VariantRequestResult;
+import varviewer.shared.variant.VariantRequest;
+import varviewer.shared.variant.VariantRequestResult;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;

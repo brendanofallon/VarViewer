@@ -5,12 +5,13 @@ import java.util.List;
 
 import varviewer.client.HighlightButton;
 import varviewer.client.VarViewer;
-import varviewer.shared.VariantFilter;
 import varviewer.shared.varFilters.DeleteriousFilter;
 import varviewer.shared.varFilters.ExonFuncFilter;
 import varviewer.shared.varFilters.GeneFilter;
 import varviewer.shared.varFilters.HGMDOmimFilter;
 import varviewer.shared.varFilters.MaxFreqFilter;
+import varviewer.shared.varFilters.QualityDepthFilter;
+import varviewer.shared.variant.VariantFilter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

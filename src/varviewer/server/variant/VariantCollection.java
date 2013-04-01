@@ -11,7 +11,8 @@ import java.util.Map;
 import varviewer.shared.AllIntervals;
 import varviewer.shared.HasVariants;
 import varviewer.shared.IntervalList;
-import varviewer.shared.Variant;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.Variant;
 
 /**
  * An in-memory collection of variants
@@ -21,6 +22,7 @@ import varviewer.shared.Variant;
 public class VariantCollection implements HasVariants {
 
 	protected Map<String, List<Variant>>  vars = new HashMap<String, List<Variant>>();
+	protected AnnotationIndex annoIndex;
 	
 	/**
 	 * Create an empty variant collection with no contigs or variants
@@ -29,6 +31,20 @@ public class VariantCollection implements HasVariants {
 		//Blank on purpose
 	}
 	
+	
+	
+	public AnnotationIndex getAnnoIndex() {
+		return annoIndex;
+	}
+
+
+
+	public void setAnnoIndex(AnnotationIndex annoIndex) {
+		this.annoIndex = annoIndex;
+	}
+
+
+
 	/**
 	 * Build a new variant pool from the given list of variants
 	 * @param varList

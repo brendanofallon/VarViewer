@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import varviewer.server.variant.AbstractVariantReader;
 import varviewer.server.variant.ConcurrentVariantReader;
 import varviewer.server.variant.TabixCSVReader;
-import varviewer.server.variant.VCFReader;
 import varviewer.server.variant.VariantCollection;
 import varviewer.shared.HasVariants;
 import varviewer.shared.SampleInfo;
@@ -42,13 +41,9 @@ public class DirSampleSource implements SampleSource {
 		initialize();
 	}
 	
-	
-	
 	public File getRootDir() {
 		return rootDir;
 	}
-
-
 
 	public void setRootDir(File rootDir) {
 		this.rootDir = rootDir;
@@ -74,7 +69,7 @@ public class DirSampleSource implements SampleSource {
 			if (subdirs[i].isDirectory()) {
 				SampleInfoFile sampleInfo = createInfoForFile(subdirs[i]);
 				if (sampleInfo != null) {
-					Logger.getLogger(getClass()).info("Loading sample info from file " + subdirs[i].getAbsolutePath() + ", found sample id: " + sampleInfo.info.getSampleID());
+					//Logger.getLogger(getClass()).info("Loading sample info from file " + subdirs[i].getAbsolutePath() + ", found sample id: " + sampleInfo.info.getSampleID());
 					samples.put(sampleInfo.info.getSampleID(), sampleInfo);
 					SampleTreeNode sampleNode = new SampleTreeNode(sampleInfo.info);
 					parentNode.addChild(sampleNode);
@@ -311,9 +306,9 @@ public class DirSampleSource implements SampleSource {
 				if (varsFile.getName().endsWith(".gz")) {
 					reader = new TabixCSVReader(varsFile.getAbsolutePath());
 				}
-				if (varsFile.getName().endsWith(".vcf")) {
-					reader = new VCFReader(new File(varsFile.getAbsolutePath()));
-				}
+//				if (varsFile.getName().endsWith(".vcf")) {
+//					reader = new VCFReader(new File(varsFile.getAbsolutePath()));
+//				}
 				if (varsFile.getName().endsWith(".csv")) {
 					//reader = new UncompressedCSVReader(varsFile.getAbsolutePath());
 					reader = new ConcurrentVariantReader(varsFile);

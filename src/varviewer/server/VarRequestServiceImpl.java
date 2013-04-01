@@ -1,14 +1,12 @@
 package varviewer.server;
 
-
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import varviewer.client.services.VarRequestService;
-import varviewer.shared.VariantRequest;
-import varviewer.shared.VariantRequestResult;
+import varviewer.shared.variant.VariantRequest;
+import varviewer.shared.variant.VariantRequestResult;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -27,8 +25,6 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 	@Override
 	public VariantRequestResult queryVariant(VariantRequest req)
 			throws IllegalArgumentException {
-
-		LogFactory lf = null;
 		
 		if (reqHandler == null) {
 			String springFullPath = "spring.xml";
@@ -41,8 +37,11 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 			
 		}
 		
-		if (reqHandler != null)
-			return reqHandler.queryVariant(req);
+		if (reqHandler != null){
+			VariantRequestResult result = reqHandler.queryVariant(req);
+			Logger.getLogger(getClass()).info("Returning variant result with " + result.getVars().size() + " variants");
+			return result;
+		}
 		else {
 			return null;
 		}

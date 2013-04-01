@@ -1,7 +1,7 @@
 package varviewer.client.filters;
 
 import varviewer.client.HighlightButton;
-import varviewer.shared.VariantFilter;
+import varviewer.shared.variant.VariantFilter;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;

@@ -2,7 +2,7 @@ package varviewer.client.varTable;
 
 import java.util.Comparator;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 public class PositionComparator implements Comparator<Variant> {
 

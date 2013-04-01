@@ -3,6 +3,7 @@ package varviewer.util.concurrentBuffer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -59,6 +60,16 @@ public class ConcurrentBuffer<T> {
 		producerThread = new Thread(producer);
 		consumerThread = new Thread(consumer);
 		
+		//If consumer thread dies due to an uncaught exception producer will still keep chugging away
+		//endlessly.. so look for uncaught exceptions and interrupt the producer thread if we find any.
+		consumerThread.setUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread arg0, Throwable arg1) {
+				System.err.println("Uncaught exception detected in concurrent buffer consumer, interrupting producer. " + arg1.getLocalizedMessage());
+				producer.requestStop();
+			}
+		});
+		
 		producerThread.start();
 		consumerThread.start();
 		
@@ -99,6 +110,7 @@ public class ConcurrentBuffer<T> {
 	class ProducerTask implements Runnable {
 
 		final Producer<T> producer;
+		private boolean stopRequested = false;
 		
 		ProducerTask(Producer<T> prod) {
 			this.producer = prod;
@@ -107,7 +119,8 @@ public class ConcurrentBuffer<T> {
 		@Override
 		public void run() {
 			
-			while(! producer.isFinishedProducing()) {
+			//Go until producer is done or a stop has been requested
+			while((!producer.isFinishedProducing()) && (! stopRequested)) {
 				T item = producer.nextItem();
 				if (item != null) {
 					buffer.add(item);
@@ -116,7 +129,7 @@ public class ConcurrentBuffer<T> {
 				if (buffer.size() > MAX_BUFFER_SIZE) {
 					try {
 						Thread.sleep(500);
-						System.out.println("Producer is waiting for consumer to catch up....");
+						System.err.println("Producer is waiting for consumer to catch up....");
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -124,6 +137,10 @@ public class ConcurrentBuffer<T> {
 				}
 			}
 			
+		}
+		
+		public void requestStop() {
+			stopRequested = true;
 		}
 		
 		public boolean isDone() {

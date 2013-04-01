@@ -2,13 +2,13 @@ package varviewer.client.varTable;
 
 import java.util.Comparator;
 
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Variant;
 
 import com.google.gwt.user.cellview.client.Column;
 
 /**
  * Model for describing a single piece of information about a variant. This does not 
- * actually hold the variant data (that's in an Annotation object that is stored in each Variant)
+ * actually hold the variant data (that's in an annotation object that is stored in each Variant)
  * This mostly just augments a Column<Variant, ?> with additional data including user-friendly text header,
  * sorter, preferred width, etc. 
  * @author brendan

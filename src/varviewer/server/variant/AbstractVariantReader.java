@@ -2,13 +2,17 @@ package varviewer.server.variant;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import varviewer.server.VVProps;
-import varviewer.shared.Variant;
+import varviewer.shared.variant.Annotation;
+import varviewer.shared.variant.AnnotationIndex;
+import varviewer.shared.variant.SimpleAnnotationIndex;
+import varviewer.shared.variant.Variant;
 
 /**
  * Base class for things that read (create) Variants from files. This tends to be something of
@@ -19,10 +23,12 @@ import varviewer.shared.Variant;
  */
 public abstract class AbstractVariantReader {
 
+	public static final int COLS_TO_IGNORE = 5; //Skip first X columns when parsing variants
 	protected File varFile = null;
 	protected String[] headerToks = null;
 	protected boolean[] numericFlags = null; //Indicates which annotations are numeric, is initialized with header
-
+	protected AnnotationIndex annoIndex = null; //Initialized in call to initializeHeader
+	
 	//Stores which annotations should be treated as numeric. This is read in from
 	//the properties file every time an AbstractVariantReader is created. 
 	//protected Set<String> numericAnnotations = new HashSet<String>();
@@ -73,12 +79,20 @@ public abstract class AbstractVariantReader {
 			}
 		}
 		
+		
+		//Create annotationIndex. First five columns (chrom, start, end, ref, alt) are ignored
+		String[] annoKeys = Arrays.copyOfRange(headerToks, COLS_TO_IGNORE, headerToks.length);
+		annoIndex = new SimpleAnnotationIndex(annoKeys, numericAnnotations);
+		
 	}
 	
-	
-//	public boolean annotationIsNumeric(String annoKey) {
-//		
-//	}
+	/**
+	 * Obtain the index that associates annotation keys with numbers. This is null until initializeHeader is called.
+	 * @return
+	 */
+	public AnnotationIndex getAnnotationIndex() {
+		return annoIndex;
+	}
 	
 	/**
 	 * Parse, create and return a variant from the given string. All items in columns five
@@ -86,30 +100,30 @@ public abstract class AbstractVariantReader {
 	 * @param str
 	 * @return
 	 */
-	protected static Variant variantFromString(String[] toks, String[] headerTokens, boolean[] numericFlags) {
-		if (toks.length != headerTokens.length) {
-			return null;
-		}
-		
+	protected static Variant variantFromString(String[] toks, AnnotationIndex index, boolean[] numericFlags) {
 		String contig = toks[0];
 		Integer start = Integer.parseInt(toks[1]);
 		String ref = toks[3];
 		String alt = toks[4];
 		Variant var = new Variant(contig, start, ref, alt);
-		for(int i=5; i<toks.length; i++) {
+		Annotation[] annotations = new Annotation[toks.length-COLS_TO_IGNORE];
+		for(int i=COLS_TO_IGNORE; i<toks.length; i++) {
+			
 			if (numericFlags[i]) {
 				try {
 					Double val = Double.parseDouble( toks[i]);
-					var.addAnnotation(headerTokens[i], val);
+					annotations[i-COLS_TO_IGNORE] = new Annotation(val);
 				}
 				catch (NumberFormatException nfe) {
 					//Don't sweat it, no annotation added
 				}
 			}
 			else {
-				var.addAnnotation(headerTokens[i], toks[i]);
+				annotations[i-COLS_TO_IGNORE] = new Annotation(toks[i].trim());
 			}
 		}
+		var.setAnnotations(Arrays.asList(annotations));
+		var.setAnnotationIndex(index);
 		return var;
 	}
 }
