@@ -29,6 +29,7 @@ public class Variant implements Comparable<Variant>, Serializable {
 	}
 	
 //	public void addAnnotation(String key, String value) {
+//		
 //		addAnnotation(key, new Annotation(value));
 //	}
 //	
@@ -36,12 +37,20 @@ public class Variant implements Comparable<Variant>, Serializable {
 //		addAnnotation(key, new Annotation(value));
 //	}
 	
+	public void addAnnotation(int index, Annotation anno) {
+		while(annotations.size() <= index) {
+			annotations.add(null);
+		}
+		annotations.set(index, anno);
+	}
+	
 	public void setAnnotationIndex(AnnotationIndex index) {
 		this.annoIndex = index;
 	}
 	
 	public void setAnnotations(List<Annotation> annos) {
-		annotations = annos;
+		annotations.clear();
+		annotations.addAll(annos);
 	}
 	
 	public Annotation getAnnotation(int index) {

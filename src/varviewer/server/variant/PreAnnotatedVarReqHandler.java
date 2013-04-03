@@ -41,6 +41,8 @@ public class PreAnnotatedVarReqHandler implements VariantRequestHandler {
 		
 		VariantCollection vars = variantSource.getVariantsForSample(req.getSampleIDs().get(0));
 
+		//A bit ugly here... filters often use Annotations to do their filtering, so they need
+		//access to the AnnotationIndex. Here, we just go through all filters and set the index. 
 		AnnotationIndex index = vars.getAnnoIndex();
 		if (index == null) {
 			throw new IllegalStateException("Annotation index was not set for variants from sample : " + req.getSampleIDs().get(0));
@@ -74,10 +76,16 @@ public class PreAnnotatedVarReqHandler implements VariantRequestHandler {
 		//to do so to a given list of variants. We do this here so they don't waste time annotating
 		//variants that will be filtered out, but this functionality should be encapsulated somewhere
 		//else at some point
+		
 		for(VariantFilter filter : req.getFilters()) {
 			if (filter instanceof PedigreeFilter) {
 				PedigreeFilter pedFilter = (PedigreeFilter)filter;
-				pedFilter.applyAnnotations(passingVars);
+				String key = pedFilter.getPedSampleID() + "-zygosity";
+				int valIndex = index.getIndexForKey(key);
+				if (valIndex == -1) {
+					valIndex = index.addKey(key, false);
+				}
+				pedFilter.applyAnnotations(valIndex, passingVars);
 			}
 		}
 

@@ -62,7 +62,7 @@ public class CachingSampleSource implements SampleSource {
 
 	@Override
 	public HasVariants getHasVariantsForSample(String sampleID) {
-		return source.getHasVariantsForSample(sampleID);
+		return getVariantsForSample(sampleID);
 	}
 
 

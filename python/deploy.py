@@ -16,17 +16,18 @@ import paramiko
 # setup logging
 paramiko.util.log_to_file('deploy.log')
 
-# get hostname
 username = 'brendan'
 hostname = sys.argv[1]
+destDir = "/usr/share/tomcat6/webapps/VarViewer/"
+if (len(sys.argv)>2):
+	destDir = sys.argv[2]
 port = 22
+
+sourceDir = "/home/brendan/workspace/VarViewer/"
 
 password = getpass.getpass('Password for %s: ' % (hostname))
 
 #First, use sftp to copy the contents of the war/ directory to the destination directory on the host
-sourceDir = "/home/brendan/workspace/VarViewer/"
-destDir = "/usr/share/tomcat6/webapps/VarViewer/"
-
 #sftp doesn't support recursive file copying, so instead tar and gzip the sourceDir to transfer
 print "** Compressing war directory"
 os.chdir(sourceDir)
@@ -63,7 +64,24 @@ try:
 	client.exec_command("tar zxvf varviewer.war.tgz")
 	client.exec_command("cp -r war/* " + destDir)
 	client.exec_command("cd " + destDir)
-	client.exec_command("cp spring-" + hostname + ".xml spring.xml")
+	print "** Executing server side deployment scripts"
+	stdin, stdout,stderr = client.exec_command("ls -1 " + destDir + "/deploy_scripts")
+	script = stdout.readline()
+	while(script):
+		script = script.strip()
+		if (script.endswith(".sh") or script.endswith(".py") or script.endswith(".pl")):
+			print "Executing : " + script
+			scriptin, scriptout, scripterr = client.exec_command(destDir + "/deploy_scripts/" + script)
+			msg = scriptout.readline()
+			while(msg):
+				print msg
+				msg = scriptout.readline()
+			err = scripterr.readline()
+			while(err):
+				print err,
+				err = scripterr.readline()
+		script = stdout.readline()
+
 
 	chan.close()
 	client.close()

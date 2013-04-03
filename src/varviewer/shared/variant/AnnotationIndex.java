@@ -17,6 +17,14 @@ public interface AnnotationIndex {
 	public boolean isNumericForKey(String key);
 	
 	/**
+	 * Add the given key to this index
+	 * @param key
+	 * @param numeric
+	 * @return the element index associated with the newly added key
+	 */
+	public int addKey(String key, boolean numeric);
+	
+	/**
 	 * Return the number of keys in the index
 	 * @return
 	 */

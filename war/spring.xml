@@ -7,10 +7,12 @@
     <bean name="textFetcherHandler" class="varviewer.server.textFetch.FileTextFetcher">
 	</bean>
 	
-    <!--  Variant annotation and reading configuration -->
+    <!--  Object that actually reads variants from a file/url, sampleSources need -->
+    <!-- one of these to do the reading -->
     <bean name="variantReader" class="varviewer.server.variant.ConcurrentVariantReader">
     </bean>
     
+    <!--  SampleSource object to maintain a list of samples and deliver variants from them -->
 	<bean name="sampleSource" class="varviewer.server.DirSampleSource">
 	    <property name="rootDir" value="/home/brendan/jobwrangler_samples" />
 	    <property name="variantReader" ref="variantReader" />

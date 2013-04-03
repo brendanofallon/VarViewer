@@ -10,7 +10,7 @@ public class PedigreeSample implements Serializable {
 	private String probandId = null; //Sample id of proband
 	private String relId = null; //Sample id of the sample for comparison
 	//String relUserLabel = null; //not currently used
-	private ZygType zType = ZygType.HETS;	//Category of variants to include / exclude
+	private ZygType zType = ZygType.ALL;	//Category of variants to include / exclude
 	private OperationType oType = OperationType.NONE; //Operation to perform, include, exclude, etc.
 	
 	public PedigreeSample() {
@@ -59,10 +59,10 @@ public class PedigreeSample implements Serializable {
 			return "All";
 		}
 		if (zType == ZygType.HETS) {
-			return "Hets.";
+			return "Hets";
 		}
 		if (zType == ZygType.HOMS) {
-			return "Homs.";
+			return "Homs";
 		}
 		
 		//Should never get here
@@ -84,9 +84,9 @@ public class PedigreeSample implements Serializable {
 		if (zygStr.equals("Homs")) {
 			return ZygType.HOMS;
 		}
+		
 		//Should never get here
-		System.err.println("Error: unrecognized zygosity string : " +zygStr);
-		return ZygType.HETS;
+		throw new IllegalArgumentException("Unrecognized zygosity string : " +zygStr);
 	}
 	
 	public boolean equals(Object o) {

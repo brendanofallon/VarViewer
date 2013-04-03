@@ -6,6 +6,7 @@ import java.util.List;
 import varviewer.shared.HasSamples;
 import varviewer.shared.HasVariants;
 import varviewer.shared.PedigreeSample;
+import varviewer.shared.variant.Annotation;
 import varviewer.shared.variant.AnnotationIndex;
 import varviewer.shared.variant.Variant;
 import varviewer.shared.variant.VariantFilter;
@@ -19,7 +20,7 @@ import varviewer.shared.variant.VariantFilter;
  */
 public class PedigreeFilter implements VariantFilter, Serializable {
 
-	private PedigreeSample sample = null;
+	private PedigreeSample sample = null; 
 	private transient HasVariants relVars = null; //Don't try to serialize this
 	private transient HasSamples varSource = null; //Dont serialize this, either
 	
@@ -50,22 +51,22 @@ public class PedigreeFilter implements VariantFilter, Serializable {
 	 * PedigreeFilters can also create a special annotation for Variants 
 	 * @param vars
 	 */
-	public void applyAnnotations(List<Variant> vars) {
-//		if (relVars == null) {
-//			initializeRelVars();
-//		}
-//		
-//		for(Variant var : vars) {
-//			Variant relVar = relVars.getVariant(var.getChrom(), var.getPos());
-//			String relZyg = null;
-//			if (relVar != null) {
-//				relZyg = relVar.getAnnotationStr("zygosity");
-//				var.addAnnotation(sample.getRelId() + "-zygosity", relZyg);
-//			}
-//			else {
-//				var.addAnnotation(sample.getRelId() + "-zygosity", "Ref");
-//			}
-//		}
+	public void applyAnnotations(int index, List<Variant> vars) {
+		if (relVars == null) {
+			initializeRelVars();
+		}
+		
+		for(Variant var : vars) {
+			Variant relVar = relVars.getVariant(var.getChrom(), var.getPos());
+			String relZyg = null;
+			if (relVar != null) {
+				relZyg = relVar.getAnnotationStr("zygosity");
+				var.addAnnotation(index, new Annotation(relZyg));
+			}
+			else {
+				var.addAnnotation(index, new Annotation("Ref"));
+			}
+		}
 	}
 	
 	@Override
