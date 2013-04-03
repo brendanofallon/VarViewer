@@ -6,9 +6,14 @@ public class Annotation implements Serializable {
 
 	private String strValue = null;
 	private Double doubleValue = null;
+	private boolean numeric = false;
 	
 	public Annotation() {
 		//required no-arg constructor
+	}
+	
+	public boolean isNumeric() {
+		return numeric;
 	}
 	
 	public Annotation(String str) {
@@ -17,6 +22,7 @@ public class Annotation implements Serializable {
 	
 	public Annotation(Double dub) {
 		this.doubleValue = dub;
+		numeric = true;
 	}
 	
 	public Double getDoubleValue() {

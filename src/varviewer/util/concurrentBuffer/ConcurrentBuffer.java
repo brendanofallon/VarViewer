@@ -129,7 +129,7 @@ public class ConcurrentBuffer<T> {
 				if (buffer.size() > MAX_BUFFER_SIZE) {
 					try {
 						Thread.sleep(200);
-						System.err.println("Producer is waiting for consumer to catch up....");
+						//System.err.println("Producer is waiting for consumer to catch up....");
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -167,9 +167,9 @@ public class ConcurrentBuffer<T> {
 				if (item != null) {
 					consumer.processItem(item);
 					itemsProcessed++;
-					if (itemsProcessed % 2500 == 0) {
-						System.err.println("Buffer size : " + buffer.size());
-					}
+//					if (itemsProcessed % 2500 == 0) {
+//						System.err.println("Buffer size : " + buffer.size());
+//					}
 				}
 				else {
 					if (stopIfEmpty) {

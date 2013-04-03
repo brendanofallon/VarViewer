@@ -286,14 +286,30 @@ public class ColumnStore {
 			
 		}, 1.0));
 		
-		addColumn(new VarAnnotation<String>("pop.freq", "Pop. Freq.", new TextColumn<Variant>() {
+		VarAnnotation<String> popFreqCol =new VarAnnotation<String>("pop.freq", "Pop. Freq.", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("pop.freq");
 				return val != null ? val.toString() : "0";
 			}
-		}, 1.0));
+		}, 1.0);
+		//Null population frequency values should be converted to zero
+		popFreqCol.setComparator(new Comparator<Variant>() {
+
+			@Override
+			public int compare(Variant arg0, Variant arg1) {
+				Double val0 = arg0.getAnnotationDouble("pop.freq");
+				Double val1 = arg1.getAnnotationDouble("pop.freq");
+				if (val0==null)
+					val0 = 0.0;
+				if (val1 == null)
+					val1 = 0.0;
+				return val0.compareTo(val1);
+			}
+		});
+		addColumn(popFreqCol);
+		
 		
 		addColumn(new VarAnnotation<String>("arup.freq", "ARUP Freq.", new TextColumn<Variant>() {
 

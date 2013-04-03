@@ -26,6 +26,16 @@ public class SimpleAnnotationIndex implements AnnotationIndex, Serializable {
 		}
 	}
 	
+	public String keyForIndex(int index) {
+		for(String key : keyMap.keySet()) {
+			Integer val = keyMap.get(key);
+			if (val.equals(index)) {
+				return key;
+			}
+		}
+		return "?";
+	}
+	
 	@Override
 	public int getIndexForKey(String key) {
 		Integer val = keyMap.get(key);

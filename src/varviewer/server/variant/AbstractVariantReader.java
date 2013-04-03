@@ -127,6 +127,7 @@ public abstract class AbstractVariantReader implements VariantReader {
 			else {
 				annotations[i-COLS_TO_IGNORE] = new Annotation(toks[i].trim());
 			}
+			//System.out.println( ((SimpleAnnotationIndex)index).keyForIndex(i-COLS_TO_IGNORE) + " : " + annotations[i-COLS_TO_IGNORE] + " numeric: " + numericFlags[i]); 
 		}
 		var.setAnnotations(Arrays.asList(annotations));
 		var.setAnnotationIndex(index);

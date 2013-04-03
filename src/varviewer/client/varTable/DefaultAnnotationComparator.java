@@ -31,6 +31,7 @@ public class DefaultAnnotationComparator implements Comparator<Variant> {
 		if (a0 == null && a1 == null) {
 			return 0;
 		}
+		
 		if (a0 == null && a1 != null) {
 			return 1;
 		}
