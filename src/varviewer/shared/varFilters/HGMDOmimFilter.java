@@ -54,8 +54,6 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 		this.excludeNonGeneHits = excludeNonGeneHits;
 	}
 
-
-
 	@Override
 	public boolean variantPasses(Variant var) {
 		String hgmdExact = var.getAnnotationStr(hgmdExactIndex);

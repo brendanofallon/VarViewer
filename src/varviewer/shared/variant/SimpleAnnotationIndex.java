@@ -62,9 +62,10 @@ public class SimpleAnnotationIndex implements AnnotationIndex, Serializable {
 			throw new IllegalArgumentException("Annotation index already contains key: " + key);
 		}
 		int prevSize = size();
-		keyMap.put(key, prevSize);
+		int newIndex = prevSize + 1;
+		keyMap.put(key, newIndex);
 		numericMap.put(key, numeric);
-		return prevSize;
+		return newIndex;
 	}
 
 }

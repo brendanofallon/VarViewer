@@ -397,6 +397,8 @@ public class ColumnStore {
 				boolean hasHGMDGene = hgmdGeneMatch != null && hgmdGeneMatch.length() > 3;
 				boolean hasOmim = omimGeneMatch != null && omimGeneMatch.length() > 3;
 				
+				//System.out.println(var.getAnnotationStr("gene") + " : " + var.getAnnotationStr("cdot") + "hgmdExact: " +hgmdExact + " hgmdGene: " + hgmdGeneMatch + " omim: " + omimGeneMatch);
+				
 				ImageResource img = null;
 				if (hasHGMDExact) {
 					if (hasOmim) {

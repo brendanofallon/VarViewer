@@ -2,7 +2,7 @@ package varviewer.server;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import varviewer.client.services.VarRequestService;
 import varviewer.shared.variant.VariantRequest;
@@ -26,16 +26,16 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 	public VariantRequestResult queryVariant(VariantRequest req)
 			throws IllegalArgumentException {
 		
+		//If the requestHandler has not been initialized, try to initialize it. 
 		if (reqHandler == null) {
-			String springFullPath = "spring.xml";
-			Logger.getLogger(getClass()).info("Loading spring config from " + springFullPath);
-			ApplicationContext context = new FileSystemXmlApplicationContext(springFullPath);
-			if (! context.containsBean("variantRequestHandler")) {
-				throw new IllegalArgumentException("No VariantRequestHandler found in configuration");
-			}
+
+			String path = "spring.xml";
+			Logger.getLogger(getClass()).info("Loading spring config from " + path);
+			ApplicationContext context = new ClassPathXmlApplicationContext(path);
 			reqHandler = (VariantRequestHandler) context.getBean("variantRequestHandler");
 			
-		}
+		}	
+		
 		
 		if (reqHandler != null){
 			VariantRequestResult result = reqHandler.queryVariant(req);
@@ -43,6 +43,8 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 			return result;
 		}
 		else {
+			Logger.getLogger(getClass()).error("Could not initialize variant request handler!");
+			System.err.println("Could not initialize request handler!");
 			return null;
 		}
 	}

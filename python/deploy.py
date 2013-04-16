@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-# Simple deploy script for varviewer, right now just copies contents of war/ directory to /usr/share/tomcat/webapps/VarViewer
+# Simple deploy script for VarViewer. Just tar's up the contents of war/ directory, copies it to remote server,
+# and untars and moves it to the right directory
 # on remote server
 
 import base64
@@ -18,10 +19,13 @@ paramiko.util.log_to_file('deploy.log')
 
 username = 'brendan'
 hostname = sys.argv[1]
-destDir = "/usr/share/tomcat6/webapps/VarViewer/"
+webAppDir = "/usr/share/tomcat6/webapps/"
+destDir = webAppDir + "VarViewer/"
 if (len(sys.argv)>2):
-	destDir = sys.argv[2]
+	destDir = webAppDir + sys.argv[2]
 port = 22
+
+print "Deploying to host: " + hostname + " : " + destDir
 
 sourceDir = "/home/brendan/workspace/VarViewer/"
 
@@ -62,6 +66,7 @@ try:
 	print repr(client.get_transport())
 	print "** Moving files on " + hostname
 	client.exec_command("tar zxvf varviewer.war.tgz")
+	client.exec_command("mkdir " + destDir)
 	client.exec_command("cp -r war/* " + destDir)
 	client.exec_command("cd " + destDir)
 	print "** Executing server side deployment scripts"
