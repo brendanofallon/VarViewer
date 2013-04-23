@@ -1,4 +1,4 @@
-package varviewer.server;
+package varviewer.server.sampleSource;
 
 import java.io.IOException;
 import java.util.List;

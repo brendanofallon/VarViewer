@@ -93,7 +93,7 @@
   
   <servlet>
     <servlet-name>sampleListServlet</servlet-name>
-    <servlet-class>varviewer.server.SampleListServiceImpl</servlet-class>
+    <servlet-class>varviewer.server.sampleSource.SampleListServiceImpl</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>sampleListServlet</servlet-name>

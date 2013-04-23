@@ -6,16 +6,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import varviewer.server.CachingSampleSource;
-import varviewer.server.DirSampleSource;
 import varviewer.server.FilterExecutor;
-import varviewer.server.SampleSource;
 import varviewer.server.SimpleFilterExecutor;
 import varviewer.server.VVProps;
 import varviewer.server.VariantRequestHandler;
 import varviewer.server.annotation.AnnotationKeyIndex;
 import varviewer.server.annotation.AnnotationProvider;
 import varviewer.server.annotation.TestAnnotationProvider;
+import varviewer.server.sampleSource.CachingSampleSource;
+import varviewer.server.sampleSource.DirSampleSource;
+import varviewer.server.sampleSource.SampleSource;
 import varviewer.shared.variant.Variant;
 import varviewer.shared.variant.VariantRequest;
 import varviewer.shared.variant.VariantRequestResult;

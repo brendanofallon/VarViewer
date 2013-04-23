@@ -14,11 +14,9 @@ public class LogoutServiceImpl extends RemoteServiceServlet implements LogoutSer
 
 	@Override
 	public void logout(AuthToken token) {
-		
 		HttpServletRequest req = getThreadLocalRequest();
 		Logger.getLogger(LogoutServiceImpl.class).warn("Attempting to log out user " + token.getUsername() + " from addr:" + req.getRemoteAddr() + " host:" + req.getRemoteHost() );		
 		SecurityContextHolder.clearContext();
-
 	}
 
 }

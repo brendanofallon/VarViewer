@@ -1,4 +1,4 @@
-package varviewer.server;
+package varviewer.server.sampleSource;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import varviewer.server.VVProps;
 import varviewer.server.variant.VariantCollection;
 import varviewer.server.variant.VariantReader;
 import varviewer.shared.HasVariants;

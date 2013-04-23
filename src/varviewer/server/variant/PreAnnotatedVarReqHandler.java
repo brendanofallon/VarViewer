@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import varviewer.server.CachingSampleSource;
 import varviewer.server.FilterExecutor;
-import varviewer.server.SampleSource;
 import varviewer.server.SimpleFilterExecutor;
 import varviewer.server.VariantRequestHandler;
+import varviewer.server.sampleSource.CachingSampleSource;
+import varviewer.server.sampleSource.SampleSource;
 import varviewer.shared.varFilters.PedigreeFilter;
 import varviewer.shared.variant.AnnotationIndex;
 import varviewer.shared.variant.Variant;

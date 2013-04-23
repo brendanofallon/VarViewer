@@ -17,7 +17,7 @@
     </bean>
     
     <!--  SampleSource object to maintain a list of samples and deliver variants from them -->
-	<bean name="sampleSource" class="varviewer.server.DirSampleSource">
+	<bean name="sampleSource" class="varviewer.server.sampleSource.DirSampleSource">
 	    <property name="rootDir" value="/home/brendan/jobwrangler_samples" />
 	    <property name="variantReader" ref="variantReader" />
 	</bean>
