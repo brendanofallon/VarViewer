@@ -2,19 +2,11 @@ package varviewer.client;
 
 import varviewer.shared.AuthToken;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.i18n.client.HasDirection.Direction;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 
 /**
  * A panel with a logout button and username display
@@ -23,8 +15,9 @@ import com.google.gwt.user.client.ui.Label;
  */
 public class AccountStatus extends FocusPanel {
 
-	private HighlightButton logoutButton;
-	private Label usernameLabel;
+	private MenuBar mainMenu;
+	private MenuBar menu;
+	private HorizontalPanel internalPanel;
 	private final VarViewer mainView;
 	
 	public AccountStatus(VarViewer view) {
@@ -34,50 +27,39 @@ public class AccountStatus extends FocusPanel {
 
 	public void setStatus(AuthToken tok) {
 		String username = tok.getUsername();
-		usernameLabel.setText(username);
+		
+		if (menu == null) {
+			menu = new MenuBar();
+			menu.setAutoOpen(true);
+			menu.setStylePrimaryName("accountmenu");
+			mainMenu.addItem(new MenuItem("Settings", new Command() {
+
+				@Override
+				public void execute() {
+					//At some point this will link to account settings screen
+				}
+
+			}));
+			mainMenu.addSeparator();
+			MenuItem item = new MenuItem("Log out", new Command() {
+
+				@Override
+				public void execute() {
+					mainView.logoutCurrentUser();
+				}
+
+			});
+			mainMenu.addItem(item);
+			menu.addItem(username, mainMenu);
+
+			internalPanel.add(menu);
+		}
 	}
 	
 	private void initComponents() {
 		this.setStylePrimaryName("accountstatus");
-		final HorizontalPanel internalPanel = new HorizontalPanel();
+		internalPanel = new HorizontalPanel();
 		this.add(internalPanel);
-		
-		this.addMouseOverHandler(new MouseOverHandler() {
-
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				internalPanel.add(logoutButton);
-				internalPanel.setCellHorizontalAlignment(logoutButton, HorizontalAlignmentConstant.endOf(Direction.LTR));
-			}	
-		});
-		
-		this.addMouseOutHandler(new MouseOutHandler() {
-
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				internalPanel.remove(logoutButton);
-			}
-		});
-		
-
-		
-		Image logoutImage = new Image("images/logoutIcon24.png");
-		logoutButton = new HighlightButton(logoutImage);
-		logoutButton.addClickHandler( new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				mainView.logoutCurrentUser();
-			}
-			
-		});
-		logoutButton.setTitle("Log out");
-		logoutButton.setWidth("24px");
-		logoutButton.setHeight("24px");
-		
-		usernameLabel = new Label("User: no one!");
-		usernameLabel.setStylePrimaryName("statuslabel");
-		internalPanel.add(usernameLabel);
-		internalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+		mainMenu = new MenuBar(true);
 	}
 }

@@ -37,14 +37,12 @@
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/annotations" />
         <property name="username" value="arup" />
-        <property name="password" value="arup" />
     </bean>
 		
 	<bean name="geneDetailHandler" class="varviewer.server.genedb.DBNSFPGeneDB">
 	    <property name="sourceFile" value="geneInfo.csv" />
 	</bean>
 
-	
 	
 	<!--  simple authentication scheme -->
 	<bean id="encoder" class="varviewer.server.auth.PasswordStore" />
