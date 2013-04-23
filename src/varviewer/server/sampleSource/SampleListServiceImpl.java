@@ -27,7 +27,7 @@ public class SampleListServiceImpl extends RemoteServiceServlet implements Sampl
 			sampleDir = (SampleSource) context.getBean("sampleSource");
 		}
 		
-		//re-initialize every time
+		//re-initialize every time to check for changes
 		try {
 			sampleDir.initialize();
 		} catch (IOException e) {

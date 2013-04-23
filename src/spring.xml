@@ -16,10 +16,14 @@
     <bean name="variantReader" class="varviewer.server.variant.ConcurrentVariantReader">
     </bean>
     
-    <!--  SampleSource object to maintain a list of samples and deliver variants from them -->
+	<!--  Reads information from sample 'reviewdir's and feeds them to the SampleSource -->
+    <bean name="infoParser" class="varviewer.server.sampleSource.SecuredSampleInfoParser" />
+    
+    <!--  SampleSource object to maintain a list of samples and deliver variants from them -->    
 	<bean name="sampleSource" class="varviewer.server.sampleSource.DirSampleSource">
 	    <property name="rootDir" value="/home/brendan/jobwrangler_samples" />
 	    <property name="variantReader" ref="variantReader" />
+	    <property name="infoParser" ref="infoParser" />
 	</bean>
 	
 	<!--  Variant annotations come from the annotated_vars file, not from a db.  -->
