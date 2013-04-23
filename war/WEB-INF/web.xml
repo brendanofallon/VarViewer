@@ -5,8 +5,20 @@
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
 
+    <!--  Spring config
+    <context-param>
+   		<param-name>contextConfigLocation</param-name>
+   		<param-value>
+       		/WEB-INF/security-config.xml
+   		</param-value>
+	</context-param>
+    
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    -->
+    
   <!-- Servlets -->
-
  <servlet>
     <servlet-name>textFetchServlet</servlet-name>
     <servlet-class>varviewer.server.textFetch.TextFetchServiceImpl</servlet-class>

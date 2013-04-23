@@ -3,6 +3,8 @@ package varviewer.server;
 import java.io.File;
 
 import org.apache.log4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import varviewer.client.services.SampleListService;
 import varviewer.shared.SampleListResult;
@@ -34,6 +36,19 @@ public class SampleListServiceImpl extends RemoteServiceServlet implements Sampl
 			sampleDir = new DirSampleSource();
 			Logger.getLogger(getClass()).info("Initializing sample source directory on path: " + dirFile.getAbsolutePath());
 			sampleDir.setRootDir(dirFile);
+		}
+		
+		if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (principal instanceof UserDetails) {
+				
+					UserDetails dets = (UserDetails)principal;
+					System.out.println("User " + dets.getUsername() + " listing samples.");
+					
+					
+			}
+		}else {
+			System.out.println("No authenticated user");
 		}
 		
 		//re-initialize every time

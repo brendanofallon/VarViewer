@@ -7,19 +7,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * Interface to a password file. We use jBCrypt to encrypt passwords
+ * Interface to a password file. We use jBCrypt to encrypt passwords. This can also act as a spring
+ * PasswordEncoder
  * @author brendan
  *
  */
-public class PasswordStore {
+public class PasswordStore implements PasswordEncoder {
 
 	private static final String passwordFilename = "vv.passwd";
 	private static final String pathToPasswordFile = System.getProperty("user.home") + "/" + passwordFilename;
 	
 	public PasswordStore() {
 		
+	}
+	
+	@Override
+	public String encode(CharSequence pw) {
+		return BCrypt.hashpw(pw.toString(), BCrypt.gensalt());
+	}
+
+	@Override
+	public boolean matches(CharSequence raw, String encoded) {
+		return BCrypt.checkpw(raw.toString(), encoded);
 	}
 	
 	public static boolean checkPassword(String username, String candidatePassword) {
@@ -64,6 +76,9 @@ public class PasswordStore {
 		return map;
 	}
 	
+
+
+	
 	public static void main(String[] args) {
 		if (args.length==0) {
 			System.out.println("Enter a password to hash");
@@ -72,6 +87,9 @@ public class PasswordStore {
 		String hashed = BCrypt.hashpw(args[0], BCrypt.gensalt());
 		System.out.println( hashed );
 	}
+
+
+
 	
 
 }

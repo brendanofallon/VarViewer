@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!-- Default handler for text-fetching operations -->
+    <bean name="textFetcherHandler" class="varviewer.server.textFetch.FileTextFetcher">
+	</bean>
+	
+    <!--  Object that actually reads variants from a file/url, sampleSources need -->
+    <!-- one of these to do the reading -->
+    <bean name="variantReader" class="varviewer.server.variant.ConcurrentVariantReader">
+    </bean>
+    
+    <!--  SampleSource object to maintain a list of samples and deliver variants from them -->
+	<bean name="sampleSource" class="varviewer.server.DirSampleSource">
+	    <property name="rootDir" value="/home/brendan/jobwrangler_samples" />
+	    <property name="variantReader" ref="variantReader" />
+	</bean>
+	
+	<!--  Variant annotations come from the annotated_vars file, not from a db.  -->
+	<bean name="variantRequestHandler" class="varviewer.server.variant.PreAnnotatedVarReqHandler">
+		<property name="variantSource" ref="sampleSource"/>
+	</bean>
+	
+	
+	<!--  GeneDetails configuration -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/annotations" />
+        <property name="username" value="arup" />
+        <property name="password" value="arup" />
+    </bean>
+		
+	<bean name="geneDetailHandler" class="varviewer.server.genedb.DBNSFPGeneDB">
+	    <property name="sourceFile" value="geneInfo.csv" />
+	</bean>
+
+	
+	
+	<!--  simple authentication scheme -->
+	<bean id="encoder" class="varviewer.server.auth.PasswordStore" />
+
+  	<security:authentication-manager alias="authManager">
+  	    <security:authentication-provider>
+    	  <security:password-encoder ref="encoder"/>
+    	  <security:user-service properties="user.details.props" />
+  		</security:authentication-provider>
+  	</security:authentication-manager>
+		
+</beans>
