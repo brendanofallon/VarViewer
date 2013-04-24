@@ -17,7 +17,11 @@
     </bean>
     
 	<!--  Reads information from sample 'reviewdir's and feeds them to the SampleSource -->
-    <bean name="infoParser" class="varviewer.server.sampleSource.SecuredSampleInfoParser" />
+	<!--  This infoParser lets everyone read every sample it parses -->
+	<bean name="infoParser" class="varviewer.server.sampleSource.DefaultSampleInfoParser" />
+	
+	<!-- This infoParser enforces sample level security, only certain samples are allowed to pass -->
+    <!-- bean name="infoParser" class="varviewer.server.sampleSource.SecuredSampleInfoParser" / -->
     
     <!--  SampleSource object to maintain a list of samples and deliver variants from them -->    
 	<bean name="sampleSource" class="varviewer.server.sampleSource.DirSampleSource">
@@ -39,9 +43,15 @@
         <property name="username" value="arup" />
     </bean>
 		
-	<bean name="geneDetailHandler" class="varviewer.server.genedb.DBNSFPGeneDB">
+	<!--  Use this bean if you want to read gene details info from a text file -->
+	<!-- bean name="geneDetailHandler" class="varviewer.server.genedb.DBNSFPGeneDB">
 	    <property name="sourceFile" value="geneInfo.csv" />
-	</bean>
+	</bean -->
+	
+	<!-- Use this bean if you want to read gene details info from a SQL server -->
+    <bean name="geneDetailHandler" class="varviewer.server.geneDetails.SQLGeneDB">
+          <property name="dataSource" ref="dataSource" />
+    </bean>
 
 	
 	<!--  simple authentication scheme -->

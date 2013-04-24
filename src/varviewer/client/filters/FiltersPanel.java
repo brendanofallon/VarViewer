@@ -5,6 +5,7 @@ import java.util.List;
 
 import varviewer.client.HighlightButton;
 import varviewer.client.VarViewer;
+import varviewer.client.varTable.VariantDisplay;
 import varviewer.shared.varFilters.DeleteriousFilter;
 import varviewer.shared.varFilters.ExonFuncFilter;
 import varviewer.shared.varFilters.GeneFilter;
@@ -17,8 +18,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * The filters panel displays a succession of VariantFilters, whose visual representation
@@ -29,10 +32,15 @@ import com.google.gwt.user.client.ui.SimplePanel;
  */
 public class FiltersPanel extends FlowPanel {
 	
+	private HighlightButton expandButton;
+	private HorizontalPanel topPanel = new HorizontalPanel();
+	private VerticalPanel filterContainer = new VerticalPanel();
 	private List<FilterBox> activeFilters = new ArrayList<FilterBox>();
 	private List<FilterListener> listeners = new ArrayList<FilterListener>();
+	private VariantDisplay displayParent;
 	
-	public FiltersPanel() {
+	public FiltersPanel(VariantDisplay display) {
+		this.displayParent = display;
 		initComponents();
 	}
 	
@@ -70,14 +78,14 @@ public class FiltersPanel extends FlowPanel {
 
 	public void addFilter(FilterBox filter) {
 		activeFilters.add(filter);
-		this.add(filter);
+		filterContainer.add(filter);
 		fireFiltersChanged();
 	}
 	
 	public void removeFilter(FilterBox filterBox) {
 		boolean ok = Window.confirm("Remove filter?");
 		if (ok) {
-			this.remove(filterBox);
+			filterContainer.remove(filterBox);
 			activeFilters.remove(filterBox);
 		}
 		fireFiltersChanged();
@@ -111,12 +119,40 @@ public class FiltersPanel extends FlowPanel {
 		}
 	}
 	
+	protected void collapse() {
+		this.remove(topPanel);
+		this.remove(filterContainer);
+		this.add(expandButton);
+		this.setStylePrimaryName("filterspanel-collapsed");
+		displayParent.setFilterPanelWidth(36.0);
+	}
+	
+	protected void expand() {
+		this.remove(expandButton);
+		this.add(topPanel);
+		this.add(filterContainer);
+		this.setStylePrimaryName("filterspanel");
+		displayParent.setFilterPanelWidth(240.0);
+	}
+	
 	/**
 	 * Create UI components
 	 */
 	private void initComponents() {
 		this.setStylePrimaryName("filterspanel");
 		
+		Image expandImage = new Image("images/expand32.png");
+		expandButton = new HighlightButton(expandImage, new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				expand();
+			}
+			
+		});
+		expandButton.setTitle("Show filters");
+		expandButton.setWidth("34px");
+		expandButton.setHeight("34px");
 		
 		Image backImage = new Image("images/backButton.png");
 		HighlightButton backButton = new HighlightButton(backImage, "Back to sample list", new ClickHandler() {
@@ -126,11 +162,27 @@ public class FiltersPanel extends FlowPanel {
 			}
 		});
 		
-		this.add(backButton);
+		topPanel.add(backButton);
+		
+		Image collapseImage = new Image("images/collapse32.png");
+		HighlightButton collapseButton = new HighlightButton(collapseImage, "Collapse filters", new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				collapse();				
+			}
+			
+		});
+		topPanel.add(collapseButton);
+		this.add(topPanel);
+		
+	
 		backButton.setWidth("130px");
 		SimplePanel spacer1 = new SimplePanel();
 		spacer1.setHeight("20px");
-		this.add(spacer1);
+		filterContainer.add(spacer1);
+		
+		this.add(filterContainer);
 		
 		MaxFreqFilter freqFilter = new MaxFreqFilter();
 		freqFilter.setMaxFreq(0.10);

@@ -128,7 +128,13 @@
 	margin: 0px;
 	width: 240px;
 	min-height: 500px;
-	
+}
+
+.filterspanel-collapsed {
+	border: 0px;
+	margin: 0px;
+	width: 36px;
+	min-height: 500px;
 }
 
 .filterbox {
@@ -206,6 +212,7 @@
 	font-size: 11px;
 	text-shadow: 1px 1px 1px rgba(250, 250, 250, 70); 
 }
+
 
 .textlabel-disabled {
 	font-family: 'Open Sans', sans-serif;

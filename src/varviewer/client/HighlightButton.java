@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class HighlightButton extends FocusPanel {
 
 	private HorizontalPanel interiorPanel = new HorizontalPanel();
+	private Label lab; 
 	
 	public HighlightButton(Image image, ClickHandler handler) {
 		initialize();
@@ -28,7 +29,7 @@ public class HighlightButton extends FocusPanel {
 	
 	public HighlightButton(String text, Image image) {
 		initialize();
-		Label lab = new Label(text);
+		lab = new Label(text);
 		lab.setStylePrimaryName("textlabel");
 		interiorPanel.add(lab);
 		SimplePanel spacer = new SimplePanel();
@@ -39,7 +40,7 @@ public class HighlightButton extends FocusPanel {
 	
 	public HighlightButton(Image image, String text,  ClickHandler handler) {
 		initialize();
-		Label lab = new Label(text);
+		lab = new Label(text);
 		lab.setStylePrimaryName("textlabel");
 		SimplePanel spacer = new SimplePanel();
 		spacer.setWidth("4px");

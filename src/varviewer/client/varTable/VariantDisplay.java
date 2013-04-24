@@ -44,9 +44,13 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 		return filtersPanel.getFilterUserText();
 	}
 	
+	public void setFilterPanelWidth(double size) {
+		this.setWidgetSize(filtersPanel, size);
+	}
+	
 	private void initComponents() {
 		//TODO : These should be obtained from a factory or something, not instantiated here
-		filtersPanel = new FiltersPanel();
+		filtersPanel = new FiltersPanel(this);
 		detailsPanel = new DetailsPanel();
 		
 		this.setStylePrimaryName("variantdisplay");
