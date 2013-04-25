@@ -1,30 +1,24 @@
 package varviewer.client;
 
-import varviewer.client.services.AuthService;
-import varviewer.client.services.AuthServiceAsync;
 import varviewer.shared.AuthToken;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class LoginPanel extends VerticalPanel {
+public class LoginPanel extends VerticalPanel implements LoginListener {
 
 	private TextBox usernameField;
 	private PasswordTextBox passwordField;
-	private VarViewer mainView;
 	
-	public LoginPanel(VarViewer mainView) {
-		this.mainView = mainView;
+	public LoginPanel() {
 		initComponents();
 	}
 	
@@ -62,29 +56,12 @@ public class LoginPanel extends VerticalPanel {
 		this.add(goButton);
 		
 		this.setHeight("500px");
+		
+		AuthManager.getAuthManager().addListener(this);
 	}
 
 	protected void tryLogin(final String username, final String password) {
-		
-		authService.authenticate(username, password, new AsyncCallback<AuthToken>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Server failure when authenticating user: " + username);	
-			}
-
-			@Override
-			public void onSuccess(AuthToken token) {
-				if (token != null) {
-					mainView.checkTokenShowViewer(token);
-					
-				}
-				else {
-					showAccessDeniedLabel();
-				}
-			}
-			
-		});
+		AuthManager.getAuthManager().tryLogin(username, password);
 	}
 	
 	
@@ -92,6 +69,21 @@ public class LoginPanel extends VerticalPanel {
 		Window.alert("Invalid username or password, please try again");
 	}
 
+	@Override
+	public void onSuccessfulLogin(AuthToken tok) {
+		//Do nothing
+	}
+
+	@Override
+	public void onFailedLogin(AuthToken tok) {
+		Window.alert("Username / password not recognized, please try again.");
+	}
+
+	@Override
+	public void onLogout(AuthToken tok) {
+		
+	}
+
 	//private HTML accessDeniedLabel = new HTML("<b>Incorrect username / password, please try again</b>");
-	private final AuthServiceAsync authService = GWT.create(AuthService.class);
+	
 }

@@ -21,7 +21,8 @@
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='varviewer.client.VarViewer'/>
-
+  <!-- entry-point class="varviewer.client.Home"/ -->
+  
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>

@@ -18,10 +18,8 @@ public class AccountStatus extends FocusPanel {
 	private MenuBar mainMenu;
 	private MenuBar menu;
 	private HorizontalPanel internalPanel;
-	private final VarViewer mainView;
 	
-	public AccountStatus(VarViewer view) {
-		this.mainView = view;
+	public AccountStatus() {
 		initComponents();
 	}
 
@@ -45,7 +43,7 @@ public class AccountStatus extends FocusPanel {
 
 				@Override
 				public void execute() {
-					mainView.logoutCurrentUser();
+					AuthManager.getAuthManager().doLogout();
 				}
 
 			});

@@ -6,6 +6,16 @@
          xmlns="http://java.sun.com/xml/ns/javaee">
     
   <!-- Servlets -->
+   <servlet>
+    <servlet-name>listServices</servlet-name>
+    <servlet-class>varviewer.server.services.ListServicesServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>listServices</servlet-name>
+    <url-pattern>/varviewer/listservices</url-pattern>
+  </servlet-mapping>
+  
  <servlet>
     <servlet-name>textFetchServlet</servlet-name>
     <servlet-class>varviewer.server.textFetch.TextFetchServiceImpl</servlet-class>
