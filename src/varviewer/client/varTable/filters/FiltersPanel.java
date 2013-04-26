@@ -1,4 +1,4 @@
-package varviewer.client.filters;
+package varviewer.client.varTable.filters;
 
 import java.util.ArrayList;
 import java.util.List;

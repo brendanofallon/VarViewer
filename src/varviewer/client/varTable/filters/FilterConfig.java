@@ -1,4 +1,5 @@
-package varviewer.client.filters;
+package varviewer.client.varTable.filters;
+
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;

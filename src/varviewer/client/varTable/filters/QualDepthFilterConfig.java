@@ -1,4 +1,4 @@
-package varviewer.client.filters;
+package varviewer.client.varTable.filters;
 
 import varviewer.shared.varFilters.QualityDepthFilter;
 import varviewer.shared.variant.VariantFilter;

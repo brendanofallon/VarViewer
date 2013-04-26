@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.VarListListener;
-import varviewer.client.filters.FilterListener;
-import varviewer.client.filters.FiltersPanel;
 import varviewer.client.serviceUI.ViewSamples;
+import varviewer.client.varTable.filters.FilterListener;
+import varviewer.client.varTable.filters.FiltersPanel;
 import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
 import varviewer.shared.variant.Variant;
 import varviewer.shared.variant.VariantFilter;
