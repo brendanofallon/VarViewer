@@ -1,7 +1,5 @@
 package varviewer.client.sampleView;
 
-import varviewer.client.IGVInterface;
-import varviewer.client.VarViewer;
 import varviewer.shared.SampleInfo;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,9 +23,9 @@ public class SampleDetailView extends FlowPanel {
 	private SampleInfo currentSample = null;
 	private FlowPanel labelsPanel = new FlowPanel();
 	private Grid buttonGrid = new Grid(2,2);
-	private SamplesView sampleViewParent;
+	private DisplayVariantsListener sampleViewParent;
 	
-	public SampleDetailView(SamplesView sampleViewParent) {
+	public SampleDetailView(DisplayVariantsListener sampleViewParent) {
 		this.sampleViewParent = sampleViewParent;
 		this.setStylePrimaryName("sampledetailspanel");
 		header = new Label("No data yet");
@@ -75,13 +73,7 @@ public class SampleDetailView extends FlowPanel {
 	
 	protected void doShowVariants() {
 		if (currentSample != null) {
-			VarViewer.getViewer().getVarDisplay().setSample(currentSample.getSampleID());
-			String bamLinkText = null;
-			if (currentSample.getBamLink() != null) {
-				bamLinkText = IGVInterface.baseURL + "load?file=http://" + Location.getHostName() + "/" + currentSample.getBamLink();
-			}
-			VarViewer.getViewer().getVarDisplay().setBamLink(bamLinkText);
-			sampleViewParent.getVarViewer().showVariantDisplay();
+			sampleViewParent.showVariantsForSample(currentSample);
 		}
 	}
 
@@ -105,7 +97,7 @@ public class SampleDetailView extends FlowPanel {
 		
 		if (currentSample.getVcfLink() != null) {
 			String url = "http://" + Location.getHostName() + "/" + currentSample.getVcfLink();
-			Window.open(url, "_self", "");
+			Window.open(url, "_blank", "");
 		}
 	}
 
@@ -117,7 +109,7 @@ public class SampleDetailView extends FlowPanel {
 		if (currentSample.getBamLink() != null) {
 			String url = "http://genseqar01.aruplab.net/" + currentSample.getBamLink();
 			System.out.println("Showing bam sample " + currentSample.getSampleID() + " at url: " + url);
-			Window.open(url, "_self", "");
+			Window.open(url, "_blank", "");
 		}
 	}
 

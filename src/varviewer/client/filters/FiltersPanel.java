@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.HighlightButton;
-import varviewer.client.VarViewer;
-import varviewer.client.varTable.VariantDisplay;
+import varviewer.client.serviceUI.ViewSamples;
 import varviewer.shared.varFilters.DeleteriousFilter;
 import varviewer.shared.varFilters.ExonFuncFilter;
 import varviewer.shared.varFilters.GeneFilter;
@@ -37,10 +36,10 @@ public class FiltersPanel extends FlowPanel {
 	private VerticalPanel filterContainer = new VerticalPanel();
 	private List<FilterBox> activeFilters = new ArrayList<FilterBox>();
 	private List<FilterListener> listeners = new ArrayList<FilterListener>();
-	private VariantDisplay displayParent;
+	private ViewSamples mainView;
 	
-	public FiltersPanel(VariantDisplay display) {
-		this.displayParent = display;
+	public FiltersPanel(ViewSamples display) {
+		this.mainView = display;
 		initComponents();
 	}
 	
@@ -124,7 +123,8 @@ public class FiltersPanel extends FlowPanel {
 		this.remove(filterContainer);
 		this.add(expandButton);
 		this.setStylePrimaryName("filterspanel-collapsed");
-		displayParent.setFilterPanelWidth(36.0);
+		if (mainView.getVariantDisplay() != null)
+			mainView.getVariantDisplay().setFilterPanelWidth(36.0);
 	}
 	
 	protected void expand() {
@@ -132,7 +132,8 @@ public class FiltersPanel extends FlowPanel {
 		this.add(topPanel);
 		this.add(filterContainer);
 		this.setStylePrimaryName("filterspanel");
-		displayParent.setFilterPanelWidth(240.0);
+		if (mainView.getVariantDisplay() != null)
+			mainView.getVariantDisplay().setFilterPanelWidth(240.0);
 	}
 	
 	/**
@@ -158,7 +159,7 @@ public class FiltersPanel extends FlowPanel {
 		HighlightButton backButton = new HighlightButton(backImage, "Back to sample list", new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				VarViewer.getViewer().showSampleViewer();
+				mainView.showSampleChooser();
 			}
 		});
 		

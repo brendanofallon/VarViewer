@@ -11,21 +11,31 @@ import varviewer.shared.services.ServiceListResult;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class Home implements EntryPoint, LoginListener {
 
 	//Topmost UI element that defines basic layout
 	private DockLayoutPanel mainPanel;
+	private HighlightButton homeButton;
+	private HorizontalPanel topBar;
 	private Panel centerPanel;
 	private LoginPanel loginPanel;
+	private ServiceUI activeService = null;
+	private HandlerRegistration homeButtonReg; //Used to add/ remove click handler from home button
 	
 	@Override
 	public void onModuleLoad() {
@@ -34,9 +44,23 @@ public class Home implements EntryPoint, LoginListener {
 	}
 
 	private void initComponents() {
+		topBar = new HorizontalPanel();
+		Label topLabel = new Label("ARUP NGS Variant Viewer");
+		topBar.setStylePrimaryName("topbar");
+		
+		homeButton = new HighlightButton(new Image("images/homeIcon.png"));
+		homeButton.setTitle("Return to home screen");
+		homeButton.setWidth("31px");
+		homeButton.setHeight("32px");
+		homeButton.setEnabled(false);
+		topBar.add(homeButton);
+		
+		topLabel.setStylePrimaryName("topbarlabel");
+		topBar.add(topLabel);
+		
 		mainPanel = new DockLayoutPanel(Unit.PX);
-		mainPanel.addNorth(new Label("North panel"), 50.0);
-		mainPanel.addWest(new Label("Sidebar"), 60.0);
+		mainPanel.addNorth(topBar, 50.0);
+		//mainPanel.addWest(new Label("Sidebar"), 60.0);
 		centerPanel = new FlowPanel();
 		centerPanel.add(new HTML("<b> CENTER!! </b> "));
 		mainPanel.add(centerPanel);
@@ -62,7 +86,20 @@ public class Home implements EntryPoint, LoginListener {
 	
 	@Override
 	public void onSuccessfulLogin(AuthToken tok) {
-		final String username = tok.getUsername();
+		showAvailableServices();
+		homeButton.setEnabled(true);
+		homeButtonReg = homeButton.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				showAvailableServices();
+			}
+		});
+	}
+
+	protected void showAvailableServices() {
+		unloadService();
+		final String username = AuthManager.getAuthManager().getLoggedInUsername();
 		listServicesService.listServicesForUser(username, new AsyncCallback<ServiceListResult>() {
 
 			@Override
@@ -79,9 +116,9 @@ public class Home implements EntryPoint, LoginListener {
 				showServicesPanel(result);
 			}
 			
-		});
+		});		
 	}
-
+	
 	protected void showServicesPanel(ServiceListResult result) {
 		clearCenterPanel();
 		ServicesPanel servicesPanel = new ServicesPanel(this);
@@ -92,22 +129,35 @@ public class Home implements EntryPoint, LoginListener {
 	public void loadService(ServiceUI service) {
 		clearCenterPanel();
 		service.initialize();
-		
+		Widget w = service.getWidget();
+		centerPanel.add(w);
+		activeService = service;
+	}
+	
+	/**
+	 * 
+	 */
+	public void unloadService() {
+		if (activeService != null) {
+			activeService.close();
+			activeService = null;
+			clearCenterPanel();
+		}
 	}
 
 	@Override
 	public void onFailedLogin(AuthToken tok) {
-		
+		//Nothing to do
 	}
 	
 	@Override
 	public void onLogout(AuthToken tok) {
-		// TODO Auto-generated method stub
-		
+		showLoginPanel();
+		homeButton.setEnabled(false);
+		homeButtonReg.removeHandler();
 	}
 
+	
 	private final ListServicesServiceAsync listServicesService = GWT.create(ListServicesService.class);
-
-
 
 }

@@ -1,12 +1,21 @@
 package varviewer.client.serviceUI;
 
+import varviewer.client.IGVInterface;
+import varviewer.client.sampleView.DisplayVariantsListener;
+import varviewer.client.sampleView.SamplesView;
+import varviewer.client.varTable.VariantDisplay;
+import varviewer.shared.SampleInfo;
+
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ViewSamples implements ServiceUI {
+public class ViewSamples implements ServiceUI, DisplayVariantsListener {
 
+	private FlowPanel mainWidget;
+	private VariantDisplay varDisplay = null;
+	private SamplesView sampleView = null;
 	
 	@Override
 	public Image getIcon() {
@@ -16,14 +25,49 @@ public class ViewSamples implements ServiceUI {
 
 	@Override
 	public void initialize() {
-		//Nothing to do
+		mainWidget = new FlowPanel();
+		varDisplay = new VariantDisplay(this);
+		sampleView = new SamplesView(this);
+		sampleView.refreshSampleList();
+		mainWidget.add(sampleView);
 	}
 
 	@Override
-	public Widget getWidget() {
-		FlowPanel samplesPanel = new FlowPanel();
-		samplesPanel.add(new Label("View samples here"));
-		return samplesPanel;
+	public void close() {
+		varDisplay = null;
+		sampleView = null;
 	}
+	
+	public VariantDisplay getVariantDisplay() {
+		return varDisplay;
+	}
+	
+	/**
+	 * Clear main panel and show the VariantDisplay in it. 
+	 */
+	public void showSampleChooser() {
+		mainWidget.clear();
+		mainWidget.add(sampleView);
+	}
+	
+	@Override
+	public Widget getWidget() {
+		return mainWidget;
+	}
+
+	@Override
+	public void showVariantsForSample(SampleInfo chosenSample) {
+		if (varDisplay == null) {
+			varDisplay = new VariantDisplay(this);
+		}
+		
+		
+		mainWidget.clear();
+		varDisplay.setBamLink( IGVInterface.baseURL + "load?file=http://" + Location.getHostName() + "/" + chosenSample.getBamLink() );
+		varDisplay.setSample(chosenSample.getSampleID());
+		mainWidget.add(varDisplay);
+	}
+
+
 
 }

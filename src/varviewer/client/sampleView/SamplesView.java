@@ -1,6 +1,5 @@
 package varviewer.client.sampleView;
 
-import varviewer.client.VarViewer;
 import varviewer.shared.SampleInfo;
 
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -15,10 +14,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
  */
 public class SamplesView extends FlowPanel implements SampleSelectionListener {
 
-	private VarViewer vvParent = null;
-		
-	public SamplesView(VarViewer parent) {
-		this.vvParent = parent;
+	private DisplayVariantsListener displayListener;
+	
+	public SamplesView(DisplayVariantsListener displayListener) {
+		this.displayListener = displayListener;
 		initComponents();
 	}
 
@@ -43,12 +42,8 @@ public class SamplesView extends FlowPanel implements SampleSelectionListener {
 		mainArea.add(listPanel);
 		
 		//Create sample details panel...
-		sampleDetailsPanel = new SampleDetailView(this);
+		sampleDetailsPanel = new SampleDetailView(displayListener);
 		mainArea.add(sampleDetailsPanel);
-	}
-
-	protected VarViewer getVarViewer() {
-		return vvParent;
 	}
 	
 	/**
@@ -59,8 +54,10 @@ public class SamplesView extends FlowPanel implements SampleSelectionListener {
 	public void updateSelectedSample(SampleInfo selectedSample) {
 		sampleDetailsPanel.setSample(selectedSample);
 	}
+
 	
 	private SampleChooserList listPanel;
 	private SampleDetailView sampleDetailsPanel;
+
 	
 }

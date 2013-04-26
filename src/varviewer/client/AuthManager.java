@@ -15,7 +15,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * Singleton class that keeps track of who's logged in and manages calls to the authService 
- * and logoutService. 
+ * and logoutService. LoginListeners can be added / removed and are informed on login / logout events. 
  * @author brendan
  *
  */

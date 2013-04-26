@@ -1,11 +1,10 @@
 package varviewer.client;
 
-import varviewer.client.sampleView.SamplesView;
+import varviewer.client.serviceUI.ViewSamples;
 import varviewer.client.services.CheckAuthTokenService;
 import varviewer.client.services.CheckAuthTokenServiceAsync;
 import varviewer.client.services.LogoutService;
 import varviewer.client.services.LogoutServiceAsync;
-import varviewer.client.varTable.VariantDisplay;
 import varviewer.shared.AuthToken;
 
 import com.google.gwt.core.client.EntryPoint;
@@ -30,14 +29,6 @@ public class VarViewer implements EntryPoint, LoginListener {
 
 	public void onModuleLoad() {
 		initComponents();
-	}
-
-	/**
-	 * Convenient static access to some VarViewer instance
-	 * @return
-	 */
-	public static VarViewer getViewer() {
-		return viewer;
 	}
 
 	private void initComponents() {
@@ -67,30 +58,7 @@ public class VarViewer implements EntryPoint, LoginListener {
 		LoginPanel loginPanel = new LoginPanel();
 		centerPanel.add(loginPanel);
 	}
-
-	/**
-	 * A reference to the VariantDisplay object used to display all variants
-	 * @return
-	 */
-	public VariantDisplay getVarDisplay() {
-		return varDisplay;
-	}
-
-	/**
-	 * Remove all widgets from main panel and add the varDisplay widget to it
-	 */
-	public void showVariantDisplay() {
-		statusPanel.setStatus(AuthManager.getAuthManager().getToken());
-		centerPanel.clear();
-		centerPanel.add(varDisplay);
-	}
-
-	public void showSampleViewer() {
-		statusPanel.setStatus(AuthManager.getAuthManager().getToken());
-		centerPanel.clear();
-		sampleView.refreshSampleList();
-		centerPanel.add(sampleView);	
-	}
+	
 	
 	@Override
 	public void onSuccessfulLogin(AuthToken tok) {
@@ -101,8 +69,11 @@ public class VarViewer implements EntryPoint, LoginListener {
 		}
 		
 		centerPanel.clear();
-		sampleView.refreshSampleList();
-		centerPanel.add(sampleView);
+		if (sampleView == null) {
+			sampleView = new ViewSamples();
+			sampleView.initialize();
+		}
+		centerPanel.add(sampleView.getWidget());
 	}
 
 	@Override
@@ -122,13 +93,9 @@ public class VarViewer implements EntryPoint, LoginListener {
 	AccountStatus statusPanel;
 	FlowPanel mainPanel; //Root container for all UI elements
 	FlowPanel centerPanel; //Central container, does not include topbar or footer
-	VariantDisplay varDisplay = new VariantDisplay(); //Displays variant table and related panels
-	SamplesView sampleView = new SamplesView(this); //UI element that displays sample list	  
 	private final LogoutServiceAsync logoutService = GWT.create(LogoutService.class);
 	private final CheckAuthTokenServiceAsync authCheckService = GWT.create(CheckAuthTokenService.class);
-
-
-
+	ViewSamples sampleView = null;
 
 }
 

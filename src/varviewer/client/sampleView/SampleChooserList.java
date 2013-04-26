@@ -35,7 +35,7 @@ import com.google.gwt.view.client.TreeViewModel;
 public class SampleChooserList extends FlowPanel {
 
 	private Comparator<SampleInfo> sampleSorter = new SampleDateComparator();
-	private SearchBox searchBox;
+	//private SearchBox searchBox;
 	private List<SampleInfo> allSamples = null;
 	final private SampleTreeNode rootNode = new SampleTreeNode();
 	private SampleViewModel model = null;
@@ -73,8 +73,8 @@ public class SampleChooserList extends FlowPanel {
 	}
 	
 	private void initComponents() {
-		searchBox = new SearchBox(this);
-		this.add(searchBox);
+		//searchBox = new SearchBox(this);
+		//this.add(searchBox);
 
 		model = new SampleViewModel(rootNode);
 		rootNode.setChildren("root", new ArrayList<SampleTreeNode>());

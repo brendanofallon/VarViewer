@@ -14,5 +14,5 @@ public interface SampleSelectionListener {
 	 * @param selectedInfo
 	 */
 	public void updateSelectedSample(SampleInfo selectedInfo);
-	
+		
 }

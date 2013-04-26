@@ -20,6 +20,7 @@ public class HighlightButton extends FocusPanel {
 
 	private HorizontalPanel interiorPanel = new HorizontalPanel();
 	private Label lab; 
+	private boolean enabled = true;
 	
 	public HighlightButton(Image image, ClickHandler handler) {
 		initialize();
@@ -55,6 +56,16 @@ public class HighlightButton extends FocusPanel {
 		interiorPanel.add(image);
 	}
 	
+	
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	private void initialize() {
 		this.add(interiorPanel);
 		setStylePrimaryName("highlightbutton");
@@ -62,7 +73,8 @@ public class HighlightButton extends FocusPanel {
 
 			@Override
 			public void onMouseOver(MouseOverEvent event) {
-				setStylePrimaryName("highlightbutton-hover");
+				if (enabled)
+					setStylePrimaryName("highlightbutton-hover");
 			}
 			
 		});

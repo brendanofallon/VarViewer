@@ -9,6 +9,8 @@ public interface ServiceUI {
 	
 	public Widget getWidget();
 	
+	public void close();
+	
 	public Image getIcon();
 	
 }
