@@ -3,6 +3,8 @@
 # Simple deploy script for VarViewer. Just tar's up the contents of war/ directory, copies it to remote server,
 # and untars and moves it to the right directory
 # on remote server
+#
+# Usage deploy.py [hostname]
 
 import base64
 import getpass

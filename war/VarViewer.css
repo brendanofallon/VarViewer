@@ -71,6 +71,14 @@
 	margin-right: 20px;
 }
 
+.accountsettingspanel {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16pt;
+	margin-left: 50px;
+	margin-top: 50px;
+}
+
+
 .footer {
 	font-family: 'Open Sans', sans-serif;
 	height: 50px;
@@ -122,6 +130,19 @@
 	left: 88px;
 	height: 30px;
 	width: 300px;
+}
+
+.passworddialog {
+	font-family: 'Open Sans', sans-serif;
+	outline: 0px;
+	border: 1px solid rgb(160, 160, 160);
+	border-radius: 10px;
+	-moz-box-shadow: 5px 5x 12px rgb(180, 180, 180);
+	-webkit-box-shadow: 5px 5px 12px rgb(180, 180, 180);
+	box-shadow: 5px 5px 12px rgb(180, 180, 180);
+	padding-left: 20px;
+	padding-right: 20px;
+	background : rgb(255, 255, 255);	
 }
 
 .filterspanel {
@@ -226,6 +247,11 @@
 	font-family: 'Open Sans', sans-serif;
 	font-weight: bold;
 	font-size: 12px;
+}
+
+.textlabel14-light {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
 }
 
 .textlabel14{

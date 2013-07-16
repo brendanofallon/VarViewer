@@ -32,10 +32,7 @@ public class ServicesPanel extends FlowPanel {
 	
 	public void setServices(List<ServiceDescription> services) {
 		for(ServiceDescription desc : services) {
-			if (desc.getClassName().equals("varviewer.client.serviceUI.ViewSamples")) {
 				addService(desc.getServiceUserText(), repo.getService(desc.getServiceID()));
-				
-			}
 		}
 	}
 

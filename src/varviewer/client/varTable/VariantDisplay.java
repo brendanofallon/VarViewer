@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.VarListListener;
-import varviewer.client.serviceUI.ViewSamples;
+import varviewer.client.serviceUI.SampleViewUI;
 import varviewer.client.varTable.filters.FilterListener;
 import varviewer.client.varTable.filters.FiltersPanel;
 import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.SplitLayoutPanel;
  */
 public class VariantDisplay extends SplitLayoutPanel implements VarListListener, ColumnModelListener, FilterListener {
 
-	protected final ViewSamples mainView;
+	protected final SampleViewUI mainView;
 	
-	public VariantDisplay(ViewSamples mainView) {
+	public VariantDisplay(SampleViewUI mainView) {
 		super(4); //Splitters slightly smaller than usual
 		this.mainView = mainView;
 		initComponents();

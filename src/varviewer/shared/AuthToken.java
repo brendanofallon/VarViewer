@@ -3,7 +3,8 @@ package varviewer.shared;
 import java.io.Serializable;
 
 /**
- * These are returned as the result of an authentication attempt
+ * These are returned as the result of an authentication attempt and are stored on the client in the AuthManager
+ * so we can remember who's logged in. 
  * @author brendan
  *
  */

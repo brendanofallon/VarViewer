@@ -3,6 +3,7 @@ package varviewer.server.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,18 @@ public class ListServicesServiceImpl extends RemoteServiceServlet implements Lis
 		ServiceListResult result = new ServiceListResult();
 		List<ServiceDescription> authorizedServices = new ArrayList<ServiceDescription>();
 		result.setServices(authorizedServices);
+		
+		//Some null checks...
+		if (SecurityContextHolder.getContext() == null) {
+			Logger.getLogger(getClass()).warn("Attempt to list services for user " + username + " but there's no security context");
+			return result;
+		}
+		
+		
+		if (SecurityContextHolder.getContext().getAuthentication() == null) {
+			Logger.getLogger(getClass()).warn("Attempt to list services for user " + username + " but there's no authentication object");
+			return result;
+		}
 		
 		if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
 			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

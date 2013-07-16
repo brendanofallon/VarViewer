@@ -57,8 +57,8 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 		if (excludeIntergenic 
 				&& (varType.contains("intergenic") 
 						|| varType.contains("upstream") 
-						|| varType.contains("downstream"))
-						|| (var.getAnnotationStr(geneIndex) != null && var.getAnnotationStr(geneIndex).length() < 2)) {
+						|| varType.contains("downstream")
+						|| (var.getAnnotationStr(geneIndex) != null && var.getAnnotationStr(geneIndex).length() < 2))) {
 			return false;
 		}
 		

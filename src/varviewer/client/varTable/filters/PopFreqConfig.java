@@ -39,17 +39,17 @@ public class PopFreqConfig extends FilterConfig {
 		HTML lab2 = new HTML("(<em> range 0.0-1.0 </em>)");
 		panel.add(lab2);
 		
-		Label lab3 = new Label("Exclude variants seen at ARUP more than");
+		Label lab3 = new Label("Exclude variants with ARUP frequency greater than");
 		panel.add(lab3);
-		arupBox.setText("50");
+		arupBox.setText("0.20");
 		arupBox.setWidth("50px");
 		panel.add(arupBox);
 		
-		Label lab4 = new Label("Exclude with VarBin greater than (1-4)");
-		panel.add(lab4);
-		varBinBox.setText("3");
-		varBinBox.setWidth("50px");
-		panel.add(varBinBox);
+//		Label lab4 = new Label("Exclude with VarBin greater than (1-4)");
+//		panel.add(lab4);
+//		varBinBox.setText("3");
+//		varBinBox.setWidth("50px");
+//		panel.add(varBinBox);
 		
 		interiorPanel.add(panel);
 		interiorPanel.setWidth("250px");
@@ -67,15 +67,17 @@ public class PopFreqConfig extends FilterConfig {
 			}
 			
 			
-			Integer arupTot = Integer.parseInt( arupBox.getText() );
-			Integer varBinMin = Integer.parseInt( varBinBox.getText() );
+			Double arupFreq = Double.parseDouble( arupBox.getText() );
+			if (arupFreq < 0.0 || arupFreq > 1.0) {
+				Window.alert("Please enter a number between 0 and 1.0");
+				return false;
+			}
+			//Integer varBinMin = Integer.parseInt( varBinBox.getText() );
 			
 			
-			this.filter.setArupMax(arupTot);
+			this.filter.setArupMax(arupFreq);
 			this.filter.setMaxFreq(freq);
-			this.filter.setVarBinMin(varBinMin);
-			
-			
+			//this.filter.setVarBinMin(varBinMin);
 			
 			updateInteriorLabelText();
 			return true;
@@ -89,7 +91,7 @@ public class PopFreqConfig extends FilterConfig {
 
 	@Override
 	public void updateInteriorLabelText() {
-		parentBox.setInteriorText("Exclude pop. freq. > " + this.filter.getMaxFreq() + ", ARUP > " + filter.getArupMax() + ", VarBin > " + filter.getVarBinMin());
+		parentBox.setInteriorText("Pop. freq. > " + this.filter.getMaxFreq() + ", ARUP freq. > " + filter.getArupMax() /* + ", VarBin > " + filter.getVarBinMin() */);
 	}
 
 }

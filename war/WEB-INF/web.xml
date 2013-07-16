@@ -16,6 +16,16 @@
     <url-pattern>/varviewer/listservices</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>accountDetails</servlet-name>
+    <servlet-class>varviewer.server.auth.AccountDetailsServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>accountDetails</servlet-name>
+    <url-pattern>/varviewer/accountdetails</url-pattern>
+  </servlet-mapping>
+  
  <servlet>
     <servlet-name>textFetchServlet</servlet-name>
     <servlet-class>varviewer.server.textFetch.TextFetchServiceImpl</servlet-class>
@@ -35,16 +45,6 @@
   <servlet-mapping>
     <servlet-name>logoutServlet</servlet-name>
     <url-pattern>/varviewer/logout</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>checkTokenServlet</servlet-name>
-    <servlet-class>varviewer.server.auth.CheckAuthTokenServiceImpl</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>checkTokenServlet</servlet-name>
-    <url-pattern>/varviewer/checktoken</url-pattern>
   </servlet-mapping>
 
   <servlet>

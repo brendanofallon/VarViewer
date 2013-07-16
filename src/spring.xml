@@ -60,7 +60,7 @@
   	<security:authentication-manager alias="authManager">
   	    <security:authentication-provider>
     	  <security:password-encoder ref="encoder"/>
-    	  <security:user-service properties="user.details.props" />
+    	  <security:user-service id="userService" properties="user.details.props" />
   		</security:authentication-provider>
   	</security:authentication-manager>
 		

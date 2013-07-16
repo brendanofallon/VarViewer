@@ -19,15 +19,16 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	double maxFreq = Double.MAX_VALUE;
 	
 	//Max arup value
-	int arupMax = 100;
+	double arupMax = 1.0;
 	
 	//VarBin min
-	int varBinMin = 3;
+	//int varBinMin = 3;
 	
 	private AnnotationIndex annoIndex = null;
 	private int popFreqIndex = -1;
-	private int arupIndex = -1;
-	private int varbinIndex = -1;
+//	private int arupIndex = -1;
+	private int arupOverallFreqIndex = -1;
+//	private int varbinIndex = -1;
 	
 	public MaxFreqFilter() {
 		//Required no-arg constructor
@@ -36,24 +37,25 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	public void setAnnotationIndex(AnnotationIndex index) {
 		this.annoIndex = index;
 		this.popFreqIndex = index.getIndexForKey("pop.freq");
-		this.arupIndex = index.getIndexForKey("ARUP.freq");
-		this.varbinIndex = index.getIndexForKey("varbin.bin");
+//		this.arupIndex = index.getIndexForKey("ARUP.freq");
+		this.arupOverallFreqIndex = index.getIndexForKey("ARUP.overall.freq");
+//		this.varbinIndex = index.getIndexForKey("varbin.bin");
 	}
 	
-	public int getVarBinMin() {
-		return varBinMin;
-	}
-
-
-
-	public void setVarBinMin(int varBinMin) {
-		this.varBinMin = varBinMin;
-	}
+//	public int getVarBinMin() {
+//		return varBinMin;
+//	}
+//
+//
+//
+//	public void setVarBinMin(int varBinMin) {
+//		this.varBinMin = varBinMin;
+//	}
 
 
 
 	/**
-	 * Set the maximum frequency allowed by this filter
+	 * Set the maximum population (1000 Genomes) frequency allowed by this filter
 	 * @param freq
 	 */
 	public void setMaxFreq(double freq) {
@@ -66,60 +68,54 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	
 	
 	
-	public int getArupMax() {
+	public double getArupMax() {
 		return arupMax;
 	}
 
-	public void setArupMax(int arupMax) {
+	/**
+	 * Set the maximum ARUP frequency allowed by this filter
+	 * @param freq
+	 */
+	public void setArupMax(double arupMax) {
 		this.arupMax = arupMax;
 	}
 
 	@Override
 	public boolean variantPasses(Variant var) {
 		Double freq = var.getAnnotationDouble(popFreqIndex);
-		String arupStr = var.getAnnotationStr(arupIndex);
-		Double varbin = var.getAnnotationDouble(varbinIndex);
+		//String arupStr = var.getAnnotationStr(arupIndex);
+		Double arupFreq = var.getAnnotationDouble(arupOverallFreqIndex);
+		//Double varbin = var.getAnnotationDouble(varbinIndex);
 		
 		
 		if (freq == null)
 			freq = 0.0;
-		if (varbin == null) {
-			varbin = 0.0;
-		}
-		if (arupStr == null) {
-			arupStr = "0 total";
-		}
+		if (arupFreq == null)
+			arupFreq = 0.0;
+//		if (varbin == null) {
+//			varbin = 0.0;
+//		}
+		
 		
 		
 		if (freq > maxFreq) {
 			return false;
 		}
 
-		int arupTot = 0;
-		try {
-
-			int idx = arupStr.indexOf(" tot");
-			if (idx > 0) {
-				arupTot = Integer.parseInt( arupStr.substring(0, idx));
-				if (arupTot > arupMax) {
-					return false;
-				}
-			}
-		}
-		catch(NumberFormatException nfe) {
-
-		}
-
-		if (varbin > varBinMin) {
+		if (arupFreq > arupMax) {
 			return false;
 		}
+
+//		if (varbin > varBinMin) {
+//			return false;
+//		}
 		
 		return true;
 	}
 
 	@Override
 	public String getUserDescription() {
-		return "Excluding variants with population frequency (from 1000 Genomes) greater than " + maxFreq + ", ARUP count greater than " + arupMax + ", and varbin bin# greater than " + varBinMin; 
+		return "Excluding variants with population frequency (from 1000 Genomes) greater than " + maxFreq + " and ARUP frequency greater than " + arupMax; 
 	}
 
 }

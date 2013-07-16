@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import varviewer.client.HighlightButton;
-import varviewer.client.serviceUI.ViewSamples;
+import varviewer.client.serviceUI.SampleViewUI;
 import varviewer.shared.varFilters.DeleteriousFilter;
 import varviewer.shared.varFilters.ExonFuncFilter;
 import varviewer.shared.varFilters.GeneFilter;
@@ -36,9 +36,9 @@ public class FiltersPanel extends FlowPanel {
 	private VerticalPanel filterContainer = new VerticalPanel();
 	private List<FilterBox> activeFilters = new ArrayList<FilterBox>();
 	private List<FilterListener> listeners = new ArrayList<FilterListener>();
-	private ViewSamples mainView;
+	private SampleViewUI mainView;
 	
-	public FiltersPanel(ViewSamples display) {
+	public FiltersPanel(SampleViewUI display) {
 		this.mainView = display;
 		initComponents();
 	}
@@ -187,7 +187,7 @@ public class FiltersPanel extends FlowPanel {
 		
 		MaxFreqFilter freqFilter = new MaxFreqFilter();
 		freqFilter.setMaxFreq(0.10);
-		freqFilter.setArupMax(30);
+		freqFilter.setArupMax(0.20);
 		FilterBox freqFilterBox = new FilterBox(this, "Pop. frequency", freqFilter);
 		PopFreqConfig freqConfig = new PopFreqConfig(freqFilterBox);
 		freqFilterBox.setConfigTool(freqConfig);

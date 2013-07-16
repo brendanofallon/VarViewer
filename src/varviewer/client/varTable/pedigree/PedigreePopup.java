@@ -31,8 +31,8 @@ public class PedigreePopup extends PopupPanel {
 	private FlowPanel mainPanel = new FlowPanel();
 	private HorizontalPanel centerPanel = new HorizontalPanel();
 	private HorizontalPanel bottomPanel = new HorizontalPanel();
-	private SampleChooserPanel includesPanel = new SampleChooserPanel("Intersect");
-	private SampleChooserPanel excludesPanel = new SampleChooserPanel("Subtract");
+	private SampleChooserPanel includesPanel = new SampleChooserPanel("Intersect affected cases");
+	private SampleChooserPanel excludesPanel = new SampleChooserPanel("Subtract healthy controls");
 	private VariantDisplay varDisplay;
 	 
 	public PedigreePopup(VariantDisplay display) {

@@ -5,7 +5,11 @@ import java.util.List;
 
 import varviewer.shared.variant.Variant;
 
+import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -37,7 +41,19 @@ public class VarPage extends CellTable<Variant> {
 				handleSelectionChange( (Variant)selectionModel.getSelectedObject() );
 			}
 		});
+	
 		
+		Column<Variant, Boolean> checkColumn = new Column<Variant, Boolean>(
+			    new CheckboxCell(true, false)) {
+			  @Override
+			  public Boolean getValue(Variant var) {
+			    // Get the value from the selection model.
+			    return selectionModel.isSelected(var);
+			  }
+			};
+		
+		this.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+		this.setColumnWidth(checkColumn, 40, Unit.PX);
 	}
 
 	/**

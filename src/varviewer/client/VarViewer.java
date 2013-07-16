@@ -1,14 +1,9 @@
 package varviewer.client;
 
-import varviewer.client.serviceUI.ViewSamples;
-import varviewer.client.services.CheckAuthTokenService;
-import varviewer.client.services.CheckAuthTokenServiceAsync;
-import varviewer.client.services.LogoutService;
-import varviewer.client.services.LogoutServiceAsync;
+import varviewer.client.serviceUI.SampleViewUI;
 import varviewer.shared.AuthToken;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -21,14 +16,15 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class VarViewer implements EntryPoint, LoginListener {
 
 	//Static reference to VarViewer object 
-	static private VarViewer viewer = null;
+	//static private VarViewer viewer = null;
 	
 	public VarViewer() {
-		viewer = this;
+	//	viewer = this;
 	}
 
 	public void onModuleLoad() {
 		initComponents();
+		showLoginPanel();
 	}
 
 	private void initComponents() {
@@ -70,7 +66,7 @@ public class VarViewer implements EntryPoint, LoginListener {
 		
 		centerPanel.clear();
 		if (sampleView == null) {
-			sampleView = new ViewSamples();
+			sampleView = new SampleViewUI();
 			sampleView.initialize();
 		}
 		centerPanel.add(sampleView.getWidget());
@@ -93,9 +89,7 @@ public class VarViewer implements EntryPoint, LoginListener {
 	AccountStatus statusPanel;
 	FlowPanel mainPanel; //Root container for all UI elements
 	FlowPanel centerPanel; //Central container, does not include topbar or footer
-	private final LogoutServiceAsync logoutService = GWT.create(LogoutService.class);
-	private final CheckAuthTokenServiceAsync authCheckService = GWT.create(CheckAuthTokenService.class);
-	ViewSamples sampleView = null;
+	SampleViewUI sampleView = null;
 
 }
 

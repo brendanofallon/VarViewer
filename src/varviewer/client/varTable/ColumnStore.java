@@ -311,7 +311,7 @@ public class ColumnStore {
 		addColumn(popFreqCol);
 		
 		
-		addColumn(new VarAnnotation<String>("arup.freq", "ARUP Freq.", new TextColumn<Variant>() {
+		addColumn(new VarAnnotation<String>("arup.freq", "ARUP count", new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
@@ -322,6 +322,35 @@ public class ColumnStore {
 			}
 		}, 2.0));
 
+		addColumn(new VarAnnotation<String>("ARUP.overall.freq", "ARUP Freq.", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double val = var.getAnnotationDouble("ARUP.overall.freq");
+				if (val == null) {
+					return "NA";
+				}
+				
+				val *= 100.0;
+				String retStr = "" + val;
+				
+				if (retStr.length()>3)
+					retStr = retStr.substring(0,4);
+				return retStr + "%";
+			}
+		}, 1.0));
+		
+		addColumn(new VarAnnotation<String>("ARUP.freq.details", "ARUP details", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				String val = var.getAnnotationStr("ARUP.freq.details");
+				if (val == null) {
+					return "NA";
+				}
+				return val;
+			}
+		}, 2.0));
 		
 		addColumn(new VarAnnotation<String>("sift.score", "SIFT score", new TextColumn<Variant>() {
 

@@ -1,7 +1,7 @@
 package varviewer.server.textFetch;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import varviewer.client.services.TextFetchService;
 import varviewer.shared.TextFetchResult;
@@ -17,7 +17,7 @@ public class TextFetchServiceImpl extends RemoteServiceServlet implements TextFe
 		
 		if (handler == null) {
 			String springFullPath = "spring.xml";
-			ApplicationContext context = new FileSystemXmlApplicationContext(springFullPath);
+			ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 			if (! context.containsBean("textFetcherHandler")) {
 				throw new IllegalArgumentException("No textFetcherHandler found in configuration");
 			}

@@ -17,6 +17,7 @@ import varviewer.shared.AuthToken;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 
+
 /**
  * Implementation of authentication. Obatains authManager from spring configuration
  * and uses it to attempt authentication. On success calls
@@ -49,17 +50,6 @@ public class AuthServiceImpl extends RemoteServiceServlet implements AuthService
 		
 		
 		if (SecurityContextHolder.getContext().getAuthentication().isAuthenticated()) {
-//			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//			if (principal instanceof UserDetails) {
-//					UserDetails dets = (UserDetails)principal;
-//					System.out.println(dets.getUsername() + " : ");
-//					System.out.println("Not expired : " + dets.isAccountNonExpired() );
-//					for(GrantedAuthority authority : dets.getAuthorities()) {
-//						System.out.println("\t" + authority.getAuthority());	
-//					}
-//					
-//			}
-			
 			Logger.getLogger(AuthServiceImpl.class).info("User " + username + " authenticated successfully");
 			AuthToken token = new AuthToken();
 			token.setUsername(username);

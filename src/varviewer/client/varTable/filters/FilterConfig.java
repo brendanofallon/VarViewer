@@ -64,7 +64,7 @@ public abstract class FilterConfig extends PopupPanel {
 		
 		HorizontalPanel bottomPanel = new HorizontalPanel();
 		bottomPanel.setStylePrimaryName("topborder");
-		interiorPanel.addSouth(bottomPanel, 28.0);
+		interiorPanel.addSouth(bottomPanel, 36.0);
 		
 		Button cancelButton = new Button("Cancel");
 		bottomPanel.add(cancelButton);
@@ -89,8 +89,8 @@ public abstract class FilterConfig extends PopupPanel {
 			}
 		});
 		bottomPanel.add(doneButton);
-		cancelButton.getElement().getStyle().setPadding(3.0, Unit.PX);
-		doneButton.getElement().getStyle().setPadding(3.0, Unit.PX);
+		cancelButton.getElement().getStyle().setPadding(2.0, Unit.PX);
+		doneButton.getElement().getStyle().setPadding(2.0, Unit.PX);
 		
 	}
 	

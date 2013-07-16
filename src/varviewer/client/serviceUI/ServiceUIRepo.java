@@ -14,7 +14,8 @@ public class ServiceUIRepo {
 	private List<Entry> services = new ArrayList<Entry>();
 	
 	public ServiceUIRepo() {
-		addServiceUI("view.samples", new ViewSamples());
+		addServiceUI("view.samples", new SampleViewUI());
+		addServiceUI("account.settings", new AccountSettingsUI());
 	}
 	
 	protected void addServiceUI(String id, ServiceUI service) {

@@ -11,9 +11,10 @@ public class ServiceRepo {
 	private List<ServiceEntry> availableServices = new ArrayList<ServiceEntry>();
 	
 	public ServiceRepo() {
-		addService("view.samples", "View samples", "varviewer.client.serviceUI.ViewSamples", Arrays.asList(new String[]{"ROLE_USER"}));
-		addService("admin.users", "Administer users", "varviewer.client.serviceUI.AdminUsers", Arrays.asList(new String[]{"ROLE_USER"}));
-		addService("admin.all", "Administer everything", "varviewer.client.serviceUI.AdminUsers", Arrays.asList(new String[]{"ROLE_ADMIN"}));
+		addService("view.samples", "View samples", "varviewer.client.serviceUI.SampleViewUI", Arrays.asList(new String[]{"ROLE_USER"}));
+		addService("account.settings", "Account settings", "varviewer.client.serviceUI.AccountSettingsUI", Arrays.asList(new String[]{"ROLE_USER"}));
+//		addService("admin.users", "Administer users", "varviewer.client.serviceUI.AdminUsers", Arrays.asList(new String[]{"ROLE_ADMIN"}));
+//		addService("admin.all", "Administer everything", "varviewer.client.serviceUI.AdminUsers", Arrays.asList(new String[]{"ROLE_ADMIN"}));
 	}
 	
 	public void addService(String id, String userText, String className, List<String> roles) {
