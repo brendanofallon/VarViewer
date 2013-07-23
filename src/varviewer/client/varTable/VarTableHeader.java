@@ -4,6 +4,7 @@ package varviewer.client.varTable;
 import varviewer.client.HighlightButton;
 import varviewer.client.services.TextFetchService;
 import varviewer.client.services.TextFetchServiceAsync;
+import varviewer.client.varTable.cisTrans.CisTransPopup;
 import varviewer.client.varTable.pedigree.PedigreePopup;
 import varviewer.shared.TextFetchResult;
 
@@ -31,19 +32,26 @@ public class VarTableHeader extends HorizontalPanel {
 	final HighlightButton exportButton; 
 	final HighlightButton incidentalsButton;
 	final HighlightButton colMenuButton;
+	final HighlightButton cisTransButton;
 	final HeaderSearchBox searchBox;
 	final PedigreePopup pedPopup;
+	final CisTransPopup cisTransPopup;
 	final ColPickerPopup popup;
 	
 	private String igvLinkText = null;
 	private VarTable tableParent;
 	
-	public VarTableHeader(final VarTable tableParent, ColumnModel colModel, PedigreePopup pedPopup, ColPickerPopup colPopup) {
+	public VarTableHeader(final VarTable tableParent, 
+			ColumnModel colModel, 
+			PedigreePopup pedPopup, 
+			CisTransPopup cisTransPopup, 
+			ColPickerPopup colPopup) {
 		this.tableParent = tableParent;
 		this.setStylePrimaryName("vartableheader");
 		this.add(sampleLabel);
 		sampleLabel.setStylePrimaryName("samplelabel");
 		this.pedPopup = pedPopup;
+		this.cisTransPopup = cisTransPopup;
 		this.popup = colPopup;
 		searchBox = new HeaderSearchBox(tableParent);
 		this.add(searchBox);
@@ -124,13 +132,41 @@ public class VarTableHeader extends HorizontalPanel {
 		colMenuButton.setWidth("24px");
 		colMenuButton.setHeight("24px");
 		
+		
+		Image cisTransImage = new Image("images/pieChart24.png");
+		cisTransButton = new HighlightButton(cisTransImage, new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				doCisTransCompute();
+			}
+			
+		});
+		cisTransButton.setTitle("Perform cis / trans inference on selected variants");
+		this.add(cisTransButton);
+		cisTransButton.setWidth("24px");
+		cisTransButton.setHeight("24px");
+		
+		
 		this.add(pager);
+		
 		
 		this.setCellHorizontalAlignment(sampleLabel, ALIGN_LEFT);
 		this.setCellHorizontalAlignment(searchBox, ALIGN_CENTER);
 		this.setCellHorizontalAlignment(pager, ALIGN_RIGHT);
 		
 		pager.setDisplay(tableParent.getVarPage());
+	}
+
+	protected void doCisTransCompute() {
+		int selectedVariantCount = tableParent.getSelectedVariantCount();
+		if (selectedVariantCount != 2) {
+			Window.alert("Please select two variants before using this feature");
+		}
+		else {
+			cisTransPopup.setPopupPosition(200, 100);
+			cisTransPopup.show();
+		}
 	}
 
 	protected void doIncidentalsFilter() {

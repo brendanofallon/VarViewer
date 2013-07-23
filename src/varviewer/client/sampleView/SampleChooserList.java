@@ -154,7 +154,9 @@ public class SampleChooserList extends FlowPanel {
 		this.remove(sampleBrowser);
 		this.allSamples = treeToList(result);
 		model = new SampleViewModel(rootNode);
+		
 		rootNode.setChildren("root", result.getRootNode().getChildren());
+		
 		sampleBrowser = new CellBrowser(model, rootNode);
 		sampleBrowser.setAnimationEnabled(true);
 		sampleBrowser.setStylePrimaryName("samplebrowser");

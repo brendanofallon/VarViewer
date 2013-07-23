@@ -2,9 +2,11 @@ package varviewer.client.varTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import varviewer.client.services.ExportService;
 import varviewer.client.services.ExportServiceAsync;
+import varviewer.client.varTable.cisTrans.CisTransPopup;
 import varviewer.client.varTable.pedigree.PedigreePopup;
 import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
 import varviewer.shared.variant.Variant;
@@ -66,6 +68,22 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 		varPage.setVisibleRange(0, VISIBLE_ROWS);
 	}
 
+	/**
+	 * Return the number of variants with their checkboxes checked.  
+	 * @return
+	 */
+	public int getSelectedVariantCount() {
+		return varPage.getSelectedVariants().size();
+	}
+	
+	/**
+	 * Return all variants that have their checkboxes checked. 
+	 * @return
+	 */
+	public Set<Variant> getSelectedVariants() {
+		return varPage.getSelectedVariants();
+	}
+	
 	public void handleSearchBoxTextChange(String text) {
 		if (text.trim().length()==0) {
 			searchBoxFilter.clearFilters();
@@ -128,7 +146,8 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	private void initComponents() {
 		PedigreePopup pedPopup = new PedigreePopup(displayParent);
 		ColPickerPopup colPopup = new ColPickerPopup(colModel);
-		header = new VarTableHeader(this, colModel, pedPopup, colPopup);
+		CisTransPopup ctPopup = new CisTransPopup(displayParent);
+		header = new VarTableHeader(this, colModel, pedPopup, ctPopup, colPopup);
 		
 		this.add(header);
 		

@@ -2,6 +2,7 @@ package varviewer.client.varTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import varviewer.shared.variant.Variant;
 
@@ -11,14 +12,14 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent.Handler;
-import com.google.gwt.view.client.SingleSelectionModel;
 
 /**
  * A fairly thin wrapper for a CellTable<Variant>, this just displays a list of variants.
- *  Multiple VarPages make up a single VarTable
  * @author brendan
  *
  */
@@ -33,12 +34,26 @@ public class VarPage extends CellTable<Variant> {
 		super(VarTable.VISIBLE_ROWS, resources);
 		varData.addDataDisplay(this);
 		this.setWidth("100%", true);		
-		final SingleSelectionModel<Variant> selectionModel = new SingleSelectionModel<Variant>();
-		this.setSelectionModel(selectionModel);
+		
+		//Initialize selection model and check box column
+		final MultiSelectionModel<Variant> selectionModel = new MultiSelectionModel<Variant>();
+
+		this.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Variant> createCheckboxManager());
+		
+		
 		selectionModel.addSelectionChangeHandler(new Handler() {
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				handleSelectionChange( (Variant)selectionModel.getSelectedObject() );
+				
+				Set<Variant> selectedVars = selectionModel.getSelectedSet();
+				if (selectedVars.size()==0) {
+					handleSelectionChange( null );	
+				}
+				else {
+					Variant var = selectedVars.iterator().next();
+					handleSelectionChange( var );
+				}
+				
 			}
 		});
 	
@@ -47,7 +62,6 @@ public class VarPage extends CellTable<Variant> {
 			    new CheckboxCell(true, false)) {
 			  @Override
 			  public Boolean getValue(Variant var) {
-			    // Get the value from the selection model.
 			    return selectionModel.isSelected(var);
 			  }
 			};
@@ -76,6 +90,14 @@ public class VarPage extends CellTable<Variant> {
 			varData.setList(vars);		
 			initializeSorters();
 		}
+	}
+	
+	/**
+	 * Return all currently checked (selected) Variants. Set may be empty.  
+	 * @return
+	 */
+	public Set<Variant> getSelectedVariants() {
+		return ((MultiSelectionModel<Variant>) this.getSelectionModel()).getSelectedSet();
 	}
 	
 	/**
