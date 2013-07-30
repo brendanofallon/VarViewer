@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import varviewer.client.services.AuthService;
+import varviewer.server.appContext.SpringContext;
 import varviewer.shared.AuthToken;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -37,7 +37,7 @@ public class AuthServiceImpl extends RemoteServiceServlet implements AuthService
 
 		
 		try {
-			ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+			ApplicationContext context = SpringContext.getContext(); 
 			AuthenticationManager manager = (AuthenticationManager) context.getBean("authManager");
 	        Authentication request = new UsernamePasswordAuthenticationToken(username, password);
 	        Authentication result = manager.authenticate(request);

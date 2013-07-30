@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import varviewer.client.services.AccountDetailsService;
+import varviewer.server.appContext.SpringContext;
 import varviewer.shared.AccountDetails;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -29,7 +29,7 @@ public class AccountDetailsServiceImpl extends RemoteServiceServlet implements A
 		AccountDetails result = new AccountDetails();
 		
 		try {
-			ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");			
+			ApplicationContext context = SpringContext.getContext(); 			
 	        UserDetailsService userService = (UserDetailsService) context.getBean("userService");
 	        UserDetails details = userService.loadUserByUsername(username);
 	        result.setUserName(username);

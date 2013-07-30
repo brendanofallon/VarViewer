@@ -2,9 +2,9 @@ package varviewer.server;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import varviewer.client.services.VarRequestService;
+import varviewer.server.appContext.SpringContext;
 import varviewer.shared.variant.VariantRequest;
 import varviewer.shared.variant.VariantRequestResult;
 
@@ -28,10 +28,7 @@ public class VarRequestServiceImpl extends RemoteServiceServlet implements VarRe
 		
 		//If the requestHandler has not been initialized, try to initialize it. 
 		if (reqHandler == null) {
-
-			String path = "spring.xml";
-			Logger.getLogger(getClass()).info("Loading spring config from " + path);
-			ApplicationContext context = new ClassPathXmlApplicationContext(path);
+			ApplicationContext context = SpringContext.getContext(); 
 			reqHandler = (VariantRequestHandler) context.getBean("variantRequestHandler");
 			
 		}	

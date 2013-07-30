@@ -165,6 +165,7 @@ public class VarTableHeader extends HorizontalPanel {
 		}
 		else {
 			cisTransPopup.setPopupPosition(200, 100);
+			cisTransPopup.refreshResults();
 			cisTransPopup.show();
 		}
 	}

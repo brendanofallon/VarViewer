@@ -1,11 +1,17 @@
 package varviewer.client.varTable.cisTrans;
 
+import varviewer.client.services.CisTransService;
+import varviewer.client.services.CisTransServiceAsync;
 import varviewer.client.varTable.VariantDisplay;
-import varviewer.client.varTable.pedigree.SampleChooserPanel;
+import varviewer.shared.bcrabl.CisTransRequest;
+import varviewer.shared.bcrabl.CisTransResult;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -17,8 +23,6 @@ public class CisTransPopup extends PopupPanel {
 	private FlowPanel mainPanel = new FlowPanel();
 	private HorizontalPanel centerPanel = new HorizontalPanel();
 	private HorizontalPanel bottomPanel = new HorizontalPanel();
-	private SampleChooserPanel includesPanel = new SampleChooserPanel("Intersect affected cases");
-	private SampleChooserPanel excludesPanel = new SampleChooserPanel("Subtract healthy controls");
 	private VariantDisplay varDisplay;
 	 
 	public CisTransPopup(VariantDisplay display) {
@@ -29,6 +33,24 @@ public class CisTransPopup extends PopupPanel {
 		setHeight("350px");
 	}
 
+	public void refreshResults() {
+		CisTransRequest req = new CisTransRequest();
+		
+		cisTransService.computeCisTrans(req, new AsyncCallback<CisTransResult>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Failure! " + caught.getLocalizedMessage());
+			}
+
+			@Override
+			public void onSuccess(CisTransResult result) {
+				mainPanel.add(new Label(result.getMessage()));
+			}
+			
+		});
+	}
+	
 	private void initComponents() {
 		this.add(mainPanel);
 		this.setStylePrimaryName("genericpopup");
@@ -69,4 +91,7 @@ public class CisTransPopup extends PopupPanel {
 	protected void hidePopup() {
 		this.hide();
 	}
+	
+	CisTransServiceAsync cisTransService = (CisTransServiceAsync) GWT.create(CisTransService.class);
+
 }

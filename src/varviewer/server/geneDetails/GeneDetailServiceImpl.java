@@ -1,9 +1,9 @@
 package varviewer.server.geneDetails;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import varviewer.client.services.GeneDetailService;
+import varviewer.server.appContext.SpringContext;
 import varviewer.shared.GeneInfo;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -25,7 +25,7 @@ public class GeneDetailServiceImpl extends RemoteServiceServlet implements GeneD
 	public GeneInfo getDetails(String geneID) {
 		
 		if (geneDetailHandler == null) {
-			ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+			ApplicationContext context = SpringContext.getContext(); 
 			if (! context.containsBean("geneDetailHandler")) {
 				throw new IllegalArgumentException("No GeneDetailHandler found in configuration");
 			}

@@ -98,6 +98,16 @@
   </servlet-mapping>
   
   
+  <servlet>
+    <servlet-name>cisTransServlet</servlet-name>
+    <servlet-class>varviewer.server.bcrabl.CisTransServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>cisTransServlet</servlet-name>
+    <url-pattern>/varviewer/cistrans</url-pattern>
+  </servlet-mapping>
+  
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>VarViewer.html</welcome-file>

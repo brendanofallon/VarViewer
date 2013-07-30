@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import varviewer.client.services.SampleListService;
+import varviewer.server.appContext.SpringContext;
 import varviewer.shared.SampleListResult;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -23,7 +23,7 @@ public class SampleListServiceImpl extends RemoteServiceServlet implements Sampl
 	@Override
 	public SampleListResult getSampleList() {
 		if (sampleDir == null) {
-			ApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+			ApplicationContext context = SpringContext.getContext(); 
 			sampleDir = (SampleSource) context.getBean("sampleSource");
 		}
 		
