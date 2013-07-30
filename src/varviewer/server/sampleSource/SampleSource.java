@@ -1,5 +1,6 @@
 package varviewer.server.sampleSource;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -49,6 +50,13 @@ public interface SampleSource extends HasSamples {
 	 * @return
 	 */
 	public SampleInfo getInfoForSample(String sampleID);
+
+	/**
+	 * Access to the BAM file for this sample
+	 * @param sampleID
+	 * @return
+	 */
+	public File getBAMFileForSample(String sampleID);
 	
 	/**
 	 * Obtain all variants in this sample in a VariantCollection object 

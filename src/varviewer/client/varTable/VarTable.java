@@ -51,6 +51,7 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	}
 	
 	public void setVariants(List<Variant> variants) {
+		this.clearSelectedVariants();
 		fullVariantList = variants;
 		List<Variant> searchBoxPassingVars = new ArrayList<Variant>();
 		if (searchBoxFilter.getFilterCount()>0) {
@@ -82,6 +83,10 @@ public class VarTable extends FlowPanel implements ColumnModelListener, Provides
 	 */
 	public Set<Variant> getSelectedVariants() {
 		return varPage.getSelectedVariants();
+	}
+	
+	public void clearSelectedVariants() {
+		varPage.clearSelectedVariants();
 	}
 	
 	public void handleSearchBoxTextChange(String text) {

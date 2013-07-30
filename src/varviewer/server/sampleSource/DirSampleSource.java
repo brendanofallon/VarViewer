@@ -159,6 +159,26 @@ public class DirSampleSource implements SampleSource {
 			return infoFile.info;
 	}
 
+	public File getBAMFileForSample(String sampleID) {
+		if (! containsSample(sampleID)) {
+			throw new IllegalArgumentException("No sample with sampleID " + sampleID);
+		}
+		
+		
+		SampleInfo info = samples.get(sampleID).info;
+		File sampleDir = samples.get(sampleID).source;
+		String bamPath = info.getBamFile();
+		File bamFile = null;
+		if (bamPath.startsWith("/")) {
+			bamFile = new File(bamPath);
+		}
+		else {
+			bamFile = new File(sampleDir + "/" + bamPath);
+		}
+		
+		return bamFile;
+	}
+	
 	@Override
 	public VariantCollection getVariantsForSample(String sampleID) {
 		if ( containsSample(sampleID)) {

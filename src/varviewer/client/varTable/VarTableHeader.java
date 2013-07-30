@@ -161,7 +161,7 @@ public class VarTableHeader extends HorizontalPanel {
 	protected void doCisTransCompute() {
 		int selectedVariantCount = tableParent.getSelectedVariantCount();
 		if (selectedVariantCount != 2) {
-			Window.alert("Please select two variants before using this feature");
+			Window.alert("Please select two variants before using this feature (currently " + selectedVariantCount + " selected)");
 		}
 		else {
 			cisTransPopup.setPopupPosition(200, 100);

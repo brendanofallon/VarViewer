@@ -4,6 +4,8 @@ import java.io.File;
 import net.sf.samtools.SAMFileReader;
 import net.sf.samtools.SAMRecord;
 import net.sf.samtools.SAMRecordIterator;
+import varviewer.server.sampleSource.SampleSource;
+import varviewer.shared.bcrabl.CisTransRequest;
 import varviewer.shared.bcrabl.CisTransResult;
 import varviewer.shared.variant.Variant;
 
@@ -12,14 +14,35 @@ import varviewer.shared.variant.Variant;
  * @author markebbert
  *
  */
-public class CisTransClassifier {
+public class CisTransClassifier implements CisTransHandler {
 
 	public static final int permittedDist = 150;
 	public static final int requiredMappingQual = 15;
 	public static final int requiredBaseQual = 20;
 
-	public CisTransResult computeCisTransProb(File bamFile, Variant var1, Variant var2) {
+	SampleSource sampleSource = null;
+	
+	public SampleSource getSampleSource() {
+		return sampleSource;
+	}
 
+
+
+	public void setSampleSource(SampleSource sampleSource) {
+		this.sampleSource = sampleSource;
+	}
+
+
+
+	public CisTransResult computeCisTransResult(CisTransRequest req) {
+		
+		Variant var1 = req.getVarA();
+		Variant var2 = req.getVarB();
+		File inputBAMFile = sampleSource.getBAMFileForSample(req.getSampleID());
+		if (! inputBAMFile.exists()) {
+			throw new IllegalArgumentException("Cannot find bam file for sampleID " + req.getSampleID() + " path is: " + inputBAMFile.getAbsolutePath());
+		}
+		
 		//A few sanity checks:
 		if (!var1.getChrom().equals(var2.getChrom())) {
 			throw new IllegalArgumentException("Variants are not on the same chromosome");
@@ -36,12 +59,15 @@ public class CisTransClassifier {
 		// If not, we cannot tell because no reads will span both positions
 
 		int dist = Math.abs(var1Pos - var2Pos);
+		if (dist > permittedDist) {
+			throw new IllegalArgumentException("Variants are not close enough to compute (" + dist + " bases separate them)");
+		}
 
 		int startPos = Math.min(var1Pos, var2Pos) - permittedDist;
 		int endPos = Math.max(var1Pos, var2Pos) + permittedDist;
 
 		// open bam file
-		SAMFileReader inputBAM = new SAMFileReader(bamFile);
+		SAMFileReader inputBAM = new SAMFileReader(inputBAMFile);
 		SAMRecordIterator sit = inputBAM.query(var1.getChrom(), startPos, endPos, false);
 		MappedRead mapped;
 		char baseAtRef1, baseAtRef2;
@@ -96,47 +122,47 @@ public class CisTransClassifier {
 		}
 		inputBAM.close();
 
-		String newLine = System.getProperty("line.separator");
-		String leftAlignFormat = "| %-14s | %-10s | %13.2f%% | %-8.0f |" + newLine;
-		String leftAlignFormatSummary = "| %-10s | %-14s | %11.2f%% | %-8.0f |" + newLine;
-		//				String centerAlignFormat = "| %14s | %10s | %13.2f%% | %8.0f |" + newLine;
-		String totalCovFormat = "%-46s | %-8.0f |" + newLine;
-		System.out.format("+---------------------------------------------------------+" + newLine);
-		System.out.format("|    Min. Mapping Qual: " + requiredMappingQual +
-				"    |     Min. Base Qual " + requiredBaseQual + "     |" + newLine);
-		System.out.format("+----------------+------------+----------------+----------+" + newLine);
-		System.out.format("| Ref/Alt Combo  | Haplotype  | Perc. Reads    | n Reads  |" + newLine);
-		System.out.format("+----------------+------------+----------------+----------+" + newLine);
-
-		System.out.format(leftAlignFormat, "Ref / Ref", var1Ref + "..." + var2Ref,
-				new Double((bothRefs/readCov)*100), bothRefs);
-		System.out.format(leftAlignFormat, "Alt / Ref", var1Alt + "..." + var2Ref,
-				new Double((alt1Only/readCov)*100), alt1Only);
-		System.out.format(leftAlignFormat, "Ref / Alt", var1Ref + "..." + var2Alt,
-				new Double((alt2Only/readCov)*100), alt2Only);
-
-
-		System.out.format(leftAlignFormat, "Alt / Alt", var1Alt + "..." + var2Alt,
-				new Double((bothAlts/readCov)*100), bothAlts);
-		System.out.format(leftAlignFormat, "Misc.", "NA",
-				new Double((misc/readCov)*100), misc);
-
-		System.out.format("+----------------+------------+----------------+----------+" + newLine);
-		System.out.format(totalCovFormat, "", readCov);
-		System.out.format("                                               +----------+" + newLine);
-
-
-		System.out.println("\n");
-		System.out.format("+------------+----------------+--------------+----------+" + newLine);
-		System.out.format("| Cis/Trans  | Haplotype      | Perc. Reads  | n Reads  |" + newLine);
-		System.out.format("+------------+----------------+--------------+----------+" + newLine);			
-
-		System.out.format(leftAlignFormatSummary, "Trans", var1Alt + "..." + var2Ref + " or " +
-				var1Ref + "..." + var2Alt,
-				new Double(( (alt1Only+alt2Only)/readCov)*100), alt1Only+alt2Only);
-		System.out.format(leftAlignFormatSummary, "Cis", var1Alt + "..." + var2Alt,
-				new Double((bothAlts/readCov)*100), bothAlts);
-		System.out.format("+------------+----------------+--------------+----------+" + newLine);
+//		String newLine = System.getProperty("line.separator");
+//		String leftAlignFormat = "| %-14s | %-10s | %13.2f%% | %-8.0f |" + newLine;
+//		String leftAlignFormatSummary = "| %-10s | %-14s | %11.2f%% | %-8.0f |" + newLine;
+//		//				String centerAlignFormat = "| %14s | %10s | %13.2f%% | %8.0f |" + newLine;
+//		String totalCovFormat = "%-46s | %-8.0f |" + newLine;
+//		System.out.format("+---------------------------------------------------------+" + newLine);
+//		System.out.format("|    Min. Mapping Qual: " + requiredMappingQual +
+//				"    |     Min. Base Qual " + requiredBaseQual + "     |" + newLine);
+//		System.out.format("+----------------+------------+----------------+----------+" + newLine);
+//		System.out.format("| Ref/Alt Combo  | Haplotype  | Perc. Reads    | n Reads  |" + newLine);
+//		System.out.format("+----------------+------------+----------------+----------+" + newLine);
+//
+//		System.out.format(leftAlignFormat, "Ref / Ref", var1Ref + "..." + var2Ref,
+//				new Double((bothRefs/readCov)*100), bothRefs);
+//		System.out.format(leftAlignFormat, "Alt / Ref", var1Alt + "..." + var2Ref,
+//				new Double((alt1Only/readCov)*100), alt1Only);
+//		System.out.format(leftAlignFormat, "Ref / Alt", var1Ref + "..." + var2Alt,
+//				new Double((alt2Only/readCov)*100), alt2Only);
+//
+//
+//		System.out.format(leftAlignFormat, "Alt / Alt", var1Alt + "..." + var2Alt,
+//				new Double((bothAlts/readCov)*100), bothAlts);
+//		System.out.format(leftAlignFormat, "Misc.", "NA",
+//				new Double((misc/readCov)*100), misc);
+//
+//		System.out.format("+----------------+------------+----------------+----------+" + newLine);
+//		System.out.format(totalCovFormat, "", readCov);
+//		System.out.format("                                               +----------+" + newLine);
+//
+//
+//		System.out.println("\n");
+//		System.out.format("+------------+----------------+--------------+----------+" + newLine);
+//		System.out.format("| Cis/Trans  | Haplotype      | Perc. Reads  | n Reads  |" + newLine);
+//		System.out.format("+------------+----------------+--------------+----------+" + newLine);			
+//
+//		System.out.format(leftAlignFormatSummary, "Trans", var1Alt + "..." + var2Ref + " or " +
+//				var1Ref + "..." + var2Alt,
+//				new Double(( (alt1Only+alt2Only)/readCov)*100), alt1Only+alt2Only);
+//		System.out.format(leftAlignFormatSummary, "Cis", var1Alt + "..." + var2Alt,
+//				new Double((bothAlts/readCov)*100), bothAlts);
+//		System.out.format("+------------+----------------+--------------+----------+" + newLine);
 		//				System.out.format(totalCovFormat, "", readCov);
 		//				System.out.format("                                               +----------+" + newLine);			
 		//			}
@@ -144,7 +170,26 @@ public class CisTransClassifier {
 		//				throw new RuntimeException("ERROR: The two variants are too far apart to determine cis/trans relationship.");
 		//			}
 
-		return new CisTransResult();
+		
+		CisTransResult result = new CisTransResult();
+		if (readCov == 0) {
+			result.setFailed(true);
+			result.setMessage("No reads span both positions.");
+		}
+		else {
+			result.setFailed(false);
+			result.setCoverage((int)readCov);
+			result.setBothRefs(new Double((bothRefs/readCov)*100) );
+			result.setAlt1Only(new Double((alt1Only/readCov)*100) );
+			result.setAlt2Only(new Double((alt2Only/readCov)*100) );
+			result.setBothAlts(new Double((bothAlts/readCov)*100) );
+			result.setMisc(new Double((misc/readCov)*100) );
+			result.setTransFrac(new Double(( (alt1Only+alt2Only)/readCov)*100));
+			result.setCisFrac(new Double((bothAlts/readCov)*100));
+		}
+		return result;
 
 	}
+
+
 }

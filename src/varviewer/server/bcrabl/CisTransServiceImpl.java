@@ -26,7 +26,15 @@ public class CisTransServiceImpl extends RemoteServiceServlet implements CisTran
 			reqHandler = (CisTransHandler) context.getBean("cisTransHandler");	
 		}	
 		
-		return reqHandler.computeCisTransResult(req);
+		try {
+			CisTransResult result = reqHandler.computeCisTransResult(req);
+			return result;
+		}
+		catch (Exception ex) {
+			CisTransResult result = new CisTransResult();
+			result.setMessage("Error processing sample: " + ex.getLocalizedMessage());
+			return result;
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 package varviewer.server.sampleSource;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,7 +66,11 @@ public class CachingSampleSource implements SampleSource {
 		return getVariantsForSample(sampleID);
 	}
 
-
+	@Override
+	public File getBAMFileForSample(String sampleID) {
+		return source.getBAMFileForSample(sampleID);
+	}
+	
 	@Override
 	public void initialize() throws IOException {
 		source.initialize();
@@ -142,5 +147,7 @@ public class CachingSampleSource implements SampleSource {
 			this.vars = vars;
 		}
 	}
+
+	
 
 }

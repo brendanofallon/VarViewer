@@ -1,10 +1,14 @@
 package varviewer.client.varTable.cisTrans;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import varviewer.client.services.CisTransService;
 import varviewer.client.services.CisTransServiceAsync;
 import varviewer.client.varTable.VariantDisplay;
 import varviewer.shared.bcrabl.CisTransRequest;
 import varviewer.shared.bcrabl.CisTransResult;
+import varviewer.shared.variant.Variant;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
@@ -17,11 +21,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class CisTransPopup extends PopupPanel {
 
 	private FlowPanel mainPanel = new FlowPanel();
-	private HorizontalPanel centerPanel = new HorizontalPanel();
+	private VerticalPanel centerPanel = new VerticalPanel();
 	private HorizontalPanel bottomPanel = new HorizontalPanel();
 	private VariantDisplay varDisplay;
 	 
@@ -34,7 +39,23 @@ public class CisTransPopup extends PopupPanel {
 	}
 
 	public void refreshResults() {
+		
+		
+		Set<Variant> selectedVars = varDisplay.getVarTable().getSelectedVariants();
+		if (selectedVars.size() != 2) {
+			Window.alert("Please select exactly two variants");
+			return;
+		}
+		
+		Iterator<Variant> vit = selectedVars.iterator();
+		Variant varA = vit.next();
+		Variant varB = vit.next();
+		
 		CisTransRequest req = new CisTransRequest();
+		req.setVarA(varA);
+		req.setVarB(varB);
+		req.setSampleID(varDisplay.getSampleID());
+		
 		
 		cisTransService.computeCisTrans(req, new AsyncCallback<CisTransResult>() {
 
@@ -45,12 +66,37 @@ public class CisTransPopup extends PopupPanel {
 
 			@Override
 			public void onSuccess(CisTransResult result) {
-				mainPanel.add(new Label(result.getMessage()));
+				displayResult(result);
 			}
 			
 		});
 	}
 	
+	protected void displayResult(CisTransResult result) {
+		centerPanel.clear();
+		centerPanel.add( makePanel("Total informative reads: ", "" + result.getCoverage()));
+		centerPanel.add( makePanel("Both refs: ", format(result.getBothRefs())));
+		centerPanel.add( makePanel("Alt 1 only: ", format(result.getAlt1Only())));
+		centerPanel.add( makePanel("Alt 2 only: ", format(result.getAlt2Only())));
+		centerPanel.add( makePanel("Both alts: ", format(result.getBothAlts())));
+		centerPanel.add( makePanel("Fraction in trans: ", format(result.getTransFrac())));
+		centerPanel.add( makePanel("Fraction in cis: ", format(result.getCisFrac())));
+	}
+	
+	private static String format(Double x) {
+		String str = "" + x;
+		if (str.length() > 5) {
+			str = str.substring(0, 5);
+		}
+		return str;
+	}
+
+	private HorizontalPanel makePanel(String label1, String label2) {
+		HorizontalPanel panel = new HorizontalPanel();
+		panel.add(new Label(label1));
+		panel.add(new Label(label2));
+		return panel;
+	}
 	private void initComponents() {
 		this.add(mainPanel);
 		this.setStylePrimaryName("genericpopup");
@@ -58,7 +104,7 @@ public class CisTransPopup extends PopupPanel {
 		header.setStylePrimaryName("pedpopuptitle");
 		mainPanel.add(header);
 		
-		
+		mainPanel.add(centerPanel);
 		
 		Button cancelButton = new Button("Cancel");
 		cancelButton.addClickHandler(new ClickHandler() {

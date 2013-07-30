@@ -141,6 +141,11 @@ public class VarPage extends CellTable<Variant> {
 			this.removeColumn( varAnno.col );
 		}
 		displayedAnnotations.clear();
+		clearSelectedVariants();
+	}
+	
+	public void clearSelectedVariants() {
+		((MultiSelectionModel)this.getSelectionModel()).clear();
 	}
 	
 	public void setColumns(ColumnModel model) {

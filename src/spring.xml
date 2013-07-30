@@ -54,7 +54,9 @@
     </bean>
 
     
-    <bean name="cisTransHandler" class="varviewer.server.bcrabl.CisTransFakeImpl"></bean>
+    <bean name="cisTransHandler" class="varviewer.server.bcrabl.CisTransClassifier">
+        <property name="sampleSource" ref="sampleSource" />
+    </bean>
 	
 	<!--  simple authentication scheme -->
 	<bean id="encoder" class="varviewer.server.auth.PasswordStore" />

@@ -111,6 +111,14 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 		varManager.reloadIfRequired();
 	}
 	
+	public String getSampleID() {
+		if (varManager.getSampleNames().size()==1) {
+			return varManager.getSampleNames().get(0);
+		}
+		else {
+			return null;
+		}
+	}
 	
 	/**
 	 * Set the text of the sample label in the header above the variant table
