@@ -1,4 +1,7 @@
 
+body {
+	font-family: 'Open Sans', sans-serif;
+}
 
 #maincontainer {
 	margin: 0px;
@@ -572,4 +575,30 @@
 	-moz-box-shadow: 5px 5x 12px rgb(180, 180, 180);
 	-webkit-box-shadow: 5px 5px 12px rgb(180, 180, 180);
 	box-shadow: 5px 5px 12px rgb(180, 180, 180);	
+}
+
+
+.bcrabl-centerpanel {
+	padding: 20px;
+}
+
+.bcrabl-interiorpanel {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 13px;
+}
+
+.bcrabl-itemA {
+	width: 180px;
+	text-align: right;
+	font-weight: bold;
+}
+
+.bcrabl-itemB {
+	text-align: left;
+	margin-left: 5px;
+}
+
+.centered {
+	margin-left: auto;
+	margin-right: auto;
 }

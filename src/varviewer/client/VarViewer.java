@@ -38,7 +38,7 @@ public class VarViewer implements EntryPoint, LoginListener {
 		mainPanel.add(topBar);
 		centerPanel = new FlowPanel();
 		mainPanel.add(centerPanel);
-		Label footer = new Label("VariantViewer, ARUP Labs, version 1.2 April 23 2013");
+		Label footer = new Label("VariantViewer, ARUP Labs, version 1.3 August 1, 2013");
 		footer.setStylePrimaryName("footer");
 		mainPanel.add(footer);
 		showLoginPanel();

@@ -224,8 +224,6 @@ public class SampleChooserList extends FlowPanel {
 	
 	static class SampleViewModel implements TreeViewModel {
 		
-		
-		
 		SampleCell cell = new SampleCell();
 		final SampleTreeNode root;
 		

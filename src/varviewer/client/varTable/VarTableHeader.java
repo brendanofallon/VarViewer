@@ -164,7 +164,7 @@ public class VarTableHeader extends HorizontalPanel {
 			Window.alert("Please select two variants before using this feature (currently " + selectedVariantCount + " selected)");
 		}
 		else {
-			cisTransPopup.setPopupPosition(200, 100);
+			cisTransPopup.setPopupPosition(300, 130);
 			cisTransPopup.refreshResults();
 			cisTransPopup.show();
 		}

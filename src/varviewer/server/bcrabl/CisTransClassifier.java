@@ -65,7 +65,9 @@ public class CisTransClassifier implements CisTransHandler {
 
 		int startPos = Math.min(var1Pos, var2Pos) - permittedDist;
 		int endPos = Math.max(var1Pos, var2Pos) + permittedDist;
-
+		if (startPos < 1) 
+			startPos = 1;
+		
 		// open bam file
 		SAMFileReader inputBAM = new SAMFileReader(inputBAMFile);
 		SAMRecordIterator sit = inputBAM.query(var1.getChrom(), startPos, endPos, false);

@@ -18,8 +18,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -34,8 +36,6 @@ public class CisTransPopup extends PopupPanel {
 		super(false);
 		this.varDisplay = display;
 		initComponents();
-		setWidth("700px");
-		setHeight("350px");
 	}
 
 	public void refreshResults() {
@@ -57,6 +57,10 @@ public class CisTransPopup extends PopupPanel {
 		req.setSampleID(varDisplay.getSampleID());
 		
 		
+		centerPanel.clear(); //Clear previous results, otherwise may be confusing...
+		HTML waitLabel = new HTML("<h4>Computing cis/trans probabilities, please wait...</h4>");
+		centerPanel.add(waitLabel);
+		
 		cisTransService.computeCisTrans(req, new AsyncCallback<CisTransResult>() {
 
 			@Override
@@ -74,13 +78,15 @@ public class CisTransPopup extends PopupPanel {
 	
 	protected void displayResult(CisTransResult result) {
 		centerPanel.clear();
-		centerPanel.add( makePanel("Total informative reads: ", "" + result.getCoverage()));
-		centerPanel.add( makePanel("Both refs: ", format(result.getBothRefs())));
-		centerPanel.add( makePanel("Alt 1 only: ", format(result.getAlt1Only())));
-		centerPanel.add( makePanel("Alt 2 only: ", format(result.getAlt2Only())));
-		centerPanel.add( makePanel("Both alts: ", format(result.getBothAlts())));
-		centerPanel.add( makePanel("Fraction in trans: ", format(result.getTransFrac())));
-		centerPanel.add( makePanel("Fraction in cis: ", format(result.getCisFrac())));
+		centerPanel.add( makePanel("Total informative reads: ", "" + result.getCoverage() + " reads"));
+		centerPanel.add( makePanel("Both refs: ", format(result.getBothRefs()) + "%"));
+		centerPanel.add( makePanel("Alt 1 only: ", format(result.getAlt1Only()) + "%") );
+		centerPanel.add( makePanel("Alt 2 only: ", format(result.getAlt2Only()) + "%") );
+		centerPanel.add( makePanel("Both alts: ", format(result.getBothAlts()) + "%") );
+		Panel panel = makePanel("Fraction in trans: ", format(result.getTransFrac()) + "%" );
+		panel.getElement().getStyle().setMarginTop(10.0, Unit.PX);
+		centerPanel.add( panel );
+		centerPanel.add( makePanel("Fraction in cis: ", format(result.getCisFrac()) + "%") );
 	}
 	
 	private static String format(Double x) {
@@ -93,8 +99,14 @@ public class CisTransPopup extends PopupPanel {
 
 	private HorizontalPanel makePanel(String label1, String label2) {
 		HorizontalPanel panel = new HorizontalPanel();
-		panel.add(new Label(label1));
-		panel.add(new Label(label2));
+		Label labA = new Label(label1);
+		Label labB = new Label(label2);
+		labA.setStylePrimaryName("bcrabl-itemA");
+		labB.setStylePrimaryName("bcrabl-itemB");
+		
+		panel.add(labA);
+		panel.add(labB);
+		panel.setStylePrimaryName("bcrabl-interiorpanel");
 		return panel;
 	}
 	private void initComponents() {
@@ -105,15 +117,10 @@ public class CisTransPopup extends PopupPanel {
 		mainPanel.add(header);
 		
 		mainPanel.add(centerPanel);
+		centerPanel.setStylePrimaryName("bcrabl-centerpanel");
 		
-		Button cancelButton = new Button("Cancel");
-		cancelButton.addClickHandler(new ClickHandler() {
+		
 
-			@Override
-			public void onClick(ClickEvent event) {
-				hidePopup();
-			}
-		});
 		Button doneButton = new Button("Done");
 		doneButton.addClickHandler(new ClickHandler() {
 
@@ -123,10 +130,8 @@ public class CisTransPopup extends PopupPanel {
 			}
 		});
 		bottomPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
-		bottomPanel.add(cancelButton);
-		cancelButton.getElement().getStyle().setMarginLeft(10, Unit.PX);
 		bottomPanel.add(doneButton);
-		doneButton.getElement().getStyle().setMarginLeft(550, Unit.PX);
+		doneButton.setStylePrimaryName("centered");
 		mainPanel.add(bottomPanel);
 	}
 
