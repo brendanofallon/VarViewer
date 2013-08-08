@@ -24,6 +24,7 @@ public class SampleViewUI implements ServiceUI, DisplayVariantsListener {
 	private SamplesView sampleView = null;
 	private static Image image = new Image("images/viewSamples64.png");
 	
+	
 	@Override
 	public Image getIcon() {
 		return image;
@@ -70,7 +71,7 @@ public class SampleViewUI implements ServiceUI, DisplayVariantsListener {
 		
 		mainWidget.clear();
 		varDisplay.setBamLink( IGVInterface.baseURL + "load?file=http://" + Location.getHostName() + "/" + chosenSample.getBamLink() );
-		varDisplay.setSample(chosenSample.getSampleID());
+		varDisplay.setSample(chosenSample);
 		mainWidget.add(varDisplay);
 	}
 

@@ -113,7 +113,26 @@ public class ColumnStore {
 			public String getValue(Variant var) {
 				return "" + var.getPos();
 			}
-		}, 1.0, new PositionComparator()); 
+		}, 1.0, new PositionComparator());
+		
+		
+		//BCR-ABL specific
+		VarAnnotation<String> inVitroAnnotation = new VarAnnotation<String>("InVitro", "In Vitro (BCR-ABL)", new TextColumn<Variant>() {
+			@Override
+			public String getValue(Variant var) {
+				return var.getAnnotationStr("InVitro");
+			}
+		}, 1.0);
+		addColumn(inVitroAnnotation);
+		
+		VarAnnotation<String> bcrAblKnownAnnotation = new VarAnnotation<String>("Known", "Known (BCR-ABL)", new TextColumn<Variant>() {
+			@Override
+			public String getValue(Variant var) {
+				return var.getAnnotationStr("Known");
+			}
+		}, 1.0);
+		addColumn(bcrAblKnownAnnotation);
+		
 		
 		posAnnotation.setComparator(new Comparator<Variant>() {
 

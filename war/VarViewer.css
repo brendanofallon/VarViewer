@@ -580,6 +580,7 @@ body {
 
 .bcrabl-centerpanel {
 	padding: 20px;
+	width: 300px;
 }
 
 .bcrabl-interiorpanel {
@@ -588,7 +589,7 @@ body {
 }
 
 .bcrabl-itemA {
-	width: 180px;
+	width: 150px;
 	text-align: right;
 	font-weight: bold;
 }

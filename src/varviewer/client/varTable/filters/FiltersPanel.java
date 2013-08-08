@@ -90,6 +90,13 @@ public class FiltersPanel extends FlowPanel {
 		fireFiltersChanged();
 	}
 	
+	public void turnOffAllFilters() {
+		for(FilterBox filter : activeFilters) {
+			filter.turnOffFilter();
+		}
+		fireFiltersChanged();
+	}
+	
 	/**
 	 * Add a FilterListener to the list of objects to be notified when the filter list 
 	 * is updated

@@ -97,6 +97,15 @@ public class FilterBox extends DockLayoutPanel {
 		this.add(interiorText);
 	}
 	
+	/**
+	 * Programmatic turn off check box for this filter. 
+	 */
+	public void turnOffFilter() {
+		if ( isEnabled() ) {
+			enabledBox.setValue(false);
+		}
+	}
+	
 	protected void toggleEnabled() {
 		parentPanel.fireFiltersChanged();
 		if (! isEnabled()) {

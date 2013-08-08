@@ -8,6 +8,9 @@ import varviewer.client.serviceUI.SampleViewUI;
 import varviewer.client.varTable.filters.FilterListener;
 import varviewer.client.varTable.filters.FiltersPanel;
 import varviewer.client.varTable.pedigree.PedigreeVarAnnotation;
+import varviewer.client.varTable.triggers.SampleInfoTrigger;
+import varviewer.client.varTable.triggers.TriggerList;
+import varviewer.shared.SampleInfo;
 import varviewer.shared.variant.Variant;
 import varviewer.shared.variant.VariantFilter;
 
@@ -22,10 +25,22 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 
 	protected final SampleViewUI mainView;
 	
+	//List of triggers to get fired when we load new samples
+	private List<SampleInfoTrigger> infoTriggers = new ArrayList<SampleInfoTrigger>();
+	
 	public VariantDisplay(SampleViewUI mainView) {
 		super(4); //Splitters slightly smaller than usual
 		this.mainView = mainView;
+		infoTriggers.addAll(TriggerList.getAllTriggers());
 		initComponents();
+	}
+	
+	/**
+	 * Add a new trigger that will be fired every time a new sample is loaded
+	 * @param trigger
+	 */
+	public  void addSampleInfoTrigger(SampleInfoTrigger trigger) {
+		infoTriggers.add(trigger);
 	}
 	
 	/**
@@ -95,7 +110,7 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 	@Override
 	public void variantListUpdateBeginning() {
 		varTable.setVariants(new ArrayList<Variant>());
-		setSampleLabelText("Loading data");
+		setSampleLabelText("Loading data...");
 	}
 
 	@Override
@@ -103,14 +118,26 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 		setSampleLabelText("Error loading sample");
 	}
 	
-	public void setSample(String sampleID) {
+	public void setSample(SampleInfo info) {
 		clearPedAnnotations();
-		varManager.setSample( sampleID );
+		
+		varManager.setSample( info.getSampleID() );
 		varManager.setFilters( getActiveFilters() );
 		varManager.setAnnotations( colModel.getKeys() );
+		
+		for(SampleInfoTrigger trigger : infoTriggers) {
+			trigger.handleSampleTrigger(info, this);
+		}
+		
 		varManager.reloadIfRequired();
 	}
 	
+	
+	
+	public FiltersPanel getFiltersPanel() {
+		return filtersPanel;
+	}
+
 	public String getSampleID() {
 		if (varManager.getSampleNames().size()==1) {
 			return varManager.getSampleNames().get(0);
@@ -143,6 +170,10 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 		return varTable;
 	}
 	
+	public ColumnModel getColumnModel() {
+		return colModel;
+	}
+	
 	@Override
 	public void columnStateChanged(ColumnModel model) {
 		//If we want to switch to on-the-fly annotations then we'll need to ask for new
@@ -164,5 +195,7 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 	FiltersPanel filtersPanel;
 	DetailsPanel detailsPanel;
 	VarTable varTable = null;
+
+	
 
 }

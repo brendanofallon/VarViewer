@@ -90,6 +90,10 @@ public class CisTransPopup extends PopupPanel {
 	}
 	
 	private static String format(Double x) {
+		if (x == null || Double.isNaN(x)) {
+			return "NA";
+		}
+		
 		String str = "" + x;
 		if (str.length() > 5) {
 			str = str.substring(0, 5);
@@ -109,6 +113,8 @@ public class CisTransPopup extends PopupPanel {
 		panel.setStylePrimaryName("bcrabl-interiorpanel");
 		return panel;
 	}
+	
+	
 	private void initComponents() {
 		this.add(mainPanel);
 		this.setStylePrimaryName("genericpopup");
@@ -118,8 +124,7 @@ public class CisTransPopup extends PopupPanel {
 		
 		mainPanel.add(centerPanel);
 		centerPanel.setStylePrimaryName("bcrabl-centerpanel");
-		
-		
+			
 
 		Button doneButton = new Button("Done");
 		doneButton.addClickHandler(new ClickHandler() {

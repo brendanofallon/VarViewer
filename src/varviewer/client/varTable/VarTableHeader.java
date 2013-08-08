@@ -133,7 +133,7 @@ public class VarTableHeader extends HorizontalPanel {
 		colMenuButton.setHeight("24px");
 		
 		
-		Image cisTransImage = new Image("images/pieChart24.png");
+		Image cisTransImage = new Image("images/abacus.png");
 		cisTransButton = new HighlightButton(cisTransImage, new ClickHandler() {
 
 			@Override

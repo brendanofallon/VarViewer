@@ -43,10 +43,29 @@ public class ColumnModel {
 		addColumn( ColumnStore.getStore().getColumnForID("igv.link"));
 	}
 	
-	public void addColumn(VarAnnotation varAnno) {
+	public void setColumns(List<VarAnnotation<?>> annos) {
+		colMap.clear();
+		keys.clear();
+		for(VarAnnotation<?> anno : annos) {
+			addColumn(anno, true);
+		}
+		fireColumnChange();
+	}
+	
+	/**
+	 * Add the new column, if silent, don't fire a column change event
+	 * @param varAnno
+	 * @param silent
+	 */
+	public void addColumn(VarAnnotation<?> varAnno, boolean silent) {
 		keys.add(varAnno.id);
 		colMap.put(varAnno.id, varAnno);
-		fireColumnChange();
+		if (! silent)
+			fireColumnChange();
+	}
+	
+	public void addColumn(VarAnnotation<?> varAnno) {
+		addColumn(varAnno, false);
 	}
 	
 	public void removeColumn(String id) {
