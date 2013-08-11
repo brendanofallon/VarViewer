@@ -8,8 +8,6 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -18,14 +16,15 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SampleDetailView extends SampleDetailDisplay {
+public class BCRABLDetailView extends SampleDetailDisplay {
 
 	private SampleInfo currentSample = null;
 	private FlowPanel labelsPanel = new FlowPanel();
-	private Grid buttonGrid = new Grid(2,2);
+	private Grid buttonGrid = new Grid(1,2);
 	private DisplayVariantsListener sampleViewParent;
+	private BCRABLPopup popup = new BCRABLPopup();;
 	
-	public SampleDetailView(DisplayVariantsListener sampleViewParent) {
+	public BCRABLDetailView(DisplayVariantsListener sampleViewParent) {
 		this.sampleViewParent = sampleViewParent;
 		this.setStylePrimaryName("sampledetailspanel");
 		header = new Label("No data yet");
@@ -35,7 +34,7 @@ public class SampleDetailView extends SampleDetailDisplay {
 		
 
 		Image varsImage = new Image("images/mimeIcon3-64.png");
-		buttonGrid.setWidget(0, 0, makeButtonPanel("Show Variants", varsImage, new ClickHandler() {
+		buttonGrid.setWidget(0, 0, makeButtonPanel("View Variants", varsImage, new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
@@ -45,30 +44,14 @@ public class SampleDetailView extends SampleDetailDisplay {
 		
 		buttonGrid.setStylePrimaryName("buttongrid");
 		Image qcImage = new Image("images/qcIcon64.png");
-		buttonGrid.setWidget(0, 1, makeButtonPanel("Quality Metrics", qcImage, new ClickHandler() {
+		buttonGrid.setWidget(0, 1, makeButtonPanel("Generate Report", qcImage, new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				doQualityMetrics();
+				doGenerateReport();
 			}
 		}));
 		
-		Image bamImage = new Image("images/bam2-64.png");
-		buttonGrid.setWidget(1, 0, makeButtonPanel("Download BAM file", bamImage, new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				doDownloadBAM();
-			}
-		}));
 		
-		Image vcfImage = new Image("images/vcfIcon64.png");
-		buttonGrid.setWidget(1, 1, makeButtonPanel("Download VCF file", vcfImage, new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				doDownloadVCF();
-			}
-		}));
 	}
 	
 	protected void doShowVariants() {
@@ -77,41 +60,17 @@ public class SampleDetailView extends SampleDetailDisplay {
 		}
 	}
 
-	protected void doQualityMetrics() {
+	protected void doGenerateReport() {
 		if (currentSample == null) {
 			return;
 		}
 		
-		if (currentSample.getQCLink() != null) {
-			
-			String url = "http://" + Location.getHostName() + "/" + currentSample.getQCLink();
-			System.out.println("Showing qc metrics sample " + currentSample.getSampleID() + " at url: " + url);
-			Window.open(url, "_blank", "");
-		}
+		popup.refreshResults(currentSample);
+		popup.show();
+		
 	}
 
-	protected void doDownloadVCF() {
-		if (currentSample == null) {
-			return;
-		}
-		
-		if (currentSample.getVcfLink() != null) {
-			String url = "http://" + Location.getHostName() + "/" + currentSample.getVcfLink();
-			Window.open(url, "_blank", "");
-		}
-	}
-
-	protected void doDownloadBAM() {
-		if (currentSample == null) {
-			return;
-		}
-		
-		if (currentSample.getBamLink() != null) {
-			String url = "http://genseqar01.aruplab.net/" + currentSample.getBamLink();
-			System.out.println("Showing bam sample " + currentSample.getSampleID() + " at url: " + url);
-			Window.open(url, "_blank", "");
-		}
-	}
+	
 
 	/**
 	 * Makes a 'bigbutton' and returns it as a widget
@@ -230,7 +189,4 @@ public class SampleDetailView extends SampleDetailDisplay {
 	private AlignedPanel submitterPanel  = null;
 	private AlignedPanel datePanel  = null;
 
-
-	
-	
 }

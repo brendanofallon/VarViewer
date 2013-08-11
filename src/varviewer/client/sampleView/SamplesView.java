@@ -5,6 +5,7 @@ import varviewer.shared.SampleInfo;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
  * Displays a list of samples in fancy graphical format. Mostly just a wrapper for a
@@ -42,8 +43,10 @@ public class SamplesView extends FlowPanel implements SampleSelectionListener {
 		mainArea.add(listPanel);
 		
 		//Create sample details panel...
-		sampleDetailsPanel = new SampleDetailView(displayListener);
-		mainArea.add(sampleDetailsPanel);
+		//sampleDetailsPanel = new SampleDetailView(displayListener);
+		detailsContainer = new SimplePanel();
+		detailsContainer.add(new HTML("<h4> Select a sample to view </h4>"));
+		mainArea.add(detailsContainer);
 	}
 	
 	/**
@@ -52,12 +55,16 @@ public class SamplesView extends FlowPanel implements SampleSelectionListener {
 	 * @param selectedSample
 	 */
 	public void updateSelectedSample(SampleInfo selectedSample) {
-		sampleDetailsPanel.setSample(selectedSample);
+	
+		SampleDetailDisplay sampleDisplay = DetailViewFactory.getDetailDisplay(selectedSample, displayListener);
+		sampleDisplay.displayDetailsForSample(selectedSample);
+		detailsContainer.clear();
+		detailsContainer.add(sampleDisplay);
 	}
 
 	
 	private SampleChooserList listPanel;
 	private SampleDetailView sampleDetailsPanel;
-
+	private SimplePanel detailsContainer;
 	
 }

@@ -108,6 +108,16 @@
   </servlet-mapping>
   
   
+  <servlet>
+    <servlet-name>bcrAblReportServlet</servlet-name>
+    <servlet-class>varviewer.server.bcrabl.BCRABLReportServiceImpl</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>bcrAblReportServlet</servlet-name>
+    <url-pattern>/varviewer/bcrablreport</url-pattern>
+  </servlet-mapping>
+  
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>VarViewer.html</welcome-file>

@@ -57,6 +57,12 @@
     <bean name="cisTransHandler" class="varviewer.server.bcrabl.CisTransClassifier">
         <property name="sampleSource" ref="sampleSource" />
     </bean>
+    
+    <bean name="bcrablReportHandler" class="varviewer.server.bcrabl.SimpleReportGenerator">
+        <property name="sampleSource" ref="sampleSource" />
+        <property name="cisTransHandler" ref="cisTransHandler" />
+    </bean>
+    
 	
 	<!--  simple authentication scheme -->
 	<bean id="encoder" class="varviewer.server.auth.PasswordStore" />
