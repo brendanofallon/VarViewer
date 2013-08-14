@@ -53,6 +53,7 @@ public class SearchBoxVariantFilter implements VariantFilter {
 		if (term.startsWith("chr")) {
 			if (! term.contains(":") && term.length()<6)
 				return new RegionFilter(term.replace("chr", ""));
+			
 			if (term.contains(":")) {
 				String[] toks = term.split(":");
 				if (toks.length==0) {
@@ -141,7 +142,7 @@ public class SearchBoxVariantFilter implements VariantFilter {
 		@Override
 		public boolean variantPasses(Variant var) {
 			String varGene = var.getAnnotationStr("gene");
-			if (varGene != null && varGene.startsWith(geneName)) {
+			if (varGene != null && varGene.toUpperCase().startsWith(geneName)) {
 				return true;
 			}
 			return false;

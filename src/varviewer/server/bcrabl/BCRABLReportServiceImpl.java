@@ -27,7 +27,7 @@ public class BCRABLReportServiceImpl extends RemoteServiceServlet implements BCR
 		}
 		catch (Exception ex) {
 			BCRABLReport report = new BCRABLReport();
-			report.setMessage("Error processing sample: " + ex.getLocalizedMessage());
+			report.setMessage("Error processing sample: " + ex.getMessage());
 			return report;
 		}
 	

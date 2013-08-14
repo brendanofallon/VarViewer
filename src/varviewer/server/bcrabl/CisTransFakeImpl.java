@@ -29,4 +29,9 @@ public class CisTransFakeImpl implements CisTransHandler {
 		return result;
 	}
 
+	@Override
+	public boolean closeEnoughToCompute(CisTransRequest req) {
+		return true;
+	}
+
 }

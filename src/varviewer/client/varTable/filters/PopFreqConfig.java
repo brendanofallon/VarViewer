@@ -3,10 +3,12 @@ package varviewer.client.varTable.filters;
 import varviewer.shared.varFilters.MaxFreqFilter;
 import varviewer.shared.variant.VariantFilter;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 
 public class PopFreqConfig extends FilterConfig {
@@ -14,6 +16,7 @@ public class PopFreqConfig extends FilterConfig {
 	private TextBox freqBox = new TextBox();
 	private TextBox arupBox = new TextBox();
 	private TextBox varBinBox = new TextBox();
+	
 	private MaxFreqFilter filter;
 	
 	public PopFreqConfig(FilterBox parent) {
@@ -29,21 +32,31 @@ public class PopFreqConfig extends FilterConfig {
 		
 		
 		FlowPanel panel = new FlowPanel();
-		Label lab = new Label("Exclude all variants with population frequency greater than ");
-		panel.add(lab);
+		HorizontalPanel freqPanel = new HorizontalPanel();
+		Label lab = new Label("Exclude all variants with minor allele frequency (MAF) > ");
+		lab.setStylePrimaryName("interiortext");
+		lab.getElement().getStyle().setMarginRight(10, Unit.PX);
+		freqPanel.add(lab);
 		
 		freqBox.setText("0.10");
 		freqBox.setWidth("50px");
-		panel.add(freqBox);
+		freqPanel.add(freqBox);
+		panel.add(freqPanel);
 		
-		HTML lab2 = new HTML("(<em> range 0.0-1.0 </em>)");
-		panel.add(lab2);
+		//spacer
+		SimplePanel spacer = new SimplePanel();
+		spacer.setHeight("30px");
+		panel.add(spacer);
 		
+		HorizontalPanel arupPanel = new HorizontalPanel();
 		Label lab3 = new Label("Exclude variants with ARUP frequency greater than");
-		panel.add(lab3);
+		lab3.setStylePrimaryName("interiortext");
+		lab3.getElement().getStyle().setMarginRight(10, Unit.PX);
+		arupPanel.add(lab3);
 		arupBox.setText("0.20");
 		arupBox.setWidth("50px");
-		panel.add(arupBox);
+		arupPanel.add(arupBox);
+		panel.add(arupPanel);
 		
 //		Label lab4 = new Label("Exclude with VarBin greater than (1-4)");
 //		panel.add(lab4);

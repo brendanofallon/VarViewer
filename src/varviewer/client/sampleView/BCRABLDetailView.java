@@ -1,56 +1,56 @@
 package varviewer.client.sampleView;
 
+import varviewer.client.bcrablReporter.BCRABLReportService;
+import varviewer.client.bcrablReporter.BCRABLReportServiceAsync;
 import varviewer.shared.SampleInfo;
+import varviewer.shared.bcrabl.BCRABLReport;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOutEvent;
-import com.google.gwt.event.dom.client.MouseOutHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class BCRABLDetailView extends SampleDetailDisplay {
 
 	private SampleInfo currentSample = null;
+	private HorizontalPanel labelsWrapper = new HorizontalPanel();
 	private FlowPanel labelsPanel = new FlowPanel();
-	private Grid buttonGrid = new Grid(1,2);
+	private HorizontalPanel buttonGrid = new HorizontalPanel();
+	private VerticalPanel reportPanel = new VerticalPanel();
 	private DisplayVariantsListener sampleViewParent;
-	private BCRABLPopup popup = new BCRABLPopup();;
 	
 	public BCRABLDetailView(DisplayVariantsListener sampleViewParent) {
 		this.sampleViewParent = sampleViewParent;
 		this.setStylePrimaryName("sampledetailspanel");
+		
 		header = new Label("No data yet");
 		header.setStylePrimaryName("sampledetailsheader");
 		this.add(header);
-		this.add(labelsPanel);
-		
+		labelsWrapper.add(labelsPanel);
+		this.add(labelsWrapper);
+		this.add(buttonGrid);
+		this.add(reportPanel);
+		reportPanel.setStylePrimaryName("bcrabl-reportpanel");
 
-		Image varsImage = new Image("images/mimeIcon3-64.png");
-		buttonGrid.setWidget(0, 0, makeButtonPanel("View Variants", varsImage, new ClickHandler() {
+		Button showVarsButton = new Button("View variants", new ClickHandler() {
 
 			@Override
 			public void onClick(ClickEvent event) {
 				doShowVariants();
 			}
-		}));
+			
+		});
 		
-		buttonGrid.setStylePrimaryName("buttongrid");
-		Image qcImage = new Image("images/qcIcon64.png");
-		buttonGrid.setWidget(0, 1, makeButtonPanel("Generate Report", qcImage, new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				doGenerateReport();
-			}
-		}));
-		
+		labelsWrapper.add(showVarsButton);
+		showVarsButton.getElement().getStyle().setMargin(30.0, Unit.PX);
 		
 	}
 	
@@ -65,51 +65,43 @@ public class BCRABLDetailView extends SampleDetailDisplay {
 			return;
 		}
 		
-		popup.refreshResults(currentSample);
-		popup.show();
+		HTML waitLabel = new HTML("<h4>Generating report, please wait...</h4>");
+		reportPanel.add(waitLabel);
+		
+		reportService.generateBCRABLReport(currentSample, new AsyncCallback<BCRABLReport>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error generating report: " + caught.getLocalizedMessage());
+			}
+
+			@Override
+			public void onSuccess(BCRABLReport result) {
+				showReport(result);
+			}
+			
+		});
+		
+		
+	}
+
+	protected void showReport(BCRABLReport result) {
+		reportPanel.clear();
+		reportPanel.add(new Label(result.getMessage()));
+		for(String text : result.getReportText()) {
+			reportPanel.add(new Label(text));	
+		}
 		
 	}
 
 	
-
-	/**
-	 * Makes a 'bigbutton' and returns it as a widget
-	 * @param label
-	 * @param image
-	 * @param handler
-	 * @return
-	 */
-	private Widget makeButtonPanel(String label, Image image, ClickHandler handler) {
-		final FocusPanel wrapper = new FocusPanel();
-		FlowPanel panel = new FlowPanel();
-		panel.add(image);
-		panel.add(new Label(label));
-		wrapper.setStylePrimaryName("bigbutton");
-		wrapper.addMouseOverHandler(new MouseOverHandler() {
-			@Override
-			public void onMouseOver(MouseOverEvent event) {
-				wrapper.setStylePrimaryName("bigbutton-hover");
-			}
-		});
-		wrapper.addMouseOutHandler(new MouseOutHandler() {
-
-			@Override
-			public void onMouseOut(MouseOutEvent event) {
-				wrapper.setStylePrimaryName("bigbutton");
-			}
-		});
-		
-		if (handler != null) 
-			wrapper.addClickHandler(handler);
-		wrapper.add(panel);
-		return wrapper;
-	}
 	
 	
 	@Override
 	public void displayDetailsForSample(SampleInfo sampleInfo) {
 		this.currentSample = sampleInfo;
 		updateInfo();		
+		doGenerateReport();
 	}
 	
 	private void updateInfo() {
@@ -141,7 +133,7 @@ public class BCRABLDetailView extends SampleDetailDisplay {
 			labelsPanel.add(analysisTypePanel);
 			labelsPanel.add(datePanel);
 			labelsPanel.add(submitterPanel);
-			this.add(buttonGrid);
+			
 		}
 		else {
 			
@@ -188,5 +180,7 @@ public class BCRABLDetailView extends SampleDetailDisplay {
 	private AlignedPanel analysisTypePanel = null;
 	private AlignedPanel submitterPanel  = null;
 	private AlignedPanel datePanel  = null;
+
+	BCRABLReportServiceAsync reportService = (BCRABLReportServiceAsync) GWT.create(BCRABLReportService.class);
 
 }

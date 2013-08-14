@@ -195,8 +195,8 @@ public class DirSampleSource implements SampleSource {
 			else 
 				varsFile = new File(sampleDir + "/" + varsPath);
 			
-			if (!varsFile.exists()) {
-				Logger.getLogger(getClass()).warn("IO error reading variants for " + sampleID + " annotated vars file " + varsFile.getAbsolutePath() + " does not exist" );
+			if (!varsFile.exists() || (! varsFile.isFile())) {
+				Logger.getLogger(getClass()).warn("For sample " + sampleID + " annotated vars file " + varsFile.getAbsolutePath() + " does not exist" );
 				return null;
 			}
 			

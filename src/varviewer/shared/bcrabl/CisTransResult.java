@@ -47,7 +47,6 @@ public class CisTransResult implements Serializable {
 		this.cisFrac = cisFrac;
 	}
 
-	int reads;
 	
 	public CisTransResult() {
 		//must have no-arg constructor
@@ -101,13 +100,6 @@ public class CisTransResult implements Serializable {
 		this.misc = misc;
 	}
 
-	public int getReads() {
-		return reads;
-	}
-
-	public void setReads(int reads) {
-		this.reads = reads;
-	}
 	
 	
 }

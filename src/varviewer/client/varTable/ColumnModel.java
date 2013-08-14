@@ -37,7 +37,7 @@ public class ColumnModel {
 		addColumn( ColumnStore.getStore().getColumnForID("zygosity"));
 		addColumn( ColumnStore.getStore().getColumnForID("cdot"));
 		addColumn( ColumnStore.getStore().getColumnForID("pdot"));
-		addColumn( ColumnStore.getStore().getColumnForID("pop.freq"));
+		addColumn( ColumnStore.getStore().getColumnForID("pop.freq.maf"));
 		addColumn( ColumnStore.getStore().getColumnForID("disease.pics"));
 		addColumn( ColumnStore.getStore().getColumnForID("rsnum"));
 		addColumn( ColumnStore.getStore().getColumnForID("igv.link"));

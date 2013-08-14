@@ -32,7 +32,17 @@ public class CisTransClassifier implements CisTransHandler {
 		this.sampleSource = sampleSource;
 	}
 
-
+	public boolean closeEnoughToCompute(CisTransRequest req) {
+		Variant var1 = req.getVarA();
+		Variant var2 = req.getVarB();
+		int var1Pos = var1.getPos();
+		int var2Pos = var2.getPos();
+		int dist = Math.abs(var1Pos - var2Pos);
+		if (dist > permittedDist) {
+			return false;
+		}
+		return true;
+	}
 
 	public CisTransResult computeCisTransResult(CisTransRequest req) {
 		

@@ -6,5 +6,7 @@ import varviewer.shared.bcrabl.CisTransResult;
 //Interface for things that can implement bcr-able style cis/trans computations
 public interface CisTransHandler {
 
+	public boolean closeEnoughToCompute(CisTransRequest req);
+	
 	public CisTransResult computeCisTransResult(CisTransRequest req);
 }

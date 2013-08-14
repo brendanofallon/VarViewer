@@ -1,5 +1,6 @@
 package varviewer.server.bcrabl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -20,6 +21,8 @@ import varviewer.shared.variant.Variant;
  */
 public class SimpleReportGenerator implements ReportHandler {
 
+	public static final String NEGATIVE_RESULT_MESSAGE = "No variants were detected by this assay.";
+	
 	SampleSource sampleSource = null;
 	CisTransHandler cisTransHandler = new CisTransClassifier();
 	
@@ -46,6 +49,11 @@ public class SimpleReportGenerator implements ReportHandler {
 		BCRABLReport report = new BCRABLReport();
 		
 		VariantCollection vars = sampleSource.getVariantsForSample(info.getSampleID());
+		if (vars == null) {
+			report.setMessage(NEGATIVE_RESULT_MESSAGE);
+			return report;
+		}
+		
 		//Sanity check
 		if (vars.getContigCount() > 1) {
 			Logger.getLogger(getClass()).error("Incorrect number of contigs found for BCR-ABL sample: " + info.getSampleID());
@@ -56,27 +64,74 @@ public class SimpleReportGenerator implements ReportHandler {
 		List<Variant> varList = vars.getVariantsForContig( vars.getContigs().iterator().next() );
 		
 		if (varList.size()==0) {
-			report.setMessage("No variants were detected for this sample");
+			report.setMessage(NEGATIVE_RESULT_MESSAGE);
+			return report;
+		}
+
+		List<String> resistanceComments = new ArrayList<String>();
+		
+		if (varList.size() == 1) {
+			report.setMessage(varList.size() + " mutation was detected.");
+			String line = createLineForVariant( varList.get(0));
+			report.addReportTextLine(line);
+			resistanceComments.add( createResistanceComment(varList.get(0)));
 		}
 		else {
-			if (varList.size() == 1) {
-				report.setMessage(varList.size() + " mutation was detected.");
-				String line = createLineForVariant( varList.get(0));
-				report.addReportTextLine(line);
-		
-			}
-			else {
-				report.setMessage(varList.size() + " mutations were detected.");
-				for(Variant var : varList) {
-					String line = createLineForVariant(var);
-					//TODO: Add info for cis/trans for all other variants!
-					report.addReportTextLine( line );
+			report.setMessage(varList.size() + " mutations were detected.");
+			
+			for(Variant var : varList) {
+				String line = createLineForVariant(var);
+				resistanceComments.add( createResistanceComment(var));
+				
+				//Compute all possible cis/trans relationships
+				String cisTransPhrase = "";
+				for(Variant var2 : varList) {
+					String phrase = computeCisTransText(info.getSampleID(), var, var2);
+					
+					if (phrase.length() > 0) {
+						if (cisTransPhrase.length() > 0)
+							cisTransPhrase = cisTransPhrase + ", ";
+						cisTransPhrase = cisTransPhrase + phrase;
+					}
 				}
+				
+				if (cisTransPhrase.length() > 0) {
+					cisTransPhrase = cisTransPhrase.trim();
+					if (cisTransPhrase.endsWith(",")) {
+						cisTransPhrase = cisTransPhrase.substring(0, cisTransPhrase.length()-1);
+					}
+					line = line + "  (" + cisTransPhrase + ")";
+				}
+
+				
+				report.addReportTextLine( line );
 			}
 			
+			
+		}
+
+		report.addReportTextLine("");
+		for(String comment : resistanceComments) {
+			report.addReportTextLine(comment);
+		}
+
+		return report;
+	}
+	
+	private String createResistanceComment(Variant var) {
+		//Generate resistance comment
+		String known = var.getAnnotationStr("Known");
+		boolean knownResistant = false;
+		if (known != null) {
+			knownResistant = Boolean.parseBoolean(known);
 		}
 		
-		return report;
+		if (knownResistant) {
+			return var.getAnnotationStr("pdot").replace("p.", "") + " has been reported to confer resistance to BCR-ABL1 tyrosine kinase inhibitors.";
+		}
+		else {
+			return "No data on resistance for " + var.getAnnotationStr("pdot").replace("p.", "");	
+		}
 	}
 	
 	private String createLineForVariant(Variant var) {
@@ -84,6 +139,12 @@ public class SimpleReportGenerator implements ReportHandler {
 		try {
 			Double depth = var.getAnnotationDouble("depth");
 			Double varDepth = var.getAnnotationDouble("var.depth");
+			
+			if (varDepth == null) {
+				Logger.getLogger(getClass()).error("Could not read var.depth annotation for variant: " + var);
+				
+			}
+			
 			if (depth > 0) {
 				freqStr = formatFreq(varDepth / depth);	
 			}
@@ -93,7 +154,7 @@ public class SimpleReportGenerator implements ReportHandler {
 			
 		}
 		catch (Exception ex) {
-			Logger.getLogger(getClass()).error("Error computing alt.freq for BCR-ABL sample with variant: " + var);	
+			Logger.getLogger(getClass()).error("Error computing alt.freq for BCR-ABL sample with variant: " + var + " Exception: " + ex);	
 		}
 		
 		return var.getAnnotationStr("pdot").replace("p.",  "") + "  (" + var.getAnnotationStr("cdot") + "); " + freqStr;
@@ -115,8 +176,12 @@ public class SimpleReportGenerator implements ReportHandler {
 		req.setVarA(focalVar);
 		req.setVarB(otherVar);
 		
+		if (! cisTransHandler.closeEnoughToCompute(req)) {
+			return "";
+		}
+		
 		CisTransResult result = cisTransHandler.computeCisTransResult(req);
-		if (result.getReads()<1) {
+		if (result.getCoverage()<1) {
 			return "";
 		}
 		else {
@@ -125,11 +190,11 @@ public class SimpleReportGenerator implements ReportHandler {
 			double rawTrans = result.getTransFrac();
 			double normalizedCis = rawCis / (rawCis + rawTrans);
 			
-			if (normalizedCis > 0.75) {
+			if (normalizedCis > 0.8) {
 				return "in cis with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
 			}
 			
-			if (normalizedCis < 0.25) {
+			if (normalizedCis < 0.2) {
 				return "in trans with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
 			}
 			

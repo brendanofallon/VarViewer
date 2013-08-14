@@ -29,6 +29,7 @@ public class BCRABLPopup extends PopupPanel {
 	public BCRABLPopup() {
 		super(false);
 		super.setPopupPosition(100, 100);
+		
 		initComponents();
 	}
 
