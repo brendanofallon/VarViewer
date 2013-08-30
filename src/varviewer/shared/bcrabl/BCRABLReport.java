@@ -11,10 +11,38 @@ public class BCRABLReport implements Serializable {
 	String analysisDate;
 	List<String> reportText = new ArrayList<String>();
 	
+	boolean passedQualityCheck = false;
+	String qualityMessage = null;
 	
 	public BCRABLReport() {
 		//blah blah
 	}
+
+	
+	
+	public boolean isPassedQualityCheck() {
+		return passedQualityCheck;
+	}
+
+
+
+	public void setPassedQualityCheck(boolean passedQualityCheck) {
+		this.passedQualityCheck = passedQualityCheck;
+	}
+
+
+
+	public String getQualityMessage() {
+		return qualityMessage;
+	}
+
+
+
+	public void setQualityMessage(String qualityMessage) {
+		this.qualityMessage = qualityMessage;
+	}
+
+
 
 	public String getMessage() {
 		return message;

@@ -30,27 +30,27 @@ public class CachingSampleSource implements SampleSource {
 	}
 	
 	@Override
-	public VariantCollection getVariantsForSample(String sampleID) {
-		CachedSample sample = getCachedSampleForID(sampleID);
+	public VariantCollection getVariantsForSample(SampleInfo info) {
+		CachedSample sample = getCachedSample(info);
 		
 		if (sample != null) {
 			//Sweet, cache hit
-			bumpToFront(sampleID);
+			bumpToFront(info);
 			return sample.vars;
 		}
 		
-		Logger.getLogger(CachingSampleSource.class).info("Cache miss for sample " + sampleID + ", loading new set of variants");
+		Logger.getLogger(CachingSampleSource.class).info("Cache miss for sample " + info.getSampleID() + ", loading new set of variants");
 		
 		try {
 			//Force re-loading of sample info
 			source.initialize();
-			addToCache(sampleID, source.getVariantsForSample(sampleID));
+			addToCache(info, source.getVariantsForSample(info));
 		} catch (IOException e) {
 			Logger.getLogger(CachingSampleSource.class).warn("IOError re-loading variants: " + e.getMessage());
 			e.printStackTrace();
 		}
 		
-		sample = getCachedSampleForID(sampleID);
+		sample = getCachedSample(info);
 		if (sample != null) {
 			return sample.vars;
 		}
@@ -62,13 +62,13 @@ public class CachingSampleSource implements SampleSource {
 
 
 	@Override
-	public HasVariants getHasVariantsForSample(String sampleID) {
-		return getVariantsForSample(sampleID);
+	public HasVariants getHasVariantsForSample(SampleInfo info) {
+		return getVariantsForSample(info);
 	}
 
 	@Override
-	public File getBAMFileForSample(String sampleID) {
-		return source.getBAMFileForSample(sampleID);
+	public File getBAMFileForSample(SampleInfo info) {
+		return source.getBAMFileForSample(info);
 	}
 	
 	@Override
@@ -78,8 +78,8 @@ public class CachingSampleSource implements SampleSource {
 
 
 	@Override
-	public boolean containsSample(String sampleID) {
-		return source.containsSample(sampleID);
+	public boolean containsSample(SampleInfo info) {
+		return source.containsSample(info);
 	}
 
 
@@ -96,8 +96,8 @@ public class CachingSampleSource implements SampleSource {
 
 
 	@Override
-	public SampleInfo getInfoForSample(String sampleID) {
-		return source.getInfoForSample(sampleID);
+	public SampleInfo getInfoForSample(SampleInfo info) {
+		return source.getInfoForSample(info);
 	}
 
 	/**
@@ -105,14 +105,16 @@ public class CachingSampleSource implements SampleSource {
 	 * @param sampleID
 	 * @return
 	 */
-	private boolean isInCache(String sampleID) {
-		return getCachedSampleForID(sampleID) != null;
+	private boolean isInCache(SampleInfo info) {
+		return getCachedSample(info) != null;
 	}
 	
-	private CachedSample getCachedSampleForID(String id) {
+	private CachedSample getCachedSample(SampleInfo info) {
+		int infoKey = info.getUniqueKey();
 		for(CachedSample sample : cache) {
-			if (sample.sampleID.equals(id))
+			if (sample.info.getUniqueKey() == infoKey ) {
 				return sample;
+			}
 		}
 		return null;
 	}
@@ -121,29 +123,29 @@ public class CachingSampleSource implements SampleSource {
 	 * 
 	 * @param sampleID
 	 */
-	private void bumpToFront(String sampleID) {
-		CachedSample cs = getCachedSampleForID(sampleID);
+	private void bumpToFront(SampleInfo info) {
+		CachedSample cs = getCachedSample(info);
 		if (cs != null) {
 			cache.remove(cs);
 			cache.add(cs);
 		}
 	}
 	
-	private void addToCache(String sampleID, VariantCollection vars) {
-		CachedSample cs = new CachedSample(sampleID, vars);
+	private void addToCache(SampleInfo info, VariantCollection vars) {
+		CachedSample cs = new CachedSample(info, vars);
 		cache.add(cs);
 		if (cache.size() > samplesToCache) {
 			CachedSample removed = cache.remove(0);
-			Logger.getLogger(CachingSampleSource.class).info("Added sample " + sampleID + " to cache, bumped " + removed.sampleID + " from cache since it was full");
+			//Logger.getLogger(CachingSampleSource.class).info("Added sample " + sampleID + " to cache, bumped " + removed.sampleID + " from cache since it was full");
 		}
 	}
 	
 	class CachedSample {
-		final String sampleID;
+		final SampleInfo info;
 		final VariantCollection vars;
 		
-		public CachedSample(String id, VariantCollection vars) {
-			this.sampleID = id;
+		public CachedSample(SampleInfo info, VariantCollection vars) {
+			this.info = info;
 			this.vars = vars;
 		}
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 import varviewer.shared.HasSamples;
 import varviewer.shared.HasVariants;
 import varviewer.shared.PedigreeSample;
+import varviewer.shared.SampleInfo;
 import varviewer.shared.variant.Annotation;
 import varviewer.shared.variant.AnnotationIndex;
 import varviewer.shared.variant.Variant;
@@ -32,8 +33,8 @@ public class PedigreeFilter implements VariantFilter, Serializable {
 		this.sample = sample;
 	}
 	
-	public String getPedSampleID() {
-		return sample.getRelId();
+	public SampleInfo getPedSampleID() {
+		return sample.getRelSample();
 	}
 	
 	public PedigreeSample getPedSample() {

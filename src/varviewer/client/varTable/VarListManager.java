@@ -7,6 +7,7 @@ import varviewer.client.VarListListener;
 import varviewer.client.services.VarRequestService;
 import varviewer.client.services.VarRequestServiceAsync;
 import varviewer.shared.IntervalList;
+import varviewer.shared.SampleInfo;
 import varviewer.shared.varFilters.PedigreeFilter;
 import varviewer.shared.variant.Variant;
 import varviewer.shared.variant.VariantFilter;
@@ -34,9 +35,9 @@ public class VarListManager {
 	
 	private List<VarListListener> listeners = new ArrayList<VarListListener>();
 	
-	public void setSample(String sampleID) {
+	public void setSample(SampleInfo sample) {
 		req.clearSamples();
-		req.addSample(sampleID);
+		req.addSample(sample);
 		pedigreeFilters.clear();
 		reloadRequired = true;
 	}
@@ -45,15 +46,7 @@ public class VarListManager {
 		req.setAnnotations(annotationKeys);
 		reloadRequired = true;
 	}
-	
-	/**
-	 * Obtain the list of current sample names. If the list has not been updated via a reload() call
-	 * the sample names may not reflect the names of the variants contained herein.
-	 * @return
-	 */
-	public List<String> getSampleNames() {
-		return req.getSampleIDs();
-	}
+
 	
 	public void setIntervals(IntervalList intervals) {
 		req.setIntervals(intervals);
@@ -84,7 +77,9 @@ public class VarListManager {
 	}
 	
 	
-	
+	public List<SampleInfo> getSamples() {
+		return req.getSamples();
+	}
 	/**
 	 * Returns true if settings have been changed since last variant reload. This is 
 	 * initially false

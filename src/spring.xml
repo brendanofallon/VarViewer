@@ -37,25 +37,28 @@
 	
 	
 	<!--  GeneDetails configuration -->
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<!-- bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/annotations" />
         <property name="username" value="arup" />
-    </bean>
+    </bean -->
 		
 	<!--  Use this bean if you want to read gene details info from a text file -->
-	<!-- bean name="geneDetailHandler" class="varviewer.server.genedb.DBNSFPGeneDB">
+	<bean name="geneDetailHandler" class="varviewer.server.genedb.DBNSFPGeneDB">
 	    <property name="sourceFile" value="geneInfo.csv" />
-	</bean -->
+	</bean>
 	
 	<!-- Use this bean if you want to read gene details info from a SQL server -->
-    <bean name="geneDetailHandler" class="varviewer.server.geneDetails.SQLGeneDB">
+    <!--  bean name="geneDetailHandler" class="varviewer.server.geneDetails.SQLGeneDB">
           <property name="dataSource" ref="dataSource" />
-    </bean>
+    </bean -->
 
     
     <bean name="cisTransHandler" class="varviewer.server.bcrabl.CisTransClassifier">
         <property name="sampleSource" ref="sampleSource" />
+        <property name="permittedDist" value="150" />
+        <property name="requiredMappingQual" value="4" />
+        <property name="requiredBaseQual" value="4" />
     </bean>
     
     <bean name="bcrablReportHandler" class="varviewer.server.bcrabl.SimpleReportGenerator">

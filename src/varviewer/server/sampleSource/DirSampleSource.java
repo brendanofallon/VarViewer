@@ -24,7 +24,7 @@ import varviewer.shared.SampleTreeNode;
 public class DirSampleSource implements SampleSource {
 
 	private File rootDir = null;
-	private Map<String, SampleInfoFile> samples = new HashMap<String, SampleInfoFile>();
+	private Map<Integer, SampleInfoFile> samples = new HashMap<Integer, SampleInfoFile>();
 	private SampleTreeNode root = null; //null until initialized
 	private VariantReader variantReader = null;
 	
@@ -88,7 +88,19 @@ public class DirSampleSource implements SampleSource {
 
 				if (sampleInfo != null) {
 					if (sampleInfo.info != prohibitedInfo) {
-						samples.put(sampleInfo.info.getSampleID(), sampleInfo);
+						int key = sampleInfo.info.getUniqueKey();
+						if (samples.containsKey(key)) {
+							SampleInfoFile existing = samples.get(key);
+							File existingFile = existing.source;
+							File newConflictingFile = sampleInfo.source;
+							
+							//Same keys, different files, this shouldn't happen
+							if (! existingFile.equals(newConflictingFile)) {
+								throw new IllegalStateException("Conflicting sample keys, sample with id " + sampleInfo.info.getSampleID() + " has key " + sampleInfo.info.getUniqueKey() + " (text: " + sampleInfo.info.getKeyText() + ", directory: " + sampleInfo.source.getAbsolutePath() + "),  is associated with " + samples.get(key).info.getSampleID() + " (key text: " + existing.info.getKeyText() + " dir: " + existingFile + ")");
+							}
+						}
+						
+						samples.put(key, sampleInfo);
 						SampleTreeNode sampleNode = new SampleTreeNode(sampleInfo.info);
 						parentNode.addChild(sampleNode);
 					}
@@ -136,37 +148,42 @@ public class DirSampleSource implements SampleSource {
 	
 	
 	@Override
-	public boolean containsSample(String sampleID) {
-		return samples.containsKey(sampleID);
+	public boolean containsSample(SampleInfo sample) {
+		int sampleKey = sample.getUniqueKey();
+		for(Integer qKey : samples.keySet()) {
+			if (qKey.equals(sampleKey)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public List<SampleInfo> getAllSamples() {
-		List<SampleInfo> infos = new ArrayList<SampleInfo>();
-		for(String id : samples.keySet()) {
-			SampleInfoFile infoFile = samples.get(id);
-			infos.add(infoFile.info);
+		List<SampleInfo> sampleInfos = new ArrayList<SampleInfo>();
+		for(SampleInfoFile infoFile : samples.values()) {
+			sampleInfos.add(infoFile.info);
 		}
-		return infos;
+		return sampleInfos;
 	}
 
 	@Override
-	public SampleInfo getInfoForSample(String sampleID) {
-		SampleInfoFile infoFile = samples.get(sampleID);
+	public SampleInfo getInfoForSample(SampleInfo sample) {
+		SampleInfoFile infoFile = samples.get(sample.getUniqueKey());
 		if (infoFile == null)
 			return null;
 		else 
 			return infoFile.info;
 	}
 
-	public File getBAMFileForSample(String sampleID) {
-		if (! containsSample(sampleID)) {
-			throw new IllegalArgumentException("No sample with sampleID " + sampleID);
+	public File getBAMFileForSample(SampleInfo sample) {
+		if (! containsSample(sample)) {
+			throw new IllegalArgumentException("No sample with sampleID " + sample.getSampleID());
 		}
 		
 		
-		SampleInfo info = samples.get(sampleID).info;
-		File sampleDir = samples.get(sampleID).source;
+		SampleInfo info = samples.get(sample.getUniqueKey()).info;
+		File sampleDir = samples.get(sample.getUniqueKey()).source;
 		String bamPath = info.getBamFile();
 		File bamFile = null;
 		if (bamPath.startsWith("/")) {
@@ -180,11 +197,10 @@ public class DirSampleSource implements SampleSource {
 	}
 	
 	@Override
-	public VariantCollection getVariantsForSample(String sampleID) {
-		if ( containsSample(sampleID)) {
-			File sampleDir = samples.get(sampleID).source;
-			SampleInfo info = samples.get(sampleID).info;
-			String varsPath =  info.getAnnotatedVarsFile();
+	public VariantCollection getVariantsForSample(SampleInfo sample) {
+		if ( containsSample(sample)) {
+			File sampleDir = samples.get(sample.getUniqueKey()).source;
+			String varsPath =  sample.getAnnotatedVarsFile();
 			if (varsPath == null || varsPath.length()==0) {
 				return null;
 			}
@@ -196,7 +212,7 @@ public class DirSampleSource implements SampleSource {
 				varsFile = new File(sampleDir + "/" + varsPath);
 			
 			if (!varsFile.exists() || (! varsFile.isFile())) {
-				Logger.getLogger(getClass()).warn("For sample " + sampleID + " annotated vars file " + varsFile.getAbsolutePath() + " does not exist" );
+				Logger.getLogger(getClass()).warn("For sample " + sample.getSampleID() + " annotated vars file " + varsFile.getAbsolutePath() + " does not exist" );
 				return null;
 			}
 			
@@ -209,17 +225,17 @@ public class DirSampleSource implements SampleSource {
 				
 				return variantReader.toVariantCollection();
 			} catch (IOException e) {
-				Logger.getLogger(getClass()).warn("IO error reading variants for " + sampleID + " from " + varsFile.getAbsolutePath() + " Message: " + e.getMessage() );
+				Logger.getLogger(getClass()).warn("IO error reading variants for " + sample.getSampleID() + " from " + varsFile.getAbsolutePath() + " Message: " + e.getMessage() );
 				e.printStackTrace();
 				return null;
 			}
 			
 		}
 		else {
-			Logger.getLogger(getClass()).warn("Request for variants from sample " + sampleID + " but there's no sample with that ID" );
+			Logger.getLogger(getClass()).warn("Request for variants from sample " + sample.getSampleID() + " but there's no sample with that ID" );
 			StringBuilder msg = new StringBuilder();
-			for(String samp: samples.keySet()) {
-				msg.append(samp + ", ");
+			for(Integer key : samples.keySet()) {
+				msg.append(samples.get(key).info + ", ");
 			}
 			Logger.getLogger(getClass()).warn("Current sample ids are: " + msg);
 		}
@@ -232,8 +248,8 @@ public class DirSampleSource implements SampleSource {
 	}
 	
 	@Override
-	public HasVariants getHasVariantsForSample(String sampleID) {
-		return getVariantsForSample(sampleID);
+	public HasVariants getHasVariantsForSample(SampleInfo sample) {
+		return getVariantsForSample(sample);
 	}
 	
 	/**

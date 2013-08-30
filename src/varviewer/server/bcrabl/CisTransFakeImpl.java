@@ -16,8 +16,8 @@ public class CisTransFakeImpl implements CisTransHandler {
 		//Get SampleSource from ApplicationContext so we can examine BAM file
 		SampleSource sampleSource = (SampleSource) SpringContext.getContext().getBean("sampleSource");
 		
-		File bamFile = sampleSource.getBAMFileForSample(req.getSampleID());
-		result.setMessage("Hello! Got sampleID " + req.getSampleID() + " bam path: " + bamFile + " variant A: " + req.getVarA().getPos() + " var B : " + req.getVarB().getPos());
+		File bamFile = sampleSource.getBAMFileForSample(req.getSample());
+		result.setMessage("Hello! Got sampleID " + req.getSample().getSampleID() + " bam path: " + bamFile + " variant A: " + req.getVarA().getPos() + " var B : " + req.getVarB().getPos());
 		
 		result.setBothRefs(0.5);
 		result.setBothAlts(0.51213);

@@ -29,7 +29,7 @@ public interface SampleSource extends HasSamples {
 	 * @param sampleID
 	 * @return
 	 */
-	public boolean containsSample(String sampleID);
+	public boolean containsSample(SampleInfo info);
 	
 	/**
 	 * Retrieve a list of all SampleInfo objects representing samples available through this source
@@ -49,19 +49,19 @@ public interface SampleSource extends HasSamples {
 	 * @param sampleID
 	 * @return
 	 */
-	public SampleInfo getInfoForSample(String sampleID);
+	public SampleInfo getInfoForSample(SampleInfo info);
 
 	/**
 	 * Access to the BAM file for this sample
 	 * @param sampleID
 	 * @return
 	 */
-	public File getBAMFileForSample(String sampleID);
+	public File getBAMFileForSample(SampleInfo info);
 	
 	/**
 	 * Obtain all variants in this sample in a VariantCollection object 
 	 * @param sampleID
 	 * @return
 	 */
-	public VariantCollection getVariantsForSample(String sampleID);
+	public VariantCollection getVariantsForSample(SampleInfo info);
 }

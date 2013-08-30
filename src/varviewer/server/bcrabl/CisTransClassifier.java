@@ -4,6 +4,9 @@ import java.io.File;
 import net.sf.samtools.SAMFileReader;
 import net.sf.samtools.SAMRecord;
 import net.sf.samtools.SAMRecordIterator;
+
+import org.apache.log4j.Logger;
+
 import varviewer.server.sampleSource.SampleSource;
 import varviewer.shared.bcrabl.CisTransRequest;
 import varviewer.shared.bcrabl.CisTransResult;
@@ -16,14 +19,53 @@ import varviewer.shared.variant.Variant;
  */
 public class CisTransClassifier implements CisTransHandler {
 
-	public static final int permittedDist = 150;
-	public static final int requiredMappingQual = 15;
-	public static final int requiredBaseQual = 20;
+	private int permittedDist = 150;
+	private int requiredMappingQual = 4;
+	private int requiredBaseQual = 4;
 
 	SampleSource sampleSource = null;
 	
 	public SampleSource getSampleSource() {
 		return sampleSource;
+	}
+
+
+
+	public int getPermittedDist() {
+		return permittedDist;
+	}
+
+
+
+	public void setPermittedDist(int permittedDist) {
+		Logger.getLogger(getClass()).info("Cis/trans setting required max distance to " + permittedDist);
+		this.permittedDist = permittedDist;
+	}
+
+
+
+	public int getRequiredMappingQual() {
+		return requiredMappingQual;
+	}
+
+
+
+	public void setRequiredMappingQual(int requiredMappingQual) {
+		Logger.getLogger(getClass()).info("Cis/trans setting required mapping quality to " + requiredMappingQual);
+		this.requiredMappingQual = requiredMappingQual;
+	}
+
+
+
+	public int getRequiredBaseQual() {
+		return requiredBaseQual;
+	}
+
+
+
+	public void setRequiredBaseQual(int requiredBaseQual) {
+		Logger.getLogger(getClass()).info("Cis/trans setting required base quality to " + requiredBaseQual);
+		this.requiredBaseQual = requiredBaseQual;
 	}
 
 
@@ -48,9 +90,9 @@ public class CisTransClassifier implements CisTransHandler {
 		
 		Variant var1 = req.getVarA();
 		Variant var2 = req.getVarB();
-		File inputBAMFile = sampleSource.getBAMFileForSample(req.getSampleID());
+		File inputBAMFile = sampleSource.getBAMFileForSample(req.getSample());
 		if (! inputBAMFile.exists()) {
-			throw new IllegalArgumentException("Cannot find bam file for sampleID " + req.getSampleID() + " path is: " + inputBAMFile.getAbsolutePath());
+			throw new IllegalArgumentException("Cannot find bam file for sampleID " + req.getSample().getSampleID() + " path is: " + inputBAMFile.getAbsolutePath());
 		}
 		
 		//A few sanity checks:

@@ -94,7 +94,11 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 		
 		//Create a string with sample names for the new label text
 		StringBuilder str = new StringBuilder();
-		List<String> samples = varManager.getSampleNames();
+		List<String> samples = new ArrayList<String>();
+		for(SampleInfo sample : varManager.getSamples()) {
+			samples.add(sample.getSampleID());
+		}
+		
 		if (samples == null || samples.size()==0) {
 			str.append("Unknown sample");
 		}
@@ -121,7 +125,7 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 	public void setSample(SampleInfo info) {
 		clearPedAnnotations();
 		
-		varManager.setSample( info.getSampleID() );
+		varManager.setSample( info );
 		varManager.setFilters( getActiveFilters() );
 		varManager.setAnnotations( colModel.getKeys() );
 		
@@ -139,11 +143,12 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 	}
 
 	public String getSampleID() {
-		if (varManager.getSampleNames().size()==1) {
-			return varManager.getSampleNames().get(0);
+		SampleInfo sample = getSample();
+		if (sample == null) {
+			return "Unknown";
 		}
 		else {
-			return null;
+			return sample.getSampleID();
 		}
 	}
 	
@@ -153,6 +158,15 @@ public class VariantDisplay extends SplitLayoutPanel implements VarListListener,
 	 */
 	public void setSampleLabelText(String text) {
 		varTable.getHeader().setSampleName(text);
+	}
+	
+	public SampleInfo getSample() {
+		if (varManager.getSamples().size()==1) {
+			return varManager.getSamples().get(0);
+		}
+		else {
+			return null;
+		}
 	}
 	
 	/**

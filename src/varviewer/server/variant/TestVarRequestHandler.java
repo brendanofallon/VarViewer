@@ -59,7 +59,7 @@ public class TestVarRequestHandler implements VariantRequestHandler {
 		
 
 		//First: Obtain the "raw" list of variants, unfiltered and (mostly) unannotated
-		VariantCollection vars = variantSource.getVariantsForSample(req.getSampleIDs().get(0));
+		VariantCollection vars = variantSource.getVariantsForSample(req.getSamples().get(0));
 
 		Date readVars = new Date();
 		System.out.println("Time to read: " + (readVars.getTime()-init.getTime())/1000.0);
@@ -85,7 +85,7 @@ public class TestVarRequestHandler implements VariantRequestHandler {
 		System.out.println("Time to filter: " + (filter.getTime()-annotate.getTime())/1000.0);
 		
 		VariantRequestResult result = new VariantRequestResult();
-		result.setSampleID(req.getSampleIDs().get(0));
+		result.setSampleID(req.getSamples().get(0).getSampleID());
 		result.setVars(passingVars);
 		return result;
 	}

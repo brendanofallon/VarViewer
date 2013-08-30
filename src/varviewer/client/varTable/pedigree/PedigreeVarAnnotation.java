@@ -20,11 +20,11 @@ public class PedigreeVarAnnotation extends VarAnnotation<String> {
 	 * @param pedSample
 	 */
 	public PedigreeVarAnnotation(final PedigreeSample pedSample) {
-		super(pedSample.getRelId() + "-zygosity", pedSample.getRelId(), new TextColumn<Variant>() {
+		super(pedSample.getRelSample().getSampleID() + "-zygosity", pedSample.getRelSample().getSampleID(), new TextColumn<Variant>() {
 
 			@Override
 			public String getValue(Variant var) {
-				String val = var.getAnnotationStr(pedSample.getRelId() + "-zygosity");
+				String val = var.getAnnotationStr(pedSample.getRelSample().getSampleID() + "-zygosity");
 			
 				if (val == null || val.length()<2)
 					return "?";

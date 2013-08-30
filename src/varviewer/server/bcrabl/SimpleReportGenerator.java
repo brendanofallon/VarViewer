@@ -25,6 +25,7 @@ public class SimpleReportGenerator implements ReportHandler {
 	
 	SampleSource sampleSource = null;
 	CisTransHandler cisTransHandler = new CisTransClassifier();
+	QualityChecker qChecker = new QualityChecker();
 	
 	public CisTransHandler getCisTransHandler() {
 		return cisTransHandler;
@@ -48,7 +49,8 @@ public class SimpleReportGenerator implements ReportHandler {
 	public BCRABLReport getReportForSample(SampleInfo info) {
 		BCRABLReport report = new BCRABLReport();
 		
-		VariantCollection vars = sampleSource.getVariantsForSample(info.getSampleID());
+		
+		VariantCollection vars = sampleSource.getVariantsForSample(info);
 		if (vars == null) {
 			report.setMessage(NEGATIVE_RESULT_MESSAGE);
 			return report;
@@ -60,6 +62,15 @@ public class SimpleReportGenerator implements ReportHandler {
 			report.setMessage("There was an error generating this report: An incorrect number of contigs (" + vars.getContigCount() + ") was found");
 			return report;
 		}
+		
+//		try {
+//			QualityCheckResult qualityResult = qChecker.verifyQuality(info, sampleSource.getBAMFileForSample(info));
+//			report.setPassedQualityCheck(qualityResult.passed);
+//			report.setQualityMessage(qualityResult.message);
+//		}
+//		catch (Exception ex) {
+//			report.setQualityMessage("Error running quality procedure: " + ex.getMessage() + "\n Unable to determine sample quality");
+//		}
 		
 		List<Variant> varList = vars.getVariantsForContig( vars.getContigs().iterator().next() );
 		
@@ -86,7 +97,7 @@ public class SimpleReportGenerator implements ReportHandler {
 				//Compute all possible cis/trans relationships
 				String cisTransPhrase = "";
 				for(Variant var2 : varList) {
-					String phrase = computeCisTransText(info.getSampleID(), var, var2);
+					String phrase = computeCisTransText(info, var, var2);
 					
 					if (phrase.length() > 0) {
 						if (cisTransPhrase.length() > 0)
@@ -136,13 +147,20 @@ public class SimpleReportGenerator implements ReportHandler {
 	
 	private String createLineForVariant(Variant var) {
 		String freqStr = "Error computing frequency";
+		String depthStr = "?";
 		try {
 			Double depth = var.getAnnotationDouble("depth");
 			Double varDepth = var.getAnnotationDouble("var.depth");
 			
+			if (depth == null || Double.isNaN(depth)) {
+				depthStr = "?";
+			}
+			else {
+				depthStr = "" + (int)Math.round(depth);
+			}
+			
 			if (varDepth == null) {
 				Logger.getLogger(getClass()).error("Could not read var.depth annotation for variant: " + var);
-				
 			}
 			
 			if (depth > 0) {
@@ -157,7 +175,7 @@ public class SimpleReportGenerator implements ReportHandler {
 			Logger.getLogger(getClass()).error("Error computing alt.freq for BCR-ABL sample with variant: " + var + " Exception: " + ex);	
 		}
 		
-		return var.getAnnotationStr("pdot").replace("p.",  "") + "  (" + var.getAnnotationStr("cdot") + "); " + freqStr;
+		return var.getAnnotationStr("pdot").replace("p.",  "") + "  (" + var.getAnnotationStr("cdot") + "); " + freqStr + " Coverage: " + depthStr;
 	}
 
 	/**
@@ -166,13 +184,13 @@ public class SimpleReportGenerator implements ReportHandler {
 	 * @param otherVar
 	 * @return
 	 */
-	private String computeCisTransText(String sampleID, Variant focalVar, Variant otherVar) {
+	private String computeCisTransText(SampleInfo sample, Variant focalVar, Variant otherVar) {
 		if (focalVar == otherVar) {
 			return "";
 		}
 		
 		CisTransRequest req = new CisTransRequest();
-		req.setSampleID(sampleID);
+		req.setSample(sample);
 		req.setVarA(focalVar);
 		req.setVarB(otherVar);
 		
@@ -198,13 +216,13 @@ public class SimpleReportGenerator implements ReportHandler {
 				return "in trans with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
 			}
 			
-			return " cis/trans uncertain for " + otherVar.getAnnotationStr("pdot").replace("p.", "");
+			return "";
 		}
 		
 	}
 	
 	private String formatFreq(double freq) {
-		String str = "" + freq*100.0;
+		String str = "" + (int)Math.round(freq*100.0);
 		if (str.length() > 4) {
 			str = str.substring(0, 4);
 		}

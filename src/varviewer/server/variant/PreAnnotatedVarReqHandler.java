@@ -1,5 +1,6 @@
 package varviewer.server.variant;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,13 +40,23 @@ public class PreAnnotatedVarReqHandler implements VariantRequestHandler {
 	public VariantRequestResult queryVariant(VariantRequest req) {
 		Date begin = new Date();
 		
-		VariantCollection vars = variantSource.getVariantsForSample(req.getSampleIDs().get(0));
-
+		VariantRequestResult result = new VariantRequestResult();
+		result.setSampleID(req.getSamples().get(0).getSampleID());
+		
+		VariantCollection vars = variantSource.getVariantsForSample(req.getSamples().get(0));
+		
+		//If there are no variants in this sample (sample exists, but has zero variants) then
+		//return a new empty result
+		if (vars == null || vars.getAnnoIndex() == null ) {
+			result.setVars(new ArrayList<Variant>());
+			return result;
+		}
+		
 		//A bit ugly here... filters often use Annotations to do their filtering, so they need
 		//access to the AnnotationIndex. Here, we just go through all filters and set the index. 
 		AnnotationIndex index = vars.getAnnoIndex();
 		if (index == null) {
-			throw new IllegalStateException("Annotation index was not set for variants from sample : " + req.getSampleIDs().get(0));
+			throw new IllegalStateException("Annotation index was not set for variants from sample : " + req.getSamples().get(0).getSampleID());
 		}
 		for(VariantFilter filter : req.getFilters()) {
 			filter.setAnnotationIndex(index);
@@ -80,7 +91,7 @@ public class PreAnnotatedVarReqHandler implements VariantRequestHandler {
 		for(VariantFilter filter : req.getFilters()) {
 			if (filter instanceof PedigreeFilter) {
 				PedigreeFilter pedFilter = (PedigreeFilter)filter;
-				String key = pedFilter.getPedSampleID() + "-zygosity";
+				String key = pedFilter.getPedSample().getRelSample().getSampleID() + "-zygosity";
 				int valIndex = index.getIndexForKey(key);
 				if (valIndex == -1) {
 					valIndex = index.addKey(key, false);
@@ -89,10 +100,9 @@ public class PreAnnotatedVarReqHandler implements VariantRequestHandler {
 			}
 		}
 
-		VariantRequestResult result = new VariantRequestResult();
-		result.setSampleID(req.getSampleIDs().get(0));
+
 		result.setVars(passingVars);
-		Logger.getLogger(getClass()).info("Returning new request result for sample with id: " + req.getSampleIDs().get(0));
+		Logger.getLogger(getClass()).info("Returning new request result for sample with id: " + req.getSamples().get(0).getSampleID());
 		return result;
 	}
 

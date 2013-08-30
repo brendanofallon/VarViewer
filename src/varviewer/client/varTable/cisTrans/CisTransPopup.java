@@ -54,7 +54,7 @@ public class CisTransPopup extends PopupPanel {
 		CisTransRequest req = new CisTransRequest();
 		req.setVarA(varA);
 		req.setVarB(varB);
-		req.setSampleID(varDisplay.getSampleID());
+		req.setSample(varDisplay.getSample());
 		
 		
 		centerPanel.clear(); //Clear previous results, otherwise may be confusing...

@@ -7,8 +7,8 @@ public class PedigreeSample implements Serializable {
 	public enum ZygType {ALL, HETS, HOMS};
 	public enum OperationType {NONE, EXCLUDE, INTERSECT};
 	
-	private String probandId = null; //Sample id of proband
-	private String relId = null; //Sample id of the sample for comparison
+	private SampleInfo probandId = null; //Sample id of proband
+	private SampleInfo relId = null; //Sample id of the sample for comparison
 	//String relUserLabel = null; //not currently used
 	private ZygType zType = ZygType.ALL;	//Category of variants to include / exclude
 	private OperationType oType = OperationType.NONE; //Operation to perform, include, exclude, etc.
@@ -17,20 +17,20 @@ public class PedigreeSample implements Serializable {
 		//required no-arg constructor
 	}
 	
-	public String getProbandId() {
+	public SampleInfo getProbandId() {
 		return probandId;
 	}
 
-	public void setProbandId(String probandId) {
+	public void setProbandId(SampleInfo probandId) {
 		this.probandId = probandId;
 	}
 
-	public String getRelId() {
+	public SampleInfo getRelSample() {
 		return relId;
 	}
 
-	public void setRelId(String relId) {
-		this.relId = relId;
+	public void setRelSample(SampleInfo relInfo) {
+		this.relId = relInfo;
 	}
 
 	public ZygType getzType() {
@@ -94,7 +94,7 @@ public class PedigreeSample implements Serializable {
 			return false;
 		}
 		PedigreeSample p = (PedigreeSample)o;
-		if (p.getRelId().equals(relId) && p.getoType().equals(oType)) {
+		if (p.getRelSample().equals(relId) && p.getoType().equals(oType)) {
 			return true;
 		}
 		return false;

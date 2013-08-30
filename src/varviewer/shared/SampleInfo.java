@@ -11,7 +11,7 @@ import java.util.Date;
  *
  */
 public class SampleInfo implements Serializable {
-
+ 
 	private String sampleID = null; //name of sample, often accession number for clinical samples
 	private String analysisType = null; //exome, aortapathy, etc.
 	private Date analysisDate = null; //When bioinformatics was performed
@@ -34,6 +34,16 @@ public class SampleInfo implements Serializable {
 		this.submitter = submitter;
 	}
 
+	public int getUniqueKey() {
+		String str = getKeyText();
+		return str.hashCode();
+	}
+	
+	public String getKeyText() {
+		String str = "" + sampleID + analysisType + analysisDate.getTime();
+		return str;
+	}
+	
 	public String getBamLink() {
 		return bamLink;
 	}

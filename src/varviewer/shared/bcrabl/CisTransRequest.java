@@ -2,13 +2,14 @@ package varviewer.shared.bcrabl;
 
 import java.io.Serializable;
 
+import varviewer.shared.SampleInfo;
 import varviewer.shared.variant.Variant;
 
 public class CisTransRequest implements Serializable {
 
 	Variant varA;
 	Variant varB;
-	String sampleID;
+	SampleInfo sample;
 	
 	public CisTransRequest() {
 		//must have no arg constructor
@@ -30,12 +31,12 @@ public class CisTransRequest implements Serializable {
 		this.varB = varB;
 	}
 
-	public String getSampleID() {
-		return sampleID;
+	public SampleInfo getSample() {
+		return sample;
 	}
 
-	public void setSampleID(String sampleID) {
-		this.sampleID = sampleID;
+	public void setSample(SampleInfo sample) {
+		this.sample = sample;
 	}
 	
 	

@@ -7,6 +7,7 @@ import java.util.List;
 import varviewer.shared.AllIntervals;
 import varviewer.shared.Interval;
 import varviewer.shared.IntervalList;
+import varviewer.shared.SampleInfo;
 
 
 /**
@@ -16,7 +17,7 @@ import varviewer.shared.IntervalList;
  */
 public class VariantRequest implements Serializable {
 	
-	private List<String> sampleIDs = new ArrayList<String>();
+	private List<SampleInfo> samples = new ArrayList<SampleInfo>();
 	private IntervalList intervals = new AllIntervals();
 	private List<VariantFilter> filters = new ArrayList<VariantFilter>();
 	private List<String> annotations = new ArrayList<String>();
@@ -31,8 +32,8 @@ public class VariantRequest implements Serializable {
 	 */
 	public VariantRequest clone() {
 		VariantRequest newReq = new VariantRequest();
-		for(String id : sampleIDs) {
-			newReq.addSample(id);
+		for(SampleInfo info : samples) {
+			newReq.addSample(info);
 		}
 		newReq.setIntervals(intervals);
 		for(VariantFilter filter : filters) {
@@ -48,14 +49,14 @@ public class VariantRequest implements Serializable {
 	 * will be returned by this request
 	 */
 	public void clearSamples() {
-		sampleIDs.clear();
+		samples.clear();
 	}
 	/**
 	 * Append an additional sample for which to obtain variants
 	 * @param sampleID
 	 */
-	public void addSample(String sampleID) {
-		this.sampleIDs.add(sampleID);
+	public void addSample(SampleInfo sample) {
+		this.samples.add(sample);
 	}
 	
 	/**
@@ -115,8 +116,8 @@ public class VariantRequest implements Serializable {
 	 * Obtain the list of sampleIDs to fetch variants for
 	 * @return
 	 */
-	public List<String> getSampleIDs() {
-		return sampleIDs;
+	public List<SampleInfo> getSamples() {
+		return samples;
 	}
 	
 }

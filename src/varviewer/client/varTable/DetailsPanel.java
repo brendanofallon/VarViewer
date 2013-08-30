@@ -62,33 +62,37 @@ public class DetailsPanel extends ScrollPanel implements VariantSelectionListene
 	public void variantSelected(Variant selectedVar) {
 		if (selectedVar == null) {
 			selectGene(null);
+			return;
 		}
 		
 		String geneName = selectedVar.getAnnotationStr("gene");
-		selectGene(geneName);		
-	}
-
-	private void selectGene(String geneName) {
-		if (currentGene != geneName) {
-			currentGene = geneName;
-			
-			geneDetailService.getDetails(currentGene, new AsyncCallback<GeneInfo>() {
-
-				@Override
-				public void onFailure(Throwable caught) {
-					//Window.alert("Unable to find gene details for gene : " + currentGene + " Reason: " + caught.getMessage());
-				}
-
-				@Override
-				public void onSuccess(GeneInfo result) {
-					displayGeneInfo(result);
-				}
-				
-			});
+		if (geneName != null) {
+			selectGene(geneName);
 		}
 	}
 
+	private void selectGene(String geneName) {
+		currentGene = geneName;
+
+		geneDetailService.getDetails(currentGene, new AsyncCallback<GeneInfo>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				//Window.alert("Unable to find gene details for gene : " + currentGene + " Reason: " + caught.getMessage());
+			}
+
+			@Override
+			public void onSuccess(GeneInfo result) {
+				displayGeneInfo(result);
+			}
+
+		});
+	}
+
 	protected void displayGeneInfo(GeneInfo result) {
+		if (result == null) {
+			return;
+		}
 		String fullName = result.getFullName();
 		if (fullName != null) {
 			header.updateLabel(getCurrentGene() + " : " + result.getFullName());

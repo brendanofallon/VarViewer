@@ -390,8 +390,8 @@ body {
 
 
 .samplebrowser {
-	height: 400px;
-	width: 500px;
+	height: 500px;
+	width: 600px;
 }
 
 .sampledetailsheader {
@@ -428,17 +428,22 @@ body {
 	background : rgb(255, 255, 255);
 }
 
+.sampletableitem {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 10px;
+	vertical-align: top;	
+}
 
 .sampletabletext {
 	padding-top: 4px;
 	font-family: 'Open Sans', sans-serif;
-	font-size: 11px;	
+	font-size: 10px;	
 	font-weight: bold;
 }
 
 .sampletabletextA {
 	font-family: 'Open Sans', sans-serif;
-	font-size: 11px;	
+	font-size: 10px;	
 }
 
 .buttongrid {
@@ -481,11 +486,7 @@ body {
 	cursor: pointer;
 }
 
-.sampletableitem {
-	font-family: 'Open Sans', sans-serif;
-	font-size: 11px;
-	vertical-align: top;	
-}
+
 
 .alignA {
 	font-size: 14px;

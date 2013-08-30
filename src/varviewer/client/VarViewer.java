@@ -14,12 +14,9 @@ import com.google.gwt.user.client.ui.RootPanel;
  * can display either a VarDisplay or a SampleView element in it. 
  */
 public class VarViewer implements EntryPoint, LoginListener {
-
-	//Static reference to VarViewer object 
-	//static private VarViewer viewer = null;
 	
 	public VarViewer() {
-	//	viewer = this;
+		//nothing to do...
 	}
 
 	public void onModuleLoad() {
@@ -38,7 +35,7 @@ public class VarViewer implements EntryPoint, LoginListener {
 		mainPanel.add(topBar);
 		centerPanel = new FlowPanel();
 		mainPanel.add(centerPanel);
-		Label footer = new Label("VariantViewer, ARUP Labs, version 1.3 August 1, 2013");
+		Label footer = new Label("VariantViewer, ARUP Labs, version 1.3.1 August 23, 2013");
 		footer.setStylePrimaryName("footer");
 		mainPanel.add(footer);
 		showLoginPanel();

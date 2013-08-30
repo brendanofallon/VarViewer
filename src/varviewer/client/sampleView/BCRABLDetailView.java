@@ -87,6 +87,16 @@ public class BCRABLDetailView extends SampleDetailDisplay {
 
 	protected void showReport(BCRABLReport result) {
 		reportPanel.clear();
+		
+//		if (! result.isPassedQualityCheck()) {
+//			reportPanel.add(new HTML("<b> Warning: Sample may be of insufficient quality </b> <br>"));
+//			reportPanel.add(new HTML("<b> " + result.getQualityMessage() + "</b>"));
+//		}
+//		else {
+//			reportPanel.add(new Label("Sample passed internal quality assessment."));
+//		}	
+//		reportPanel.add(new HTML("<hr>"));
+		
 		reportPanel.add(new Label(result.getMessage()));
 		for(String text : result.getReportText()) {
 			reportPanel.add(new Label(text));	

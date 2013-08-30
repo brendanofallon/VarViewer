@@ -7,16 +7,16 @@ import java.util.Set;
 import varviewer.shared.variant.Variant;
 
 import com.google.gwt.cell.client.CheckboxCell;
+import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
+import com.google.gwt.view.client.CellPreviewEvent;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 
 /**
  * A fairly thin wrapper for a CellTable<Variant>, this just displays a list of variants.
@@ -34,29 +34,29 @@ public class VarPage extends CellTable<Variant> {
 		super(VarTable.VISIBLE_ROWS, resources);
 		varData.addDataDisplay(this);
 		this.setWidth("100%", true);		
-		
-		//Initialize selection model and check box column
-		final MultiSelectionModel<Variant> selectionModel = new MultiSelectionModel<Variant>();
 
-		this.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Variant> createCheckboxManager());
-		
-		
-		selectionModel.addSelectionChangeHandler(new Handler() {
+		this.addCellPreviewHandler(new CellPreviewEvent.Handler<Variant>() {
+
 			@Override
-			public void onSelectionChange(SelectionChangeEvent event) {
-				
-				Set<Variant> selectedVars = selectionModel.getSelectedSet();
-				if (selectedVars.size()==0) {
-					handleSelectionChange( null );	
+			public void onCellPreview(CellPreviewEvent<Variant> event) {
+				//Many types of events may come through here, we only respond to click events
+				NativeEvent nEvt = event.getNativeEvent();
+				boolean isClick = "click".equals(nEvt.getType());
+				if (isClick) {
+					Variant var = event.getValue();
+					if (var != null) {
+						fireVariantSelection(var);
+					}
 				}
-				else {
-					Variant var = selectedVars.iterator().next();
-					handleSelectionChange( var );
-				}
-				
 			}
+			
 		});
-	
+		
+		
+		//Potential confusion here: We use a SelectionModel to handle the CheckBoxes, which are always column 0,
+		//but clicks on rows separately trigger the gene details box to be updated.
+		final MultiSelectionModel<Variant> selectionModel = new MultiSelectionModel<Variant>();
+		this.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Variant> createCheckboxManager(0));
 		
 		Column<Variant, Boolean> checkColumn = new Column<Variant, Boolean>(
 			    new CheckboxCell(true, false)) {
@@ -64,9 +64,11 @@ public class VarPage extends CellTable<Variant> {
 			  public Boolean getValue(Variant var) {
 			    return selectionModel.isSelected(var);
 			  }
+			  
 			};
 		
 		this.addColumn(checkColumn, SafeHtmlUtils.fromSafeConstant("<br/>"));
+	
 		this.setColumnWidth(checkColumn, 40, Unit.PX);
 	}
 
@@ -179,6 +181,5 @@ public class VarPage extends CellTable<Variant> {
 			l.variantSelected(selectedVar);
 		}
 	}
-
 
 }

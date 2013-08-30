@@ -77,7 +77,7 @@ public class SampleChooserPanel extends FlowPanel {
 
 			@Override
 			public String getValue(PedigreeSample o) {
-				return o.getRelId();
+				return o.getRelSample().getSampleID();
 			}
 		});
 		
@@ -104,14 +104,14 @@ public class SampleChooserPanel extends FlowPanel {
 		Column<PedigreeSample, String> remCol = new Column<PedigreeSample, String>(removeCell) {
 			@Override
 			public String getValue(PedigreeSample object) {
-				return object.getRelId();
+				return object.getRelSample().getSampleID();
 			}
 		}; 
 		remCol.setFieldUpdater(new FieldUpdater<PedigreeSample, String>() {
 
 			@Override
 			public void update(int index, PedigreeSample object, String value) {
-				System.out.println("Attempting to remove sample with name: " + object.getRelId());
+				System.out.println("Attempting to remove sample with name: " + object.getRelSample());
 				removeSample(object);
 			}
 		});
@@ -141,9 +141,9 @@ public class SampleChooserPanel extends FlowPanel {
 	}
 
 
-	public void addSample(String sampleId) {
+	public void addSample(SampleInfo sample) {
 		PedigreeSample pedSample = new PedigreeSample();
-		pedSample.setRelId(sampleId);
+		pedSample.setRelSample(sample);
 		pedSample.setzType(defaultZygType);
 		pedSample.setoType(defaultOp);
 		data.getList().add(pedSample);
@@ -159,7 +159,7 @@ public class SampleChooserPanel extends FlowPanel {
 	 * @param sample
 	 */
 	public void addSampleInfo(SampleInfo sample) {
-		this.addSample(sample.getSampleID());
+		this.addSample(sample);
 	}
 	
 	
