@@ -26,16 +26,25 @@ public class VVProps {
 		//Look for a file to add more properties
 		File propsFile = new File(PROPS_FILENAME);
 		if (! propsFile.exists()) {
+			Logger.getLogger(VVProps.class).info("No properties file on path: " + propsFile.getAbsolutePath());
 			propsFile = new File("../" + PROPS_FILENAME);
 		}
 		if (! propsFile.exists()) {
+			Logger.getLogger(VVProps.class).info("No properties file on path: " + propsFile.getAbsolutePath());
 			propsFile = new File(System.getProperty("user.dir") + "/" + PROPS_FILENAME);
 		}
 		if (! propsFile.exists()) {
+			Logger.getLogger(VVProps.class).info("No properties file on path: " + propsFile.getAbsolutePath());
 			propsFile = new File(System.getProperty("user.home") + "/" + PROPS_FILENAME);
 		}
 		
+		if (! propsFile.exists()) {
+			Logger.getLogger(VVProps.class).info("No properties file on path: " + propsFile.getAbsolutePath());
+			propsFile = new File("/usr/share/tomcat6/webapps/VarViewer/" + PROPS_FILENAME);
+		}
+		
 		if (!propsFile.exists()) {
+			Logger.getLogger(VVProps.class).info("No properties file on path: " + propsFile.getAbsolutePath());
 			Logger.getLogger(VVProps.class).error("Could not find properties file on any path!");
 			return;
 		}

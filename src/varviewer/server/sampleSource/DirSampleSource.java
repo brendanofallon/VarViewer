@@ -84,7 +84,14 @@ public class DirSampleSource implements SampleSource {
 		File[] subdirs = parentDir.listFiles();
 		for(int i=0; i<subdirs.length; i++) {
 			if (subdirs[i].isDirectory()) {
-				SampleInfoFile sampleInfo = createInfoForFile(subdirs[i]);
+				SampleInfoFile sampleInfo = null;
+				try {
+					sampleInfo = createInfoForFile(subdirs[i]);
+				}
+				catch(Exception ex) {
+					System.err.println("Error reading sample info for file : " + subdirs[i] + " " + ex.getLocalizedMessage());
+					Logger.getLogger(this.getClass()).warn("Error reading sample info for file : " + subdirs[i] + " " + ex.getLocalizedMessage());
+				}
 
 				if (sampleInfo != null) {
 					if (sampleInfo.info != prohibitedInfo) {

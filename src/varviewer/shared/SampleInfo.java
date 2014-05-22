@@ -3,6 +3,8 @@ package varviewer.shared;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Information about a particular sample that is available on the server. Various SampleSource
@@ -22,6 +24,7 @@ public class SampleInfo implements Serializable {
 	private String bamFile = null;  //relative path to BAM file
 	private String bamLink = null;  //location of html link to BAM file
 	private String qcLink = null; //location of link to qc report
+	private Map<String, String> allItems = new HashMap<String, String>();
 	
 	public SampleInfo() {
 		//required no-arg constructor
@@ -34,6 +37,18 @@ public class SampleInfo implements Serializable {
 		this.submitter = submitter;
 	}
 
+	public void addItem(String key, String value) {
+		allItems.put(key, value);
+	}
+	
+	public String getItem(String key) {
+		return allItems.get(key);
+	}
+	
+	public boolean containsItem(String key) {
+		return allItems.containsKey(key);
+	}
+	
 	public int getUniqueKey() {
 		String str = getKeyText();
 		return str.hashCode();

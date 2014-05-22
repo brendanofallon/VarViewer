@@ -27,6 +27,9 @@ public class SimpleReportGenerator implements ReportHandler {
 	CisTransHandler cisTransHandler = new CisTransClassifier();
 	QualityChecker qChecker = new QualityChecker();
 	
+	
+	final String[] snpsToIgnore = new String[]{ "K247R", "Y320C", "E499E", "F311V", "T240T", "T315T" }; 
+	
 	public CisTransHandler getCisTransHandler() {
 		return cisTransHandler;
 	}
@@ -49,6 +52,20 @@ public class SimpleReportGenerator implements ReportHandler {
 	public BCRABLReport getReportForSample(SampleInfo info) {
 		BCRABLReport report = new BCRABLReport();
 		
+		
+		String meanCoverage = info.getItem("mean.depth");
+		if (meanCoverage != null) {
+			try {
+				Double cov = Double.parseDouble(meanCoverage);
+				report.setMeanCoverage(cov);
+			}
+			catch(Exception ex) {
+				Logger.getLogger(getClass()).warn("Error computing mean coverage for sample " + info.getSampleID() + " : " + ex.getMessage());
+			}
+		}
+		else {
+			Logger.getLogger(getClass()).warn("No mean coverage info for sample " + info.getSampleID() );
+		}
 		
 		VariantCollection vars = sampleSource.getVariantsForSample(info);
 		if (vars == null) {
@@ -85,14 +102,14 @@ public class SimpleReportGenerator implements ReportHandler {
 			report.setMessage(varList.size() + " mutation was detected.");
 			String line = createLineForVariant( varList.get(0));
 			report.addReportTextLine(line);
-			resistanceComments.add( createResistanceComment(varList.get(0)));
+			resistanceComments.add( createVarComment(varList.get(0)));
 		}
 		else {
 			report.setMessage(varList.size() + " mutations were detected.");
 			
 			for(Variant var : varList) {
 				String line = createLineForVariant(var);
-				resistanceComments.add( createResistanceComment(var));
+				resistanceComments.add( createVarComment(var));
 				
 				//Compute all possible cis/trans relationships
 				String cisTransPhrase = "";
@@ -129,7 +146,15 @@ public class SimpleReportGenerator implements ReportHandler {
 		return report;
 	}
 	
-	private String createResistanceComment(Variant var) {
+	private String createVarComment(Variant var) {
+		//Generate ignore comment
+		String pDot = var.getAnnotationStr("pdot").replace("p.", "");
+		for(int i=0; i<snpsToIgnore.length; i++) {
+			if (pDot.equals(snpsToIgnore[i])) {
+				return pDot + " is a common SNP. Do not report.";
+			}
+		}
+		
 		//Generate resistance comment
 		String known = var.getAnnotationStr("Known");
 		boolean knownResistant = false;
@@ -138,10 +163,10 @@ public class SimpleReportGenerator implements ReportHandler {
 		}
 		
 		if (knownResistant) {
-			return var.getAnnotationStr("pdot").replace("p.", "") + " has been reported to confer resistance to BCR-ABL1 tyrosine kinase inhibitors.";
+			return pDot + " has been reported to confer resistance to BCR-ABL1 tyrosine kinase inhibitors.";
 		}
 		else {
-			return "No data on resistance for " + var.getAnnotationStr("pdot").replace("p.", "");	
+			return "No data on resistance for " + pDot;	
 		}
 	}
 	

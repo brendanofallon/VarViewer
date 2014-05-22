@@ -75,6 +75,8 @@ public class DefaultSampleInfoParser implements SampleInfoParser {
 		SampleInfo info = new SampleInfo();
 		
 		for(String key: properties.keySet()) {
+			info.addItem(key, properties.get(key));
+			
 			if (key.equals("sample.name")) {
 				info.setSampleID(properties.get(key));
 			}

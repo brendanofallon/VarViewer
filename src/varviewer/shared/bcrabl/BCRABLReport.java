@@ -9,6 +9,7 @@ public class BCRABLReport implements Serializable {
 	String message;
 	String sampleAccession;
 	String analysisDate;
+	Double meanCoverage = -1d;
 	List<String> reportText = new ArrayList<String>();
 	
 	boolean passedQualityCheck = false;
@@ -20,6 +21,18 @@ public class BCRABLReport implements Serializable {
 
 	
 	
+	public Double getMeanCoverage() {
+		return meanCoverage;
+	}
+
+
+
+	public void setMeanCoverage(Double meanCoverage) {
+		this.meanCoverage = meanCoverage;
+	}
+
+
+
 	public boolean isPassedQualityCheck() {
 		return passedQualityCheck;
 	}
