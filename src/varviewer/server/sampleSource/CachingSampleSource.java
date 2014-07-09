@@ -20,7 +20,7 @@ import varviewer.shared.SampleTreeNode;
  */
 public class CachingSampleSource implements SampleSource {
 
-	int samplesToCache = 4;
+	int samplesToCache = 20;
 	private SampleSource source;
 	
 	private List<CachedSample> cache = new LinkedList<CachedSample>();

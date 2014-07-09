@@ -207,7 +207,12 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				String val = var.getAnnotationStr("cdot");
-				return val != null ? val : "-";
+				String usingPreferred = var.getAnnotationStr("non.preferred.transcript");
+				String append = "";
+				if (usingPreferred != null && usingPreferred.toLowerCase().equals("false")) {
+					append = "*";
+				}
+				return val != null ? val+append : "-" +append;
 			}
 		}, 2.0));
 
@@ -347,6 +352,16 @@ public class ColumnStore {
 			}
 		}, 1.0);
 		
+		
+		VarAnnotation<String> espFreqCol =new VarAnnotation<String>("exomes5400.frequency", "6500 Exomes", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double val = var.getAnnotationDouble("exomes5400.frequency");
+				return val != null ? val.toString() : "0";
+			}
+		});
+		addColumn(espFreqCol);
 		
 		//Null population frequency values should be converted to zero
 		popFreqMAFCol.setComparator(new Comparator<Variant>() {

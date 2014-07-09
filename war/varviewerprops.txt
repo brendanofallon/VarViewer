@@ -1,5 +1,5 @@
 #sample.dir=/Users/brendanofallon/jobwrangler_samples/
 sample.dir=/home/brendan/jobwrangler_samples/
 genedb.path=geneInfo.csv:../geneInfo.csv:/home/brendan/workspace/VarViewer/war/geneInfo.csv:/home/web/geneInfo.csv
-numeric.annotations=pop.freq:depth:var.depth:quality:varbin.bin:sift.score:mt.score:pp.score:gerp.score:phylop.score:siphy.score:ma.score:lrt.score:exomes.freq:ARUP.overall.freq
+numeric.annotations=pop.freq:depth:var.depth:quality:varbin.bin:sift.score:mt.score:pp.score:gerp.score:phylop.score:siphy.score:ma.score:lrt.score:exomes.freq:ARUP.overall.freq:exomes5400.frequency
 
