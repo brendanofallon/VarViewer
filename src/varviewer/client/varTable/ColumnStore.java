@@ -363,6 +363,37 @@ public class ColumnStore {
 		});
 		addColumn(espFreqCol);
 		
+
+		VarAnnotation<String> espGenotypesCol =new VarAnnotation<String>("exomes5400.genotypes", "6500 Exomes Details", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double eaHet = var.getAnnotationDouble("exomes5400.EA.het");
+				Double eaHomAlt = var.getAnnotationDouble("exomes5400.EA.homalt");
+				Double aaHet = var.getAnnotationDouble("exomes5400.AA.het");
+				Double aaHomAlt = var.getAnnotationDouble("exomes5400.AA.homalt");
+				String eaHetStr =  eaHet != null ? (100.0*eaHet)+"" : "0.0";
+				String eaHomAltStr =  eaHomAlt != null ? (100.0*eaHomAlt) + "" : "0.0";
+				String aaHetStr =  aaHet != null ? (100.0*aaHet)+"" : "0.0";
+				String aaHomAltStr =  aaHomAlt != null ? (100.0*aaHomAlt)+"" : "0.0";
+				if (eaHetStr.length()>4) {
+					eaHetStr = eaHetStr.substring(0, 4);
+				}
+				if (eaHomAltStr.length()>4) {
+					eaHomAltStr = eaHomAltStr.substring(0, 4);
+				}
+				if (aaHetStr.length()>4) {
+					aaHetStr = aaHetStr.substring(0, 4);
+				}
+				if (aaHomAltStr.length()>4) {
+					aaHomAltStr = aaHomAltStr.substring(0, 4);
+				}
+				
+				return "Het/Homs EA: " + eaHetStr + "/" + eaHomAltStr + " AA: " + aaHetStr + "/" + aaHomAltStr; 
+			}
+		});
+		addColumn(espGenotypesCol);
+		
 		//Null population frequency values should be converted to zero
 		popFreqMAFCol.setComparator(new Comparator<Variant>() {
 

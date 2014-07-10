@@ -51,26 +51,33 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 		String varType = var.getAnnotationStr(varTypeIndex);
 		String exonFunc = var.getAnnotationStr(exonFuncIndex);
 		
+		
+		
 		if (varType == null)
 			return missingDataPasses;
 		
+		//A little clumsy here, but we need to detect if these annotations came from annovar or SnpEff
+		//For SnpEff, everything is always capitalized, annovar not so. 		
+		boolean isSnpEff = varType.toUpperCase().equals(varType);
+		
+		varType = varType.toLowerCase();
 		if (excludeIntergenic 
-				&& (varType.contains("intergenic") 
+				&& (varType.contains("intergen") 
 						|| varType.contains("upstream") 
 						|| varType.contains("downstream")
 						|| (var.getAnnotationStr(geneIndex) != null && var.getAnnotationStr(geneIndex).length() < 2))) {
 			return false;
 		}
 		
-		if (excludeIntronic && varType.contains("intronic")) {
+		if (excludeIntronic && varType.contains("intron")) {
 			return false;
 		}
 		
-		if (excludeUTR && varType.contains("UTR")) {
+		if (excludeUTR && varType.contains("utr")) {
 			return false;
 		}
 		
-		if (excludeNCRNA && varType.contains("ncRNA")) {
+		if (excludeNCRNA && varType.contains("ncrna")) {
 			return false;
 		}
 		
@@ -78,6 +85,11 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 			return false;
 		}
 		
+		//The SnpEff annotator doesn't distinguish between exonFunc and varType, and just dumps everything 
+		//into varType, so if we get here and we're doing snpEff, then use varType as exonFunc
+		if (isSnpEff) {
+			exonFunc = varType.toLowerCase();
+		}
 		
 		// ORDER CRUCIAL! Don't test exonFunc for nullness until after all varType tests!
 		if (exonFunc == null) {
@@ -88,7 +100,7 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 			return false;
 		}
 		
-		if (excludeNonsynonymous && exonFunc.contains("nonsynonymous")) {
+		if (excludeNonsynonymous && ( exonFunc.contains("nonsynonymous") || exonFunc.contains("non_synonymous"))) {
 			return false;
 		}
 		
@@ -101,7 +113,7 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 		}
 
 		
-		if (excludeFrameshift && exonFunc.startsWith("frameshift")) {
+		if (excludeFrameshift && (exonFunc.startsWith("frameshift") || exonFunc.startsWith("frame_shift"))) {
 			return false;
 		}
 		
