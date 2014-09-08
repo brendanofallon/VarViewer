@@ -40,6 +40,7 @@ public class DefaultSampleInfoParser implements SampleInfoParser {
 			if (subFile.getName().equals(SAMPLE_MANIFEST_FILENAME)) {
 				Map<String, String> manifestProperties = parseManifest(subFile);
 				SampleInfo info = parseSampleInfo(dirFile, manifestProperties);
+				info.setAbsolutePath(dirFile.getAbsolutePath());
 				return info;	
 			}
 		}

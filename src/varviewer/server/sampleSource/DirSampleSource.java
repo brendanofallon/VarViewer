@@ -24,7 +24,7 @@ import varviewer.shared.SampleTreeNode;
 public class DirSampleSource implements SampleSource {
 
 	private File rootDir = null;
-	private Map<Integer, SampleInfoFile> samples = new HashMap<Integer, SampleInfoFile>();
+	private Map<String, SampleInfoFile> samples = new HashMap<String, SampleInfoFile>();
 	private SampleTreeNode root = null; //null until initialized
 	private VariantReader variantReader = null;
 	
@@ -95,7 +95,7 @@ public class DirSampleSource implements SampleSource {
 
 				if (sampleInfo != null) {
 					if (sampleInfo.info != prohibitedInfo) {
-						int key = sampleInfo.info.getUniqueKey();
+						String key = sampleInfo.info.getAbsolutePath();
 						if (samples.containsKey(key)) {
 							SampleInfoFile existing = samples.get(key);
 							File existingFile = existing.source;
@@ -103,7 +103,7 @@ public class DirSampleSource implements SampleSource {
 							
 							//Same keys, different files, this shouldn't happen
 							if (! existingFile.equals(newConflictingFile)) {
-								throw new IllegalStateException("Conflicting sample keys, sample with id " + sampleInfo.info.getSampleID() + " has key " + sampleInfo.info.getUniqueKey() + " (text: " + sampleInfo.info.getKeyText() + ", directory: " + sampleInfo.source.getAbsolutePath() + "),  is associated with " + samples.get(key).info.getSampleID() + " (key text: " + existing.info.getKeyText() + " dir: " + existingFile + ")");
+								throw new IllegalStateException("Conflicting sample keys, sample with id " + sampleInfo.info.getSampleID() + " has key " + sampleInfo.info.getAbsolutePath() + " is associated with " + samples.get(key).info.getSampleID() + " (key text: " + existing.info.getAbsolutePath() + " dir: " + existingFile + ")");
 							}
 						}
 						
@@ -156,8 +156,8 @@ public class DirSampleSource implements SampleSource {
 	
 	@Override
 	public boolean containsSample(SampleInfo sample) {
-		int sampleKey = sample.getUniqueKey();
-		for(Integer qKey : samples.keySet()) {
+		String sampleKey = sample.getAbsolutePath();
+		for(String qKey : samples.keySet()) {
 			if (qKey.equals(sampleKey)) {
 				return true;
 			}
@@ -175,8 +175,8 @@ public class DirSampleSource implements SampleSource {
 	}
 
 	@Override
-	public SampleInfo getInfoForSample(SampleInfo sample) {
-		SampleInfoFile infoFile = samples.get(sample.getUniqueKey());
+	public SampleInfo getInfoForSample(String path) {
+		SampleInfoFile infoFile = samples.get(path);
 		if (infoFile == null)
 			return null;
 		else 
@@ -189,8 +189,8 @@ public class DirSampleSource implements SampleSource {
 		}
 		
 		
-		SampleInfo info = samples.get(sample.getUniqueKey()).info;
-		File sampleDir = samples.get(sample.getUniqueKey()).source;
+		SampleInfo info = samples.get(sample.getAbsolutePath()).info;
+		File sampleDir = samples.get(sample.getAbsolutePath()).source;
 		String bamPath = info.getBamFile();
 		File bamFile = null;
 		if (bamPath.startsWith("/")) {
@@ -206,7 +206,7 @@ public class DirSampleSource implements SampleSource {
 	@Override
 	public VariantCollection getVariantsForSample(SampleInfo sample) {
 		if ( containsSample(sample)) {
-			File sampleDir = samples.get(sample.getUniqueKey()).source;
+			File sampleDir = samples.get(sample.getAbsolutePath()).source;
 			String varsPath =  sample.getAnnotatedVarsFile();
 			if (varsPath == null || varsPath.length()==0) {
 				return null;
@@ -241,7 +241,7 @@ public class DirSampleSource implements SampleSource {
 		else {
 			Logger.getLogger(getClass()).warn("Request for variants from sample " + sample.getSampleID() + " but there's no sample with that ID" );
 			StringBuilder msg = new StringBuilder();
-			for(Integer key : samples.keySet()) {
+			for(String key : samples.keySet()) {
 				msg.append(samples.get(key).info + ", ");
 			}
 			Logger.getLogger(getClass()).warn("Current sample ids are: " + msg);

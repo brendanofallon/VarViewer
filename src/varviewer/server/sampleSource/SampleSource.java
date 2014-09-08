@@ -49,7 +49,7 @@ public interface SampleSource extends HasSamples {
 	 * @param sampleID
 	 * @return
 	 */
-	public SampleInfo getInfoForSample(SampleInfo info);
+	public SampleInfo getInfoForSample(String path);
 
 	/**
 	 * Access to the BAM file for this sample

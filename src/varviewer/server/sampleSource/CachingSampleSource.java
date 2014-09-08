@@ -2,8 +2,11 @@ package varviewer.server.sampleSource;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.log4j.Logger;
 
@@ -12,6 +15,10 @@ import varviewer.shared.HasVariants;
 import varviewer.shared.SampleInfo;
 import varviewer.shared.SampleTreeNode;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 /**
  * A VariantServer that just wraps the most recently requested variants in memory
  * for faster response times. 
@@ -19,44 +26,65 @@ import varviewer.shared.SampleTreeNode;
  *
  */
 public class CachingSampleSource implements SampleSource {
-
-	int samplesToCache = 20;
+	
+	private LoadingCache<String, CachedSample> cache;
+	
+	private final int msPerHour = 3600000;
 	private SampleSource source;
-	
-	private List<CachedSample> cache = new LinkedList<CachedSample>();
-	
+	private SampleTreeNode sampleRoot = null;
+	private Date lastRootUpdate = null;
+	private Timer sampleUpdater;
+		
 	public CachingSampleSource(SampleSource sampleSource) {
 		this.source = sampleSource;
+		
+		cache = CacheBuilder.newBuilder()
+				.maximumSize(20)
+				.build( new CacheLoader<String, CachedSample>() {
+
+					@Override
+					public CachedSample load(String path) throws Exception {
+						
+						// source.initialize(); //Previous implementation had this, but its really expensive and maybe doesn't do anything
+						SampleInfo info = source.getInfoForSample(path);
+						if (info == null) {
+							throw new Exception("Invalid sample path: " + path);
+						}
+						VariantCollection vars = source.getVariantsForSample(info);
+						
+						CachedSample cs = new CachedSample(info,vars);
+						return cs;
+					}
+					
+				});
+		
+		//This timer fires periodicially (and in the background) to update the sample tree (the list of all samples)
+		//Previous behavior was to do it on every load, but with a lot of samples that gets too slow
+		//So now we do it in the background once an hour or so
+		sampleUpdater = new Timer();
+		sampleUpdater.scheduleAtFixedRate(new TimerTask() {
+
+			@Override
+			public void run() {
+				updateSampleTree();
+			}
+			
+		}, 100, 1*msPerHour);
 	}
 	
 	@Override
 	public VariantCollection getVariantsForSample(SampleInfo info) {
-		CachedSample sample = getCachedSample(info);
-		
-		if (sample != null) {
-			//Sweet, cache hit
-			bumpToFront(info);
-			return sample.vars;
-		}
-		
-		Logger.getLogger(CachingSampleSource.class).info("Cache miss for sample " + info.getSampleID() + ", loading new set of variants");
-		
+		CachedSample sample;
 		try {
-			//Force re-loading of sample info
-			source.initialize();
-			addToCache(info, source.getVariantsForSample(info));
-		} catch (IOException e) {
-			Logger.getLogger(CachingSampleSource.class).warn("IOError re-loading variants: " + e.getMessage());
+			Logger.getLogger(getClass()).info("Getting sample: " + info.getAbsolutePath() + " Cache size " + cache.size() );
+			sample = cache.get(info.getAbsolutePath());
+			return sample.vars;
+		} catch (ExecutionException e) {
+			Logger.getLogger(getClass()).error("Error retrieving " + info.getAbsolutePath() + ": " + e.getMessage() );
 			e.printStackTrace();
 		}
 		
-		sample = getCachedSample(info);
-		if (sample != null) {
-			return sample.vars;
-		}
-		else {
-			return null;
-		}
+		return null;
 	}
 
 
@@ -91,54 +119,50 @@ public class CachingSampleSource implements SampleSource {
 
 	@Override
 	public SampleTreeNode getSampleTreeRoot() {
-		return source.getSampleTreeRoot();
+		//Check to see if we need to update the sample tree
+		if (needUpdateForSampleTree()) {
+			updateSampleTree();
+		}
+		return sampleRoot; 
+	}
+	
+	private boolean needUpdateForSampleTree() {
+		if (sampleRoot == null) {
+			return true;
+		}
+		if (lastRootUpdate == null) {
+			return true;
+		}
+		
+		
+		if ( (lastRootUpdate.getTime() - (new Date()).getTime()) > 1*msPerHour) {
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	private void updateSampleTree() {
+		Logger.getLogger(CachingSampleSource.class).info("Updating sample tree root");
+		try {
+			source.initialize();
+			this.sampleRoot = source.getSampleTreeRoot();
+			this.lastRootUpdate = new Date();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 
 	@Override
-	public SampleInfo getInfoForSample(SampleInfo info) {
-		return source.getInfoForSample(info);
+	public SampleInfo getInfoForSample(String path) {
+		return source.getInfoForSample(path);
 	}
 
-	/**
-	 * Returns true if a sample with the given id is current in the cache
-	 * @param sampleID
-	 * @return
-	 */
-	private boolean isInCache(SampleInfo info) {
-		return getCachedSample(info) != null;
-	}
-	
-	private CachedSample getCachedSample(SampleInfo info) {
-		int infoKey = info.getUniqueKey();
-		for(CachedSample sample : cache) {
-			if (sample.info.getUniqueKey() == infoKey ) {
-				return sample;
-			}
-		}
-		return null;
-	}
-	
-	/**
-	 * 
-	 * @param sampleID
-	 */
-	private void bumpToFront(SampleInfo info) {
-		CachedSample cs = getCachedSample(info);
-		if (cs != null) {
-			cache.remove(cs);
-			cache.add(cs);
-		}
-	}
-	
-	private void addToCache(SampleInfo info, VariantCollection vars) {
-		CachedSample cs = new CachedSample(info, vars);
-		cache.add(cs);
-		if (cache.size() > samplesToCache) {
-			CachedSample removed = cache.remove(0);
-			//Logger.getLogger(CachingSampleSource.class).info("Added sample " + sampleID + " to cache, bumped " + removed.sampleID + " from cache since it was full");
-		}
-	}
+
 	
 	class CachedSample {
 		final SampleInfo info;

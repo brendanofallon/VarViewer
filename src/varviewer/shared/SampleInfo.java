@@ -24,17 +24,19 @@ public class SampleInfo implements Serializable {
 	private String bamFile = null;  //relative path to BAM file
 	private String bamLink = null;  //location of html link to BAM file
 	private String qcLink = null; //location of link to qc report
+	private String absolutePath = null;
 	private Map<String, String> allItems = new HashMap<String, String>();
 	
 	public SampleInfo() {
 		//required no-arg constructor
 	}
 	
-	public SampleInfo(String sampleID, String analysisType, Date analysisDate, String submitter) {
+	public SampleInfo(String sampleID, String analysisType, Date analysisDate, String submitter, String absolutePath) {
 		this.sampleID = sampleID;
 		this.analysisType = analysisType;
 		this.analysisDate = analysisDate;
 		this.submitter = submitter;
+		this.setAbsolutePath(absolutePath);
 	}
 
 	public void addItem(String key, String value) {
@@ -47,16 +49,6 @@ public class SampleInfo implements Serializable {
 	
 	public boolean containsItem(String key) {
 		return allItems.containsKey(key);
-	}
-	
-	public int getUniqueKey() {
-		String str = getKeyText();
-		return str.hashCode();
-	}
-	
-	public String getKeyText() {
-		String str = "" + sampleID + analysisType + analysisDate.getTime();
-		return str;
 	}
 	
 	public String getBamLink() {
@@ -139,6 +131,24 @@ public class SampleInfo implements Serializable {
 		this.vcfLink = link;
 	}
 	
+	public boolean equals(Object o) {
+		if (! (o instanceof SampleInfo)) {
+			return false;
+		}
+		
+		SampleInfo i = (SampleInfo)o;
+		return (i.getAbsolutePath().equals(this.getAbsolutePath()) 
+				&& i.sampleID.equals(this.sampleID)
+				&& i.analysisDate.equals(this.analysisDate));
+	}
+
+	public String getAbsolutePath() {
+		return absolutePath;
+	}
+
+	public void setAbsolutePath(String absolutePath) {
+		this.absolutePath = absolutePath;
+	}
 	
 	
 }
