@@ -110,10 +110,14 @@ public class DBNSFPGeneDB implements GeneDetailHandler {
 		
 		String line = reader.readLine();
 		line = reader.readLine();
-		while(line != null) {
+		
+		
+		while(line != null) {			
 			String[] toks = line.split("\t");
 			DBNSFPInfo info = new DBNSFPInfo();
 			info.geneName = toks[0];
+			
+			
 			info.mimDisease = toks[16];
 			info.diseaseDesc = toks[15];
 			info.functionDesc = toks[14];

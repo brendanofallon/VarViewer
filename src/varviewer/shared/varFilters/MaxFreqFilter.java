@@ -21,14 +21,18 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	//Max arup value
 	double arupMax = 1.0;
 	
+	double exomesMax = 100.0;
+	
+	double exomesHomMax = 100.0;
+	
 	//VarBin min
 	//int varBinMin = 3;
 	
 	private AnnotationIndex annoIndex = null;
 	private int popFreqIndex = -1;
-//	private int arupIndex = -1;
+	private int exomesIndex = -1;
+	private int exomesHomIndex = -1;
 	private int arupOverallFreqIndex = -1;
-//	private int varbinIndex = -1;
 	
 	public MaxFreqFilter() {
 		//Required no-arg constructor
@@ -37,6 +41,9 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	public void setAnnotationIndex(AnnotationIndex index) {
 		this.annoIndex = index;
 		this.popFreqIndex = index.getIndexForKey("pop.freq");
+		this.exomesIndex = index.getIndexForKey("exomes6500.frequency");
+		this.exomesHomIndex = index.getIndexForKey("exomes6500.homalt.frequency");
+		
 //		this.arupIndex = index.getIndexForKey("ARUP.freq");
 		this.arupOverallFreqIndex = index.getIndexForKey("ARUP.overall.freq");
 //		this.varbinIndex = index.getIndexForKey("varbin.bin");
@@ -80,9 +87,27 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		this.arupMax = arupMax;
 	}
 
+	public double getExomesMax() {
+		return exomesMax;
+	}
+
+	public void setExomesMax(double exomesMax) {
+		this.exomesMax = exomesMax;
+	}
+
+	public double getExomesHomMax() {
+		return exomesHomMax;
+	}
+
+	public void setExomesHomMax(double exomesHomMax) {
+		this.exomesHomMax = exomesHomMax;
+	}
+	
 	@Override
 	public boolean variantPasses(Variant var) {
 		Double freq = var.getAnnotationDouble(popFreqIndex);
+		Double exomesFreq = var.getAnnotationDouble(exomesIndex);
+		Double exomesHomFreq = var.getAnnotationDouble(exomesHomIndex);
 		//String arupStr = var.getAnnotationStr(arupIndex);
 		Double arupFreq = var.getAnnotationDouble(arupOverallFreqIndex);
 		//Double varbin = var.getAnnotationDouble(varbinIndex);
@@ -92,13 +117,29 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 			freq = 0.0;
 		if (arupFreq == null)
 			arupFreq = 0.0;
+		if (exomesFreq == null) {
+			exomesFreq = 0.0;
+		}
+		if (exomesHomFreq == null) {
+			exomesHomFreq = 0.0;
+		}
+		
 //		if (varbin == null) {
+		
 //			varbin = 0.0;
 //		}
 		
 		
 		
 		if (freq > maxFreq) {
+			return false;
+		}
+		
+		if (exomesFreq > exomesMax) {
+			return false;
+		}
+		
+		if (exomesHomFreq > exomesHomMax) {
 			return false;
 		}
 
@@ -115,7 +156,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 
 	@Override
 	public String getUserDescription() {
-		return "Excluding variants with population frequency (from 1000 Genomes) greater than " + maxFreq + " and ARUP frequency greater than " + arupMax; 
+		return "Excluding variants with population frequency (from 1000 Genomes) > " + maxFreq + ", ESP Freq > " + exomesMax + " ESP Homs > " + exomesHomMax + ", and ARUP frequency greater than " + arupMax; 
 	}
 
 }

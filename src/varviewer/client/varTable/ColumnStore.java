@@ -233,6 +233,36 @@ public class ColumnStore {
 			}
 		}, 1.0));
 		
+		
+		addColumn(new VarAnnotation<SafeHtml>("omim.inheritance", "OMIM Inheritance",new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
+
+			@Override
+			public SafeHtml getValue(Variant var) {
+				String inheritance = var.getAnnotationStr("omim.inheritance");
+				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
+				
+				
+							
+				if (inheritance == null || inheritance.equals("null") || inheritance.equals("UNKNOWN")) {
+					bldr.appendHtmlConstant("<span style=\"color: gray;\"><b>?</b></span>");;
+				}
+				if (inheritance.toLowerCase().equals("recessive")) {
+					bldr.appendHtmlConstant("<span style=\"color: blue;\"><b>AR</b></span>");;
+				}
+				if (inheritance.toLowerCase().equals("dominant")) {
+					bldr.appendHtmlConstant("<span style=\"color: red;\"><b>AD</b></span>");
+				}
+				if (inheritance.toLowerCase().equals("xlinked")) {
+					bldr.appendHtmlConstant("<span style=\"color: magenta;\"><b>1</b></span>");
+				}
+				if (inheritance.equals("BOTH")) {
+					bldr.appendHtmlConstant("<span style=\"color: blue;\"><b>AR</b></span>, ");
+					bldr.appendHtmlConstant("<span style=\"color: red;\"><b>AD</b></span>");
+				}
+				return bldr.toSafeHtml();
+			}
+		}, 1.0));
+		
 		addColumn(new VarAnnotation<String>("alt", "Alt.", new TextColumn<Variant>() {
 
 			@Override
@@ -345,8 +375,8 @@ public class ColumnStore {
 				if (val == null)
 					val = 0.0;
 				String retVal = "" + Math.min(val,  1.0-val);
-				if (retVal.length()>4) {
-					retVal = retVal.substring(0, 4);
+				if (retVal.length()>6) {
+					retVal = retVal.substring(0, 6);
 				}
 				return retVal; 
 			}
@@ -358,6 +388,9 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("exomes5400.frequency");
+				if (val == null) {
+					val = var.getAnnotationDouble("exomes6500.frequency");
+				}
 				return val != null ? val.toString() : "0";
 			}
 		});
@@ -391,8 +424,73 @@ public class ColumnStore {
 				
 				return "Het/Homs EA: " + eaHetStr + "/" + eaHomAltStr + " AA: " + aaHetStr + "/" + aaHomAltStr; 
 			}
-		});
+		}, 2.0);
 		addColumn(espGenotypesCol);
+		
+		VarAnnotation<String> espHomozygousCol =new VarAnnotation<String>("exome6500.hom.frequency", "6500 Exomes Homozygous freq.", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double homFreq = var.getAnnotationDouble("exomes6500.homalt.frequency");
+				
+				if (homFreq == null) {
+					homFreq = 0.0;
+				}
+				String homFreqStr = homFreq.toString();
+				if (homFreqStr.length()>5) {
+					homFreqStr = homFreqStr.substring(0, 5);
+				}
+				
+				return homFreqStr; 
+			}
+		}, 1.0);
+		addColumn(espHomozygousCol);
+		
+		VarAnnotation<String> espEADetailsCol =new VarAnnotation<String>("exome6500.EA.details", "6500 Exomes Eur. Am. Genotypes (Het / Hom)", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double eaHet = var.getAnnotationDouble("exomes6500.EA.het");
+				Double eaHomAlt = var.getAnnotationDouble("exomes6500.EA.homalt");
+				
+				String eaHetStr =  eaHet != null ? (100.0*eaHet)+"" : "0.0";
+				String eaHomAltStr =  eaHomAlt != null ? (100.0*eaHomAlt) + "" : "0.0";
+				
+				if (eaHetStr.length()>4) {
+					eaHetStr = eaHetStr.substring(0, 4);
+				}
+				if (eaHomAltStr.length()>4) {
+					eaHomAltStr = eaHomAltStr.substring(0, 4);
+				}
+				
+				
+				return eaHetStr + " / " + eaHomAltStr; 
+			}
+		}, 1.0);
+		addColumn(espEADetailsCol);
+		
+		VarAnnotation<String> espAADetailsCol =new VarAnnotation<String>("exome6500.AA.details", "6500 Exomes Afr. Am. Genotypes (Het / Hom)", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double aaHet = var.getAnnotationDouble("exomes6500.AA.het");
+				Double aaHomAlt = var.getAnnotationDouble("exomes6500.AA.homalt");
+				
+				String aaHetStr =  aaHet != null ? (100.0*aaHet)+"" : "0.0";
+				String aaHomAltStr =  aaHomAlt != null ? (100.0*aaHomAlt) + "" : "0.0";
+				
+				if (aaHetStr.length()>4) {
+					aaHetStr = aaHetStr.substring(0, 4);
+				}
+				if (aaHomAltStr.length()>4) {
+					aaHomAltStr = aaHomAltStr.substring(0, 4);
+				}
+				
+				
+				return  aaHetStr + " / " + aaHomAltStr; 
+			}
+		}, 1.0);
+		addColumn(espAADetailsCol);
 		
 		//Null population frequency values should be converted to zero
 		popFreqMAFCol.setComparator(new Comparator<Variant>() {
