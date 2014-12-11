@@ -1,11 +1,2 @@
 # Module varviewer
 # RPC service class, partial path of RPC policy file
-varviewer.client.services.LogoutService, 52548E0858A4AEAA250F08AB13B18FCE.gwt.rpc
-varviewer.client.services.VarRequestService, 0B13FA4914053FFC89F6F3CF38FC7CAA.gwt.rpc
-varviewer.client.services.AuthService, 3C46BADA760E42072E27238A1E04B061.gwt.rpc
-varviewer.client.services.ExportService, 7DE342FB65A05BFF1BB251C6455750BA.gwt.rpc
-varviewer.client.services.CisTransService, C7F82E646C3B9C7B399BB63F00D9E16A.gwt.rpc
-varviewer.client.services.TextFetchService, 15754EAC960977EAE5142FF404AFF0C8.gwt.rpc
-varviewer.client.services.SampleListService, BCACEA59DC5F05C854F7A33E7F463303.gwt.rpc
-varviewer.client.services.GeneDetailService, A1AEC053B0B8DDDD1E3602A46F482D5E.gwt.rpc
-varviewer.client.bcrablReporter.BCRABLReportService, C836AE9C899431DAD422A84C14820226.gwt.rpc

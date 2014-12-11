@@ -30,7 +30,7 @@ public class SearchBox extends HorizontalPanel {
 
 	private void initComponents() {
 		textBox.setStylePrimaryName("searchbox");
-		textBox.setText("Filter...");
+		textBox.setText("Search for samples");
 		textBox.addChangeHandler(new ChangeHandler() {
 			@Override
 			public void onChange(ChangeEvent event) {

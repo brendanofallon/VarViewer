@@ -35,9 +35,8 @@ import com.google.gwt.view.client.TreeViewModel;
 public class SampleChooserList extends FlowPanel {
 
 	private Comparator<SampleInfo> sampleSorter = new SampleDateComparator();
-	//private SearchBox searchBox;
+	private SearchBox searchBox;
 	private List<SampleInfo> allSamples = null;
-	final private SampleTreeNode rootNode = new SampleTreeNode();
 	private SampleViewModel model = null;
 	private CellBrowser sampleBrowser;
 	private SampleSelectionListener listener = null;
@@ -55,7 +54,7 @@ public class SampleChooserList extends FlowPanel {
 	 */
 	public void setFilterText(String filterText) {
 		if (allSamples != null) {
-			if (filterText == null) {
+			if (filterText == null || filterText.trim().length()==0) {
 				displaySamples(allSamples);
 				return;
 			}
@@ -73,12 +72,14 @@ public class SampleChooserList extends FlowPanel {
 	}
 	
 	private void initComponents() {
-		//searchBox = new SearchBox(this);
-		//this.add(searchBox);
+		searchBox = new SearchBox(this);
+		this.add(searchBox);
 
-		model = new SampleViewModel(rootNode);
-		rootNode.setChildren("root", new ArrayList<SampleTreeNode>());
-		sampleBrowser = new CellBrowser(model, rootNode);
+		SampleTreeNode tempRoot = new SampleTreeNode();
+		tempRoot.setChildren("root", new ArrayList<SampleTreeNode>());
+		model = new SampleViewModel(tempRoot);
+		
+		sampleBrowser = new CellBrowser(model, tempRoot);
 		sampleBrowser.setStylePrimaryName("samplebrowser");
 		selectionModel.addSelectionChangeHandler(new Handler()  {
 			@Override
@@ -109,12 +110,18 @@ public class SampleChooserList extends FlowPanel {
 
 			@Override
 			public void onSuccess(SampleListResult result) {
+				setAllSamples(result);
 				setSampleList(result);
 			}
 			  
 		  });
 	}
 	
+	protected void setAllSamples(SampleListResult result) {
+		//Stores a nice list of all samples for easy client-side filtering
+		this.allSamples = treeToList(result);
+	}
+
 	private List<SampleInfo> treeToList(SampleListResult result) {
 		List<SampleInfo> infoList = new ArrayList<SampleInfo>();
 		SampleTreeNode root = result.getRootNode();
@@ -143,6 +150,17 @@ public class SampleChooserList extends FlowPanel {
 		if (sampleSorter != null) {
 			Collections.sort(samples, sampleSorter);
 		}
+		
+		
+		SampleTreeNode rootNode = new SampleTreeNode();
+		List<SampleTreeNode> children = new ArrayList<SampleTreeNode>();
+		for(SampleInfo sample : samples) {
+			children.add(new SampleTreeNode(sample));
+		}
+		rootNode.setChildren("Search results", children);
+		SampleListResult res = new SampleListResult(rootNode);
+		
+		setSampleList(res);
 	}
 	
 	/**
@@ -152,9 +170,9 @@ public class SampleChooserList extends FlowPanel {
 	 */
 	protected void setSampleList(SampleListResult result) {
 		this.remove(sampleBrowser);
-		this.allSamples = treeToList(result);
+		SampleTreeNode rootNode = result.getRootNode();
 		model = new SampleViewModel(rootNode);
-		
+
 		rootNode.setChildren("root", result.getRootNode().getChildren());
 		
 		sampleBrowser = new CellBrowser(model, rootNode);
