@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -72,9 +75,96 @@ public class DirSampleSource implements SampleSource {
 		Logger.getLogger(getClass()).info("Initializing sample info directory from path: " + rootDir.getAbsolutePath());
 		samples.clear();
 		root = new SampleTreeNode("root", new ArrayList<SampleTreeNode>());
-		attachChildSamples(root, rootDir);
+		//attachChildSamples(root, rootDir);
+		attachChildrenConcurrently(root, rootDir);
+	}
+	
+	private void attachChildrenConcurrently(SampleTreeNode parentNode, File parentDir)  {
+		
+		ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
+		final File[] subdirs = parentDir.listFiles();
+		for(int i=0; i<subdirs.length; i++) {
+
+			if (subdirs[i].isDirectory()) {
+				Attacher attachJob = new Attacher(parentNode, subdirs[i]);
+				pool.submit(attachJob);
+			}
+		}
+		
+		pool.shutdown();
+		try {
+			pool.awaitTermination(1, TimeUnit.HOURS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
+	private void attachSample(SampleTreeNode parentNode, File subdir) {
+		if (subdir.isDirectory()) {
+			SampleInfoFile sampleInfo = null;
+			try {
+				sampleInfo = createInfoForFile(subdir);
+			}
+			catch(Exception ex) {
+				System.err.println("Error reading sample info for file : " + subdir + " " + ex.getLocalizedMessage());
+				Logger.getLogger(this.getClass()).warn("Error reading sample info for file : " + subdir + " " + ex.getLocalizedMessage());
+			}
+
+			if (sampleInfo != null) {
+				if (sampleInfo.info != prohibitedInfo) {
+					String key = sampleInfo.info.getAbsolutePath();
+					if (samples.containsKey(key)) {
+						SampleInfoFile existing = samples.get(key);
+						File existingFile = existing.source;
+						File newConflictingFile = sampleInfo.source;
+						
+						//Same keys, different files, this shouldn't happen
+						if (! existingFile.equals(newConflictingFile)) {
+							throw new IllegalStateException("Conflicting sample keys, sample with id " + sampleInfo.info.getSampleID() + " has key " + sampleInfo.info.getAbsolutePath() + " is associated with " + samples.get(key).info.getSampleID() + " (key text: " + existing.info.getAbsolutePath() + " dir: " + existingFile + ")");
+						}
+					}
+					
+					samples.put(key, sampleInfo);
+					SampleTreeNode sampleNode = new SampleTreeNode(sampleInfo.info);
+					parentNode.addChild(sampleNode);
+				}
+			}
+			else {
+				//No sample manifest or info in this directory, so assume that it contains more directories to list
+				 
+				if (subdir.listFiles().length>0) {
+					SampleTreeNode dirNode = new SampleTreeNode(subdir.getName(), new ArrayList<SampleTreeNode>());
+					attachChildSamples(dirNode, subdir);
+					//Don't include empty directories
+					if (dirNode.getChildren().size()>0)
+						parentNode.addChild(dirNode);
+				}
+			}
+		}
+	}
+	
+	class Attacher implements Runnable {
+		File subdir;
+		SampleTreeNode parent;
+		
+		Attacher(SampleTreeNode parent, File subdir) {
+			this.subdir = subdir;
+			this.parent = parent;
+		}
+
+		@Override
+		public void run() {
+			SampleTreeNode dirNode = new SampleTreeNode(subdir.getName(), new ArrayList<SampleTreeNode>());
+			attachSample(dirNode, subdir);
+			if (dirNode.getChildren().size()>0)
+				parent.addChild(dirNode);
+		}
+		
+	}
+	
 	/**
 	 * Recursive function to scan directory structure and attempt to parse 
 	 * @param parentNode
@@ -83,50 +173,7 @@ public class DirSampleSource implements SampleSource {
 	private void attachChildSamples(SampleTreeNode parentNode, File parentDir) {
 		File[] subdirs = parentDir.listFiles();
 		for(int i=0; i<subdirs.length; i++) {
-			if (subdirs[i].isDirectory()) {
-				SampleInfoFile sampleInfo = null;
-				try {
-					sampleInfo = createInfoForFile(subdirs[i]);
-				}
-				catch(Exception ex) {
-					System.err.println("Error reading sample info for file : " + subdirs[i] + " " + ex.getLocalizedMessage());
-					Logger.getLogger(this.getClass()).warn("Error reading sample info for file : " + subdirs[i] + " " + ex.getLocalizedMessage());
-				}
-
-				if (sampleInfo != null) {
-					if (sampleInfo.info != prohibitedInfo) {
-						String key = sampleInfo.info.getAbsolutePath();
-						if (samples.containsKey(key)) {
-							SampleInfoFile existing = samples.get(key);
-							File existingFile = existing.source;
-							File newConflictingFile = sampleInfo.source;
-							
-							//Same keys, different files, this shouldn't happen
-							if (! existingFile.equals(newConflictingFile)) {
-								throw new IllegalStateException("Conflicting sample keys, sample with id " + sampleInfo.info.getSampleID() + " has key " + sampleInfo.info.getAbsolutePath() + " is associated with " + samples.get(key).info.getSampleID() + " (key text: " + existing.info.getAbsolutePath() + " dir: " + existingFile + ")");
-							}
-						}
-						
-						samples.put(key, sampleInfo);
-						SampleTreeNode sampleNode = new SampleTreeNode(sampleInfo.info);
-						parentNode.addChild(sampleNode);
-					}
-				}
-				else {
-					//No sample manifest or info in this directory, so assume that it contains more directories to list
-					 
-					if (subdirs[i].listFiles().length>0) {
-						SampleTreeNode dirNode = new SampleTreeNode(subdirs[i].getName(), new ArrayList<SampleTreeNode>());
-						attachChildSamples(dirNode, subdirs[i]);
-						//Don't include empty directories
-						if (dirNode.getChildren().size()>0)
-							parentNode.addChild(dirNode);
-					}
-				}
-			}
-			else {
-				//this file is not a directory, so ignore it
-			}
+			attachSample(parentNode, subdirs[i]);
 		}
 	}
 	

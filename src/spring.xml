@@ -24,10 +24,16 @@
     <!-- bean name="infoParser" class="varviewer.server.sampleSource.SecuredSampleInfoParser" / -->
     
     <!--  SampleSource object to maintain a list of samples and deliver variants from them -->    
-	<bean name="sampleSource" class="varviewer.server.sampleSource.DirSampleSource">
+	<bean name="dirSampleSource" class="varviewer.server.sampleSource.DirSampleSource">
 	    <property name="rootDir" value="/home/brendan/jobwrangler_samples" />
 	    <property name="variantReader" ref="variantReader" />
 	    <property name="infoParser" ref="infoParser" />
+	</bean>
+	
+	<bean name="sampleSource" class="varviewer.server.sampleSource.CachingSampleSource">
+		<constructor-arg ref="dirSampleSource"/>
+		<property name="cacheSize" value="10" />
+		<property name="reloadFreqInHours" value="1.25" />
 	</bean>
 	
 	<!--  Variant annotations come from the annotated_vars file, not from a db.  -->

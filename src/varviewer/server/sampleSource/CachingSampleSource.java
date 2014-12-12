@@ -35,11 +35,14 @@ public class CachingSampleSource implements SampleSource {
 	private Date lastRootUpdate = null;
 	private Timer sampleUpdater;
 		
+	private int cacheSize = 20;
+	private double reloadFreqInHours = 1.0;
+	
 	public CachingSampleSource(SampleSource sampleSource) {
 		this.source = sampleSource;
 		
 		cache = CacheBuilder.newBuilder()
-				.maximumSize(20)
+				.maximumSize(cacheSize)
 				.build( new CacheLoader<String, CachedSample>() {
 
 					@Override
@@ -69,7 +72,7 @@ public class CachingSampleSource implements SampleSource {
 				updateSampleTree();
 			}
 			
-		}, 100, 1*msPerHour);
+		}, 100, (long)Math.round(reloadFreqInHours*msPerHour));
 	}
 	
 	@Override
@@ -87,7 +90,21 @@ public class CachingSampleSource implements SampleSource {
 		return null;
 	}
 
+	public int getCacheSize() {
+		return cacheSize;
+	}
 
+	public void setCacheSize(int cacheSize) {
+		this.cacheSize = cacheSize;
+	}
+
+	public double getReloadFreqInHours() {
+		return reloadFreqInHours;
+	}
+
+	public void setReloadFreqInHours(double reloadFreqInHours) {
+		this.reloadFreqInHours = reloadFreqInHours;
+	}
 
 	@Override
 	public HasVariants getHasVariantsForSample(SampleInfo info) {

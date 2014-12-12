@@ -36,7 +36,8 @@ public class SampleChooserList extends FlowPanel {
 
 	private Comparator<SampleInfo> sampleSorter = new SampleDateComparator();
 	private SearchBox searchBox;
-	private List<SampleInfo> allSamples = null;
+	private SampleListResult allSamples = null;
+	private List<SampleInfo> sampleInfoList = null;
 	private SampleViewModel model = null;
 	private CellBrowser sampleBrowser;
 	private SampleSelectionListener listener = null;
@@ -55,12 +56,16 @@ public class SampleChooserList extends FlowPanel {
 	public void setFilterText(String filterText) {
 		if (allSamples != null) {
 			if (filterText == null || filterText.trim().length()==0) {
-				displaySamples(allSamples);
+				setSampleList(allSamples);
 				return;
 			}
 			
+			if (sampleInfoList == null) {
+				sampleInfoList = treeToList(allSamples);
+			}
+			
 			List<SampleInfo> samplesToDisplay = new ArrayList<SampleInfo>();
-			for(SampleInfo info : allSamples) {
+			for(SampleInfo info : sampleInfoList) {
 				if (info.getSampleID().contains(filterText)
 						|| info.getAnalysisType().contains(filterText)
 						|| info.getSubmitter().contains(filterText)) {
@@ -119,7 +124,7 @@ public class SampleChooserList extends FlowPanel {
 	
 	protected void setAllSamples(SampleListResult result) {
 		//Stores a nice list of all samples for easy client-side filtering
-		this.allSamples = treeToList(result);
+		this.allSamples = result;
 	}
 
 	private List<SampleInfo> treeToList(SampleListResult result) {
@@ -175,12 +180,15 @@ public class SampleChooserList extends FlowPanel {
 
 		rootNode.setChildren("root", result.getRootNode().getChildren());
 		
-		sampleBrowser = new CellBrowser(model, rootNode);
+		CellBrowser.Builder<SampleTreeNode> cellBuilder = new CellBrowser.Builder<SampleTreeNode>(model, rootNode);
+		cellBuilder.pageSize(500);
+		sampleBrowser = cellBuilder.build();
+		
+		//sampleBrowser = new CellBrowser(model, rootNode);
 		sampleBrowser.setAnimationEnabled(true);
 		sampleBrowser.setStylePrimaryName("samplebrowser");
 		sampleBrowser.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 		this.add(sampleBrowser);
-		//setFilterText(null); //reset filter, force re-display of all samples
 	}
 	/**
 	 * Renders a single cell in the sample list table. 

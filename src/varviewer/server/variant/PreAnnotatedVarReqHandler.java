@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import varviewer.server.FilterExecutor;
 import varviewer.server.SimpleFilterExecutor;
 import varviewer.server.VariantRequestHandler;
-import varviewer.server.sampleSource.CachingSampleSource;
 import varviewer.server.sampleSource.SampleSource;
 import varviewer.shared.varFilters.PedigreeFilter;
 import varviewer.shared.variant.AnnotationIndex;
@@ -28,12 +27,7 @@ public class PreAnnotatedVarReqHandler implements VariantRequestHandler {
 	}
 
 	public void setVariantSource(SampleSource variantSource) {
-		if (! (variantSource instanceof CachingSampleSource)) {
-			this.variantSource = new CachingSampleSource(variantSource);
-		}
-		else {
-			this.variantSource = variantSource;
-		}
+		this.variantSource = variantSource;
 	}
 
 	@Override
