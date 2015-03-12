@@ -122,12 +122,13 @@ public abstract class AbstractVariantReader implements VariantReader {
 				}
 				catch (NumberFormatException nfe) {
 					//Don't sweat it, no annotation added
+					System.out.println("Huh, this one is supposedly numeric, but we couldn't parse a double : " + toks[i]);
 				}
 			}
 			else {
 				annotations[i-COLS_TO_IGNORE] = new Annotation(toks[i].trim());
 			}
-			//System.out.println( ((SimpleAnnotationIndex)index).keyForIndex(i-COLS_TO_IGNORE) + " : " + annotations[i-COLS_TO_IGNORE] + " numeric: " + numericFlags[i]); 
+			System.out.println( ((SimpleAnnotationIndex)index).keyForIndex(i-COLS_TO_IGNORE) + " : " + annotations[i-COLS_TO_IGNORE] + " numeric: " + numericFlags[i]); 
 		}
 		var.setAnnotations(Arrays.asList(annotations));
 		var.setAnnotationIndex(index);

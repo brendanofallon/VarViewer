@@ -145,25 +145,7 @@ public class DirSampleSource implements SampleSource {
 			}
 		}
 	}
-	
-	class Attacher implements Runnable {
-		File subdir;
-		SampleTreeNode parent;
-		
-		Attacher(SampleTreeNode parent, File subdir) {
-			this.subdir = subdir;
-			this.parent = parent;
-		}
 
-		@Override
-		public void run() {
-			SampleTreeNode dirNode = new SampleTreeNode(subdir.getName(), new ArrayList<SampleTreeNode>());
-			attachSample(dirNode, subdir);
-			if (dirNode.getChildren().size()>0)
-				parent.addChild(dirNode);
-		}
-		
-	}
 	
 	/**
 	 * Recursive function to scan directory structure and attempt to parse 
@@ -314,6 +296,22 @@ public class DirSampleSource implements SampleSource {
 	static class SampleInfoFile {
 		File source;
 		SampleInfo info;
+	}
+	
+	class Attacher implements Runnable {
+		File subdir;
+		SampleTreeNode parent;
+		
+		Attacher(SampleTreeNode parent, File subdir) {
+			this.subdir = subdir;
+			this.parent = parent;
+		}
+
+		@Override
+		public void run() {
+			attachSample(parent, subdir); //recursively calls attachChildSamples
+		}
+		
 	}
 
 	static final SampleInfo prohibitedInfo = new SampleInfo();

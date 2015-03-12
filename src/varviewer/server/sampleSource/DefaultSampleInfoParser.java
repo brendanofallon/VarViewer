@@ -126,7 +126,7 @@ public class DefaultSampleInfoParser implements SampleInfoParser {
 		}
 		
 		File csvFile = findCSV( new File(sampleRoot.getAbsolutePath() + "/var/") );
-		if (csvFile != null) {
+		if (csvFile != null && info.getAnnotatedVarsFile() == null) {
 			info.setAnnotatedVarsFile(csvFile.getAbsolutePath());
 		}
 		else {
