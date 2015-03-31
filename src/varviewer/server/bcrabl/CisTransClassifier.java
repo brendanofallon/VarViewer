@@ -176,54 +176,6 @@ public class CisTransClassifier implements CisTransHandler {
 		}
 		inputBAM.close();
 
-//		String newLine = System.getProperty("line.separator");
-//		String leftAlignFormat = "| %-14s | %-10s | %13.2f%% | %-8.0f |" + newLine;
-//		String leftAlignFormatSummary = "| %-10s | %-14s | %11.2f%% | %-8.0f |" + newLine;
-//		//				String centerAlignFormat = "| %14s | %10s | %13.2f%% | %8.0f |" + newLine;
-//		String totalCovFormat = "%-46s | %-8.0f |" + newLine;
-//		System.out.format("+---------------------------------------------------------+" + newLine);
-//		System.out.format("|    Min. Mapping Qual: " + requiredMappingQual +
-//				"    |     Min. Base Qual " + requiredBaseQual + "     |" + newLine);
-//		System.out.format("+----------------+------------+----------------+----------+" + newLine);
-//		System.out.format("| Ref/Alt Combo  | Haplotype  | Perc. Reads    | n Reads  |" + newLine);
-//		System.out.format("+----------------+------------+----------------+----------+" + newLine);
-//
-//		System.out.format(leftAlignFormat, "Ref / Ref", var1Ref + "..." + var2Ref,
-//				new Double((bothRefs/readCov)*100), bothRefs);
-//		System.out.format(leftAlignFormat, "Alt / Ref", var1Alt + "..." + var2Ref,
-//				new Double((alt1Only/readCov)*100), alt1Only);
-//		System.out.format(leftAlignFormat, "Ref / Alt", var1Ref + "..." + var2Alt,
-//				new Double((alt2Only/readCov)*100), alt2Only);
-//
-//
-//		System.out.format(leftAlignFormat, "Alt / Alt", var1Alt + "..." + var2Alt,
-//				new Double((bothAlts/readCov)*100), bothAlts);
-//		System.out.format(leftAlignFormat, "Misc.", "NA",
-//				new Double((misc/readCov)*100), misc);
-//
-//		System.out.format("+----------------+------------+----------------+----------+" + newLine);
-//		System.out.format(totalCovFormat, "", readCov);
-//		System.out.format("                                               +----------+" + newLine);
-//
-//
-//		System.out.println("\n");
-//		System.out.format("+------------+----------------+--------------+----------+" + newLine);
-//		System.out.format("| Cis/Trans  | Haplotype      | Perc. Reads  | n Reads  |" + newLine);
-//		System.out.format("+------------+----------------+--------------+----------+" + newLine);			
-//
-//		System.out.format(leftAlignFormatSummary, "Trans", var1Alt + "..." + var2Ref + " or " +
-//				var1Ref + "..." + var2Alt,
-//				new Double(( (alt1Only+alt2Only)/readCov)*100), alt1Only+alt2Only);
-//		System.out.format(leftAlignFormatSummary, "Cis", var1Alt + "..." + var2Alt,
-//				new Double((bothAlts/readCov)*100), bothAlts);
-//		System.out.format("+------------+----------------+--------------+----------+" + newLine);
-		//				System.out.format(totalCovFormat, "", readCov);
-		//				System.out.format("                                               +----------+" + newLine);			
-		//			}
-		//			else{
-		//				throw new RuntimeException("ERROR: The two variants are too far apart to determine cis/trans relationship.");
-		//			}
-
 		
 		CisTransResult result = new CisTransResult();
 		if (readCov == 0) {
@@ -240,6 +192,13 @@ public class CisTransClassifier implements CisTransHandler {
 			result.setMisc(new Double((misc/readCov)*100) );
 			result.setTransFrac(new Double(( (alt1Only+alt2Only)/readCov)*100));
 			result.setCisFrac(new Double((bothAlts/readCov)*100));
+			
+			//Philippe's new algo:
+			double minAlt = Math.min(alt1Only, alt2Only);
+			result.setNewCisFrac(new Double( bothAlts/(bothAlts + 2.0*minAlt) *100));
+			result.setNewTransFrac(new Double( 2.0*minAlt/(bothAlts+2.0*minAlt) *100));
+			
+			
 		}
 		return result;
 

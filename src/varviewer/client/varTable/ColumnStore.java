@@ -339,6 +339,30 @@ public class ColumnStore {
 			}
 			
 		}, 1.0));
+
+		
+		VarAnnotation<String> exacFreqCol =new VarAnnotation<String>("exac.freq", "ExAC 63K Exomes", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double val = var.getAnnotationDouble("exomes63K.allele.freq");
+				return val != null ? val.toString() : "0";
+			}
+		}, 1.0);
+		addColumn(exacFreqCol);
+		
+		
+		VarAnnotation<String> uk10KFreqCol =new VarAnnotation<String>("uk10k.frequency", "UK10K Frequency", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double val = var.getAnnotationDouble("uk10k.frequency");
+				return val != null ? val.toString() : "0";
+			}
+		}, 1.0);
+		addColumn(uk10KFreqCol);
+		
+		
 		
 		VarAnnotation<String> popFreqCol =new VarAnnotation<String>("pop.freq", "Pop. Freq.", new TextColumn<Variant>() {
 

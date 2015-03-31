@@ -14,7 +14,25 @@ public class CisTransResult implements Serializable {
 	Double misc;
 	Double transFrac;
 	Double cisFrac;
+	Double newCisFrac;
+	Double newTransFrac;
 	
+	public Double getNewCisFrac() {
+		return newCisFrac;
+	}
+
+	public void setNewCisFrac(Double newCisFrac) {
+		this.newCisFrac = newCisFrac;
+	}
+
+	public Double getNewTransFrac() {
+		return newTransFrac;
+	}
+
+	public void setNewTransFrac(Double newTransFrac) {
+		this.newTransFrac = newTransFrac;
+	}
+
 	public boolean isFailed() {
 		return failed;
 	}

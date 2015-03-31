@@ -166,7 +166,7 @@ public class SimpleReportGenerator implements ReportHandler {
 			return pDot + " has been reported to confer resistance to BCR-ABL1 tyrosine kinase inhibitors.";
 		}
 		else {
-			return "No data on resistance for " + pDot;	
+			return "No data on resistance for " + pDot + " to BCR-ABL1 tyrosine kinase inhibitors. The clinical significance of this finding is uncertain.";	
 		}
 	}
 	
@@ -229,17 +229,29 @@ public class SimpleReportGenerator implements ReportHandler {
 		}
 		else {
 			
-			double rawCis = result.getCisFrac();
-			double rawTrans = result.getTransFrac();
-			double normalizedCis = rawCis / (rawCis + rawTrans);
 			
-			if (normalizedCis > 0.8) {
+			double cisFrac = result.getNewCisFrac();
+			double transFrac = result.getNewTransFrac();
+			
+			if (cisFrac > 0.8) {
 				return "in cis with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
 			}
 			
-			if (normalizedCis < 0.2) {
+			if (transFrac > 0.8) {
 				return "in trans with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
 			}
+			
+//			double rawCis = result.getCisFrac();
+//			double rawTrans = result.getTransFrac();
+//			double normalizedCis = rawCis / (rawCis + rawTrans);
+//			
+//			if (normalizedCis > 0.8) {
+//				return "in cis with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
+//			}
+//			
+//			if (normalizedCis < 0.2) {
+//				return "in trans with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
+//			}
 			
 			return "";
 		}
