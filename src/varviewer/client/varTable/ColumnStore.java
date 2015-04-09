@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.Image;
  */
 public class ColumnStore {
 
+	
 	private static List<VarAnnotation<?>> cols = new ArrayList<VarAnnotation<?>>();
 	
 	private static ColumnStore store;
@@ -73,6 +74,18 @@ public class ColumnStore {
 	
 	private void addColumn(VarAnnotation<?> col) {
 		cols.add(col);
+	}
+	
+	private static String format(Double x) {
+		if (x==null) {
+			return "-";
+		}
+		String str = x.toString();
+		
+		if (x<10.0) {
+			return str.substring(0, Math.min(str.length(), 5));
+		}
+		return str;
 	}
 	
 	/**
@@ -240,14 +253,12 @@ public class ColumnStore {
 			public SafeHtml getValue(Variant var) {
 				String inheritance = var.getAnnotationStr("omim.inheritance");
 				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
-				
-				
 							
 				if (inheritance == null || inheritance.equals("null") || inheritance.equals("UNKNOWN")) {
-					bldr.appendHtmlConstant("<span style=\"color: gray;\"><b>?</b></span>");;
+					bldr.appendHtmlConstant("<span style=\"color: gray;\"><b>?</b></span>");
 				}
 				if (inheritance.toLowerCase().equals("recessive")) {
-					bldr.appendHtmlConstant("<span style=\"color: blue;\"><b>AR</b></span>");;
+					bldr.appendHtmlConstant("<span style=\"color: blue;\"><b>AR</b></span>");
 				}
 				if (inheritance.toLowerCase().equals("dominant")) {
 					bldr.appendHtmlConstant("<span style=\"color: red;\"><b>AD</b></span>");
@@ -270,6 +281,75 @@ public class ColumnStore {
 				return var.getAlt();
 			}
 		}, 1.0));
+
+		VarAnnotation<SafeHtml> scSnvRFCol =new VarAnnotation<SafeHtml>("scSNV.rf", "Splicing Impact (RF)", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
+
+			@Override
+			public SafeHtml getValue(Variant var) {
+				Double val = var.getAnnotationDouble("scSNV.rf_score");
+				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
+				
+				if (val==null) {
+					bldr.appendHtmlConstant("<span style=\"color: gray;\">-</span>");	
+				} else if (val < 0.5) {
+					bldr.appendHtmlConstant("<span style=\"color: green;\">" + format(val) + "</span>");
+				} else if (val < 0.7) {
+					bldr.appendHtmlConstant("<span style=\"color: blue;\">" + format(val) + "</span>");
+				} else {
+					bldr.appendHtmlConstant("<span style=\"color: red;\"><b>" + format(val) + "</b></span>");	
+				}
+								
+				return bldr.toSafeHtml();
+			}
+		}, 1.0) ;
+		scSnvRFCol.setComparator(new Comparator<Variant>() {
+
+			@Override
+			public int compare(Variant arg0, Variant arg1) {
+				Double val0 = arg0.getAnnotationDouble("scSNV.rf_score");
+				Double val1 = arg1.getAnnotationDouble("scSNV.rf_score");
+				if (val0==null)
+					val0 = 0.0;
+				if (val1 == null)
+					val1 = 0.0;
+				return val0.compareTo(val1);
+			}
+		});
+		addColumn(scSnvRFCol);
+		
+		VarAnnotation<SafeHtml> scSnvADACol = new VarAnnotation<SafeHtml>("scSNV.ada", "Splicing Impact (ADA)", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
+
+			@Override
+			public SafeHtml getValue(Variant var) {
+				Double val = var.getAnnotationDouble("scSNV.ada_score");
+				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
+				if (val==null) {
+					bldr.appendHtmlConstant("<span style=\"color: gray;\">-</span>");	
+				} else if (val < 0.5) {
+					bldr.appendHtmlConstant("<span style=\"color: green;\">" + format(val) + "</span>");
+				} else if (val < 0.7) {
+					bldr.appendHtmlConstant("<span style=\"color: blue;\">" + format(val) + "</span>");
+				} else {
+					bldr.appendHtmlConstant("<span style=\"color: red;\"><b>" + format(val) + "</b></span>");	
+				}
+								
+				return bldr.toSafeHtml();
+			}
+		}, 1.0);
+		scSnvADACol.setComparator(new Comparator<Variant>() {
+
+			@Override
+			public int compare(Variant arg0, Variant arg1) {
+				Double val0 = arg0.getAnnotationDouble("scSNV.ada_score");
+				Double val1 = arg1.getAnnotationDouble("scSNV.ada_score");
+				if (val0==null)
+					val0 = 0.0;
+				if (val1 == null)
+					val1 = 0.0;
+				return val0.compareTo(val1);
+			}
+		});
+		addColumn(scSnvADACol);
 		
 		addColumn(new VarAnnotation<String>("quality", "Quality", new TextColumn<Variant>() {
 
@@ -346,9 +426,22 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("exomes63K.allele.freq");
-				return val != null ? val.toString() : "0";
+				return val != null ? format(val) : "0";
 			}
 		}, 1.0);
+		exacFreqCol.setComparator(new Comparator<Variant>() {
+
+			@Override
+			public int compare(Variant arg0, Variant arg1) {
+				Double val0 = arg0.getAnnotationDouble("exomes63K.allele.freq");
+				Double val1 = arg1.getAnnotationDouble("exomes63K.allele.freq");
+				if (val0==null)
+					val0 = 0.0;
+				if (val1 == null)
+					val1 = 0.0;
+				return val0.compareTo(val1);
+			}
+		});
 		addColumn(exacFreqCol);
 		
 		
@@ -357,9 +450,22 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("uk10k.frequency");
-				return val != null ? val.toString() : "0";
+				return val != null ? format(val) : "0";
 			}
 		}, 1.0);
+		uk10KFreqCol.setComparator(new Comparator<Variant>() {
+
+			@Override
+			public int compare(Variant arg0, Variant arg1) {
+				Double val0 = arg0.getAnnotationDouble("uk10k.frequency");
+				Double val1 = arg1.getAnnotationDouble("uk10k.frequency");
+				if (val0==null)
+					val0 = 0.0;
+				if (val1 == null)
+					val1 = 0.0;
+				return val0.compareTo(val1);
+			}
+		});
 		addColumn(uk10KFreqCol);
 		
 		
@@ -369,7 +475,7 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("pop.freq");
-				return val != null ? val.toString() : "0";
+				return val != null ?format(val) : "0";
 			}
 		}, 1.0);
 		
@@ -415,7 +521,7 @@ public class ColumnStore {
 				if (val == null) {
 					val = var.getAnnotationDouble("exomes6500.frequency");
 				}
-				return val != null ? val.toString() : "0";
+				return val != null ? format(val) : "0";
 			}
 		});
 		addColumn(espFreqCol);
@@ -581,7 +687,7 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("sift.score");
-				return val != null ? val.toString() : "NA";
+				return val != null ? format(val) : "NA";
 			}
 		}, 1.0));
 		
@@ -590,7 +696,7 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("mt.score");
-				return val != null ? val.toString() : "NA";
+				return val != null ? format(val) : "NA";
 			}
 		}, 1.0));
 		
@@ -599,7 +705,7 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("gerp.score");
-				return val != null ? val.toString() : "NA";
+				return val != null ? format(val) : "NA";
 			}
 		}, 1.0));
 		
@@ -625,7 +731,7 @@ public class ColumnStore {
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("pp.score");
-				return val != null ? val.toString() : "NA";
+				return val != null ? format(val) : "NA";
 			}
 		}, 1.0));
 		

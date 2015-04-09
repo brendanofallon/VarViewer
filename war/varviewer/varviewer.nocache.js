@@ -1,18 +1,360 @@
-function varviewer(){var P='',xb='" for "gwt:onLoadErrorFn"',vb='" for "gwt:onPropertyErrorFn"',ib='"><\/script>',Z='#',Xb='.cache.html',_='/',lb='//',Qb='1BEC9128A683E4184A74FA628137FFA6',Rb='4C9679D4D603CC063AA4FB5DE75A9E88',Sb='55BE2C65A7FC4E5B86867AF2BCB55AF3',Tb='8AE5F2C7C0AB87A41A4659129212A013',Ub='923CE10A8FDDFF4C236AEE6A4E7B9E27',Wb=':',pb='::',dc='<script defer="defer">varviewer.onInjectionDone(\'varviewer\')<\/script>',hb='<script id="',sb='=',$='?',Vb='A921D44AD7FE51195563686C63BE71C2',ub='Bad handler "',cc='DOMContentLoaded',jb='SCRIPT',gb='__gwt_marker_varviewer',kb='base',cb='baseUrl',T='begin',S='bootstrap',bb='clear.cache.gif',rb='content',Y='end',Kb='gecko',Lb='gecko1_8',U='gwt.codesvr=',V='gwt.hosted=',W='gwt.hybrid',Yb='gwt/clean/clean.css',wb='gwt:onLoadErrorFn',tb='gwt:onPropertyErrorFn',qb='gwt:property',bc='head',Ob='hosted.html?varviewer',ac='href',Jb='ie6',Ib='ie8',Hb='ie9',yb='iframe',ab='img',zb="javascript:''",Zb='link',Nb='loadExternalRefs',mb='meta',Bb='moduleRequested',X='moduleStartup',Gb='msie',nb='name',Db='opera',Ab='position:absolute;width:0;height:0;border:none',$b='rel',Fb='safari',db='script',Pb='selectingPermutation',R='startup',_b='stylesheet',fb='undefined',Mb='unknown',Cb='user.agent',Q='varviewer',eb='varviewer.nocache.js',ob='varviewer::',Eb='webkit';var m=window,n=document,o=m.__gwtStatsEvent?function(a){return m.__gwtStatsEvent(a)}:null,p=m.__gwtStatsSessionId?m.__gwtStatsSessionId:null,q,r,s,t=P,u={},v=[],w=[],x=[],y=0,z,A;o&&o({moduleName:Q,sessionId:p,subSystem:R,evtGroup:S,millis:(new Date).getTime(),type:T});if(!m.__gwt_stylesLoaded){m.__gwt_stylesLoaded={}}if(!m.__gwt_scriptsLoaded){m.__gwt_scriptsLoaded={}}function B(){var b=false;try{var c=m.location.search;return (c.indexOf(U)!=-1||(c.indexOf(V)!=-1||m.external&&m.external.gwtOnLoad))&&c.indexOf(W)==-1}catch(a){}B=function(){return b};return b}
-function C(){if(q&&r){var b=n.getElementById(Q);var c=b.contentWindow;if(B()){c.__gwt_getProperty=function(a){return H(a)}}varviewer=null;c.gwtOnLoad(z,Q,t,y);o&&o({moduleName:Q,sessionId:p,subSystem:R,evtGroup:X,millis:(new Date).getTime(),type:Y})}}
-function D(){function e(a){var b=a.lastIndexOf(Z);if(b==-1){b=a.length}var c=a.indexOf($);if(c==-1){c=a.length}var d=a.lastIndexOf(_,Math.min(c,b));return d>=0?a.substring(0,d+1):P}
-function f(a){if(a.match(/^\w+:\/\//)){}else{var b=n.createElement(ab);b.src=a+bb;a=e(b.src)}return a}
-function g(){var a=F(cb);if(a!=null){return a}return P}
-function h(){var a=n.getElementsByTagName(db);for(var b=0;b<a.length;++b){if(a[b].src.indexOf(eb)!=-1){return e(a[b].src)}}return P}
-function i(){var a;if(typeof isBodyLoaded==fb||!isBodyLoaded()){var b=gb;var c;n.write(hb+b+ib);c=n.getElementById(b);a=c&&c.previousSibling;while(a&&a.tagName!=jb){a=a.previousSibling}if(c){c.parentNode.removeChild(c)}if(a&&a.src){return e(a.src)}}return P}
-function j(){var a=n.getElementsByTagName(kb);if(a.length>0){return a[a.length-1].href}return P}
-function k(){var a=n.location;return a.href==a.protocol+lb+a.host+a.pathname+a.search+a.hash}
-var l=g();if(l==P){l=h()}if(l==P){l=i()}if(l==P){l=j()}if(l==P&&k()){l=e(n.location.href)}l=f(l);t=l;return l}
-function E(){var b=document.getElementsByTagName(mb);for(var c=0,d=b.length;c<d;++c){var e=b[c],f=e.getAttribute(nb),g;if(f){f=f.replace(ob,P);if(f.indexOf(pb)>=0){continue}if(f==qb){g=e.getAttribute(rb);if(g){var h,i=g.indexOf(sb);if(i>=0){f=g.substring(0,i);h=g.substring(i+1)}else{f=g;h=P}u[f]=h}}else if(f==tb){g=e.getAttribute(rb);if(g){try{A=eval(g)}catch(a){alert(ub+g+vb)}}}else if(f==wb){g=e.getAttribute(rb);if(g){try{z=eval(g)}catch(a){alert(ub+g+xb)}}}}}}
-function F(a){var b=u[a];return b==null?null:b}
-function G(a,b){var c=x;for(var d=0,e=a.length-1;d<e;++d){c=c[a[d]]||(c[a[d]]=[])}c[a[e]]=b}
-function H(a){var b=w[a](),c=v[a];if(b in c){return b}var d=[];for(var e in c){d[c[e]]=e}if(A){A(a,d,b)}throw null}
-var I;function J(){if(!I){I=true;var a=n.createElement(yb);a.src=zb;a.id=Q;a.style.cssText=Ab;a.tabIndex=-1;n.body.appendChild(a);o&&o({moduleName:Q,sessionId:p,subSystem:R,evtGroup:X,millis:(new Date).getTime(),type:Bb});a.contentWindow.location.replace(t+L)}}
-w[Cb]=function(){var b=navigator.userAgent.toLowerCase();var c=function(a){return parseInt(a[1])*1000+parseInt(a[2])};if(function(){return b.indexOf(Db)!=-1}())return Db;if(function(){return b.indexOf(Eb)!=-1}())return Fb;if(function(){return b.indexOf(Gb)!=-1&&n.documentMode>=9}())return Hb;if(function(){return b.indexOf(Gb)!=-1&&n.documentMode>=8}())return Ib;if(function(){var a=/msie ([0-9]+)\.([0-9]+)/.exec(b);if(a&&a.length==3)return c(a)>=6000}())return Jb;if(function(){return b.indexOf(Kb)!=-1}())return Lb;return Mb};v[Cb]={gecko1_8:0,ie6:1,ie8:2,ie9:3,opera:4,safari:5};varviewer.onScriptLoad=function(){if(I){r=true;C()}};varviewer.onInjectionDone=function(){q=true;o&&o({moduleName:Q,sessionId:p,subSystem:R,evtGroup:Nb,millis:(new Date).getTime(),type:Y});C()};E();D();var K;var L;if(B()){if(m.external&&(m.external.initModule&&m.external.initModule(Q))){m.location.reload();return}L=Ob;K=P}o&&o({moduleName:Q,sessionId:p,subSystem:R,evtGroup:S,millis:(new Date).getTime(),type:Pb});if(!B()){try{G([Fb],Qb);G([Ib],Rb);G([Db],Sb);G([Lb],Tb);G([Jb],Ub);G([Hb],Vb);K=x[H(Cb)];var M=K.indexOf(Wb);if(M!=-1){y=Number(K.substring(M+1));K=K.substring(0,M)}L=K+Xb}catch(a){return}}var N;function O(){if(!s){s=true;if(!__gwt_stylesLoaded[Yb]){var a=n.createElement(Zb);__gwt_stylesLoaded[Yb]=a;a.setAttribute($b,_b);a.setAttribute(ac,t+Yb);n.getElementsByTagName(bc)[0].appendChild(a)}C();if(n.removeEventListener){n.removeEventListener(cc,O,false)}if(N){clearInterval(N)}}}
-if(n.addEventListener){n.addEventListener(cc,function(){J();O()},false)}var N=setInterval(function(){if(/loaded|complete/.test(n.readyState)){J();O()}},50);o&&o({moduleName:Q,sessionId:p,subSystem:R,evtGroup:S,millis:(new Date).getTime(),type:Y});o&&o({moduleName:Q,sessionId:p,subSystem:R,evtGroup:Nb,millis:(new Date).getTime(),type:T});n.write(dc)}
+function varviewer(){
+  var $wnd_0 = window, $doc_0 = document, $stats = $wnd_0.__gwtStatsEvent?function(a){
+    return $wnd_0.__gwtStatsEvent(a);
+  }
+  :null, $sessionId_0 = $wnd_0.__gwtStatsSessionId?$wnd_0.__gwtStatsSessionId:null, scriptsDone, loadDone, bodyDone, base = '', metaProps = {}, values = [], providers = [], answers = [], softPermutationId = 0, onLoadErrorFunc, propertyErrorFunc;
+  $stats && $stats({moduleName:'varviewer', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'begin'});
+  if (!$wnd_0.__gwt_stylesLoaded) {
+    $wnd_0.__gwt_stylesLoaded = {};
+  }
+  if (!$wnd_0.__gwt_scriptsLoaded) {
+    $wnd_0.__gwt_scriptsLoaded = {};
+  }
+  function isHostedMode(){
+    var result = false;
+    try {
+      var query = $wnd_0.location.search;
+      return (query.indexOf('gwt.codesvr=') != -1 || (query.indexOf('gwt.hosted=') != -1 || $wnd_0.external && $wnd_0.external.gwtOnLoad)) && query.indexOf('gwt.hybrid') == -1;
+    }
+     catch (e) {
+    }
+    isHostedMode = function(){
+      return result;
+    }
+    ;
+    return result;
+  }
+
+  function maybeStartModule(){
+    if (scriptsDone && loadDone) {
+      var iframe = $doc_0.getElementById('varviewer');
+      var frameWnd = iframe.contentWindow;
+      if (isHostedMode()) {
+        frameWnd.__gwt_getProperty = function(name_0){
+          return computePropValue(name_0);
+        }
+        ;
+      }
+      varviewer = null;
+      frameWnd.gwtOnLoad(onLoadErrorFunc, 'varviewer', base, softPermutationId);
+      $stats && $stats({moduleName:'varviewer', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date).getTime(), type:'end'});
+    }
+  }
+
+  function computeScriptBase(){
+    function getDirectoryOfFile(path){
+      var hashIndex = path.lastIndexOf('#');
+      if (hashIndex == -1) {
+        hashIndex = path.length;
+      }
+      var queryIndex = path.indexOf('?');
+      if (queryIndex == -1) {
+        queryIndex = path.length;
+      }
+      var slashIndex = path.lastIndexOf('/', Math.min(queryIndex, hashIndex));
+      return slashIndex >= 0?path.substring(0, slashIndex + 1):'';
+    }
+
+    function ensureAbsoluteUrl(url){
+      if (url.match(/^\w+:\/\//)) {
+      }
+       else {
+        var img = $doc_0.createElement('img');
+        img.src = url + 'clear.cache.gif';
+        url = getDirectoryOfFile(img.src);
+      }
+      return url;
+    }
+
+    function tryMetaTag(){
+      var metaVal = __gwt_getMetaProperty('baseUrl');
+      if (metaVal != null) {
+        return metaVal;
+      }
+      return '';
+    }
+
+    function tryNocacheJsTag(){
+      var scriptTags = $doc_0.getElementsByTagName('script');
+      for (var i = 0; i < scriptTags.length; ++i) {
+        if (scriptTags[i].src.indexOf('varviewer.nocache.js') != -1) {
+          return getDirectoryOfFile(scriptTags[i].src);
+        }
+      }
+      return '';
+    }
+
+    function tryMarkerScript(){
+      var thisScript;
+      if (typeof isBodyLoaded == 'undefined' || !isBodyLoaded()) {
+        var markerId = '__gwt_marker_varviewer';
+        var markerScript;
+        $doc_0.write('<script id="' + markerId + '"><\/script>');
+        markerScript = $doc_0.getElementById(markerId);
+        thisScript = markerScript && markerScript.previousSibling;
+        while (thisScript && thisScript.tagName != 'SCRIPT') {
+          thisScript = thisScript.previousSibling;
+        }
+        if (markerScript) {
+          markerScript.parentNode.removeChild(markerScript);
+        }
+        if (thisScript && thisScript.src) {
+          return getDirectoryOfFile(thisScript.src);
+        }
+      }
+      return '';
+    }
+
+    function tryBaseTag(){
+      var baseElements = $doc_0.getElementsByTagName('base');
+      if (baseElements.length > 0) {
+        return baseElements[baseElements.length - 1].href;
+      }
+      return '';
+    }
+
+    function isLocationOk(){
+      var loc = $doc_0.location;
+      return loc.href == loc.protocol + '//' + loc.host + loc.pathname + loc.search + loc.hash;
+    }
+
+    var tempBase = tryMetaTag();
+    if (tempBase == '') {
+      tempBase = tryNocacheJsTag();
+    }
+    if (tempBase == '') {
+      tempBase = tryMarkerScript();
+    }
+    if (tempBase == '') {
+      tempBase = tryBaseTag();
+    }
+    if (tempBase == '' && isLocationOk()) {
+      tempBase = getDirectoryOfFile($doc_0.location.href);
+    }
+    tempBase = ensureAbsoluteUrl(tempBase);
+    base = tempBase;
+    return tempBase;
+  }
+
+  function processMetas(){
+    var metas = document.getElementsByTagName('meta');
+    for (var i = 0, n = metas.length; i < n; ++i) {
+      var meta = metas[i], name_0 = meta.getAttribute('name'), content_0;
+      if (name_0) {
+        name_0 = name_0.replace('varviewer::', '');
+        if (name_0.indexOf('::') >= 0) {
+          continue;
+        }
+        if (name_0 == 'gwt:property') {
+          content_0 = meta.getAttribute('content');
+          if (content_0) {
+            var value, eq = content_0.indexOf('=');
+            if (eq >= 0) {
+              name_0 = content_0.substring(0, eq);
+              value = content_0.substring(eq + 1);
+            }
+             else {
+              name_0 = content_0;
+              value = '';
+            }
+            metaProps[name_0] = value;
+          }
+        }
+         else if (name_0 == 'gwt:onPropertyErrorFn') {
+          content_0 = meta.getAttribute('content');
+          if (content_0) {
+            try {
+              propertyErrorFunc = eval(content_0);
+            }
+             catch (e) {
+              alert('Bad handler "' + content_0 + '" for "gwt:onPropertyErrorFn"');
+            }
+          }
+        }
+         else if (name_0 == 'gwt:onLoadErrorFn') {
+          content_0 = meta.getAttribute('content');
+          if (content_0) {
+            try {
+              onLoadErrorFunc = eval(content_0);
+            }
+             catch (e) {
+              alert('Bad handler "' + content_0 + '" for "gwt:onLoadErrorFn"');
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function __gwt_getMetaProperty(name_0){
+    var value = metaProps[name_0];
+    return value == null?null:value;
+  }
+
+  function unflattenKeylistIntoAnswers(propValArray, value){
+    var answer = answers;
+    for (var i = 0, n = propValArray.length - 1; i < n; ++i) {
+      answer = answer[propValArray[i]] || (answer[propValArray[i]] = []);
+    }
+    answer[propValArray[n]] = value;
+  }
+
+  function computePropValue(propName){
+    var value = providers[propName](), allowedValuesMap = values[propName];
+    if (value in allowedValuesMap) {
+      return value;
+    }
+    var allowedValuesList = [];
+    for (var k in allowedValuesMap) {
+      allowedValuesList[allowedValuesMap[k]] = k;
+    }
+    if (propertyErrorFunc) {
+      propertyErrorFunc(propName, allowedValuesList, value);
+    }
+    throw null;
+  }
+
+  var frameInjected;
+  function maybeInjectFrame(){
+    if (!frameInjected) {
+      frameInjected = true;
+      var iframe = $doc_0.createElement('iframe');
+      iframe.src = "javascript:''";
+      iframe.id = 'varviewer';
+      iframe.style.cssText = 'position:absolute;width:0;height:0;border:none';
+      iframe.tabIndex = -1;
+      $doc_0.body.appendChild(iframe);
+      $stats && $stats({moduleName:'varviewer', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'moduleStartup', millis:(new Date).getTime(), type:'moduleRequested'});
+      iframe.contentWindow.location.replace(base + initialHtml);
+    }
+  }
+
+  providers['user.agent'] = function(){
+    var ua = navigator.userAgent.toLowerCase();
+    var makeVersion = function(result){
+      return parseInt(result[1]) * 1000 + parseInt(result[2]);
+    }
+    ;
+    if (function(){
+      return ua.indexOf('opera') != -1;
+    }
+    ())
+      return 'opera';
+    if (function(){
+      return ua.indexOf('webkit') != -1;
+    }
+    ())
+      return 'safari';
+    if (function(){
+      return ua.indexOf('msie') != -1 && $doc_0.documentMode >= 9;
+    }
+    ())
+      return 'ie9';
+    if (function(){
+      return ua.indexOf('msie') != -1 && $doc_0.documentMode >= 8;
+    }
+    ())
+      return 'ie8';
+    if (function(){
+      var result = /msie ([0-9]+)\.([0-9]+)/.exec(ua);
+      if (result && result.length == 3)
+        return makeVersion(result) >= 6000;
+    }
+    ())
+      return 'ie6';
+    if (function(){
+      return ua.indexOf('gecko') != -1;
+    }
+    ())
+      return 'gecko1_8';
+    return 'unknown';
+  }
+  ;
+  values['user.agent'] = {gecko1_8:0, ie6:1, ie8:2, ie9:3, opera:4, safari:5};
+  varviewer.onScriptLoad = function(){
+    if (frameInjected) {
+      loadDone = true;
+      maybeStartModule();
+    }
+  }
+  ;
+  varviewer.onInjectionDone = function(){
+    scriptsDone = true;
+    $stats && $stats({moduleName:'varviewer', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'loadExternalRefs', millis:(new Date).getTime(), type:'end'});
+    maybeStartModule();
+  }
+  ;
+  processMetas();
+  computeScriptBase();
+  var strongName;
+  var initialHtml;
+  if (isHostedMode()) {
+    if ($wnd_0.external && ($wnd_0.external.initModule && $wnd_0.external.initModule('varviewer'))) {
+      $wnd_0.location.reload();
+      return;
+    }
+    initialHtml = 'hosted.html?varviewer';
+    strongName = '';
+  }
+  $stats && $stats({moduleName:'varviewer', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'selectingPermutation'});
+  if (!isHostedMode()) {
+    try {
+      unflattenKeylistIntoAnswers(['gecko1_8'], '1C6071788DA2DEF1CB727CBB0F417C92');
+      unflattenKeylistIntoAnswers(['safari'], '3EEDAC6B3D6329C32E964E9FF9F8CC74');
+      unflattenKeylistIntoAnswers(['ie9'], '70D52E28309DF71F7AFAE8811AE72D70');
+      unflattenKeylistIntoAnswers(['opera'], '712D10C860C27FDA37EE55DEB97A16F8');
+      unflattenKeylistIntoAnswers(['ie6'], '899C0437E771069B50429AFBFC015A78');
+      unflattenKeylistIntoAnswers(['ie8'], 'C9538AFB62CE2F67975A798E1DCCA748');
+      strongName = answers[computePropValue('user.agent')];
+      var idx = strongName.indexOf(':');
+      if (idx != -1) {
+        softPermutationId = Number(strongName.substring(idx + 1));
+        strongName = strongName.substring(0, idx);
+      }
+      initialHtml = strongName + '.cache.html';
+    }
+     catch (e) {
+      return;
+    }
+  }
+  var onBodyDoneTimerId;
+  function onBodyDone(){
+    if (!bodyDone) {
+      bodyDone = true;
+      if (!__gwt_stylesLoaded['gwt/clean/clean.css']) {
+        var l = $doc_0.createElement('link');
+        __gwt_stylesLoaded['gwt/clean/clean.css'] = l;
+        l.setAttribute('rel', 'stylesheet');
+        l.setAttribute('href', base + 'gwt/clean/clean.css');
+        $doc_0.getElementsByTagName('head')[0].appendChild(l);
+      }
+      maybeStartModule();
+      if ($doc_0.removeEventListener) {
+        $doc_0.removeEventListener('DOMContentLoaded', onBodyDone, false);
+      }
+      if (onBodyDoneTimerId) {
+        clearInterval(onBodyDoneTimerId);
+      }
+    }
+  }
+
+  if ($doc_0.addEventListener) {
+    $doc_0.addEventListener('DOMContentLoaded', function(){
+      maybeInjectFrame();
+      onBodyDone();
+    }
+    , false);
+  }
+  var onBodyDoneTimerId = setInterval(function(){
+    if (/loaded|complete/.test($doc_0.readyState)) {
+      maybeInjectFrame();
+      onBodyDone();
+    }
+  }
+  , 50);
+  $stats && $stats({moduleName:'varviewer', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'bootstrap', millis:(new Date).getTime(), type:'end'});
+  $stats && $stats({moduleName:'varviewer', sessionId:$sessionId_0, subSystem:'startup', evtGroup:'loadExternalRefs', millis:(new Date).getTime(), type:'begin'});
+  $doc_0.write('<script defer="defer">varviewer.onInjectionDone(\'varviewer\')<\/script>');
+}
+
 varviewer();

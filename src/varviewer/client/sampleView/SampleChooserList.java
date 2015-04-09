@@ -66,9 +66,9 @@ public class SampleChooserList extends FlowPanel {
 			
 			List<SampleInfo> samplesToDisplay = new ArrayList<SampleInfo>();
 			for(SampleInfo info : sampleInfoList) {
-				if (info.getSampleID().contains(filterText)
-						|| info.getAnalysisType().contains(filterText)
-						|| info.getSubmitter().contains(filterText)) {
+				if ( (info.getSampleID() != null && info.getSampleID().contains(filterText))
+						|| (info.getAnalysisType() != null && info.getAnalysisType().contains(filterText))
+						|| (info.getSubmitter() != null && info.getSubmitter().contains(filterText))) {
 					samplesToDisplay.add(info);
 				}
 			}
