@@ -12,6 +12,8 @@ import varviewer.shared.variant.AnnotationIndex;
 import varviewer.shared.variant.Variant;
 import varviewer.shared.variant.VariantFilter;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * A type of filter that excludes variants based on their presence and zygosity
  * in another sample. These are typically generated on the client, bundled with a 
@@ -19,7 +21,7 @@ import varviewer.shared.variant.VariantFilter;
  * @author brendan
  *
  */
-public class PedigreeFilter implements VariantFilter, Serializable {
+public class PedigreeFilter implements VariantFilter, Serializable, IsSerializable {
 
 	private PedigreeSample sample = null; 
 	private transient HasVariants relVars = null; //Don't try to serialize this

@@ -3,6 +3,8 @@ package varviewer.shared.variant;
 import java.io.Serializable;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 
 /**
  * These objects are returned as the result of a VariantRequest and do little
@@ -10,7 +12,7 @@ import java.util.List;
  * @author brendan
  *
  */
-public class VariantRequestResult implements Serializable {
+public class VariantRequestResult implements Serializable, IsSerializable {
 
 	List<Variant> vars = null;
 	String sampleID = null;

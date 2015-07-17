@@ -2,7 +2,9 @@ package varviewer.shared;
 
 import java.io.Serializable;
 
-public class PedigreeSample implements Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class PedigreeSample implements Serializable, IsSerializable {
 
 	public enum ZygType {ALL, HETS, HOMS};
 	public enum OperationType {NONE, EXCLUDE, INTERSECT};

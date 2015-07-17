@@ -1,7 +1,9 @@
 package varviewer.shared.variant;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 
-public interface VariantFilter {
+
+public interface VariantFilter extends IsSerializable {
 
 	/**
 	 * Returns true if the given variant passes this filter, false if it doesn't pass

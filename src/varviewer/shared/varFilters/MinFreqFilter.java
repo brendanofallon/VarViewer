@@ -6,7 +6,9 @@ import varviewer.shared.variant.AnnotationIndex;
 import varviewer.shared.variant.Variant;
 import varviewer.shared.variant.VariantFilter;
 
-public class MinFreqFilter implements VariantFilter, Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class MinFreqFilter implements VariantFilter, Serializable, IsSerializable {
 
 	//Maximum allowable value
 	private double maxVal = Double.MAX_VALUE;

@@ -52,8 +52,10 @@ public class ExonFuncFilterConfig extends FilterConfig {
 		
 		updateInteriorLabelText(); //Set interior text in parental filterbox
 		interiorPanel.add(panel);
-		interiorPanel.setWidth("250px");
-		interiorPanel.setHeight("300px");
+		panel.setHeight("450px");
+		interiorPanel.setWidth("300px");
+		interiorPanel.setHeight("450px");
+		
 	}
 
 	private CheckBox addType(String userText, boolean checked) {

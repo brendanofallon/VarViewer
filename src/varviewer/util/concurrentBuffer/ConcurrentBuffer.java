@@ -28,7 +28,7 @@ import varviewer.server.variant.VariantCollection;
 public class ConcurrentBuffer<T> {
 
 	//Buffer won't ever contain more than this many items
-	final int MAX_BUFFER_SIZE = 16384;
+	final int MAX_BUFFER_SIZE = 50000;
 
 	//The main storage for items
 	protected Queue<T> buffer = new ConcurrentLinkedQueue<T>();

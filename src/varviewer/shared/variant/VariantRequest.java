@@ -9,13 +9,15 @@ import varviewer.shared.Interval;
 import varviewer.shared.IntervalList;
 import varviewer.shared.SampleInfo;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 
 /**
  * These objects are passed to a VariantServer to retrieve a list of Variants for display.
  * @author brendan
  *
  */
-public class VariantRequest implements Serializable {
+public class VariantRequest implements Serializable, IsSerializable {
 	
 	private List<SampleInfo> samples = new ArrayList<SampleInfo>();
 	private IntervalList intervals = new AllIntervals();

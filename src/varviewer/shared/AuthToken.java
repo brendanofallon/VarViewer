@@ -2,13 +2,15 @@ package varviewer.shared;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * These are returned as the result of an authentication attempt and are stored on the client in the AuthManager
  * so we can remember who's logged in. 
  * @author brendan
  *
  */
-public class AuthToken implements Serializable {
+public class AuthToken implements Serializable, IsSerializable {
 	
 	private String username = null;
 	private Long startTime = null;

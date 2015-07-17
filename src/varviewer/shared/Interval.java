@@ -2,6 +2,8 @@ package varviewer.shared;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 
 /**
  * A range of sites, not bound to a particular chromosome.
@@ -9,7 +11,7 @@ import java.io.Serializable;
  * @author brendan
  *
  */
-public class Interval implements Comparable<Interval>, Serializable {
+public class Interval implements Comparable<Interval>, Serializable, IsSerializable {
 		
 	private int firstPos;
 	private int lastPos;

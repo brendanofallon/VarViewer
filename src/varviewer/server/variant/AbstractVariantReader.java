@@ -122,7 +122,7 @@ public abstract class AbstractVariantReader implements VariantReader {
 				}
 				catch (NumberFormatException nfe) {
 					//Don't sweat it, no annotation added
-					//System.out.println("Huh, this one is supposedly numeric, but we couldn't parse a double : " + toks[i]);
+					//System.out.println("Huh, tok index " + i + " is supposedly numeric, but we couldn't parse a double : " + toks[i]);
 				}
 			}
 			else {

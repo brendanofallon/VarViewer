@@ -2,12 +2,14 @@ package varviewer.shared;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Stores more detailed information about a gene
  * @author brendan
  *
  */
-public class GeneInfo implements Serializable {
+public class GeneInfo implements Serializable, IsSerializable {
 
 	String summary;
 	String[] omimDiseaseIDs;

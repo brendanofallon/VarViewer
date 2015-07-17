@@ -8,12 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * A list of genomic intervals with a few utilities for merging, comparing etc. 
  * @author brendan
  *
  */
-public class IntervalList implements Serializable {
+public class IntervalList implements Serializable, IsSerializable {
 
 	protected Map<String, List<Interval>> intervals = new HashMap<String, List<Interval>>();
 	

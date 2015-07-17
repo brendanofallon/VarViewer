@@ -121,6 +121,68 @@ public class ColumnStore {
 		});
 		addColumn(chrAnno);
 
+		VarAnnotation<SafeHtml> clinvarAnnotation = new VarAnnotation<SafeHtml>("ClinVar", "ClinVar", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
+			@Override
+			public SafeHtml getValue(Variant var) {
+				String clnsig = var.getAnnotationStr("clinvar.clnsig");
+				
+				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
+				
+				if (clnsig == null || clnsig.equals("null")) {
+					bldr.appendHtmlConstant("<span style=\"color: gray;\"><b>?</b></span>");
+				}
+				
+				
+				String[] sigs = clnsig.split("|");
+				Integer[] iSigs = new Integer[sigs.length];
+				int maxSig = -1;
+				int maxSigIndex = -1;
+				for(int i=0; i<sigs.length; i++) {
+					try {
+						iSigs[i] = Integer.parseInt(sigs[i]);
+						if (iSigs[i]>maxSig) {
+							maxSig = iSigs[i];
+							maxSigIndex = i;
+						}
+					}
+					catch(NumberFormatException nfe) {
+						//ignore it.. 
+					}
+				}
+				
+				
+				//Find disease name...
+				String diseaseName = var.getAnnotationStr("clinvar.clndbn");
+				if (diseaseName != null && !diseaseName.equals("null")) {
+					String[] diseases = diseaseName.split("\\|");
+					if (maxSigIndex < diseases.length) {
+						diseaseName = diseases[maxSigIndex];
+					}
+				}
+
+				
+				if (diseaseName == null || diseaseName.equals("null")) {
+					diseaseName = "?";
+				}
+				
+				diseaseName = diseaseName.replace("_", " ");
+				if (maxSig == 5) {
+					bldr.appendHtmlConstant("<div><div style=\"color: red;\"><b>Pathogenic</b></div> <div>" + diseaseName + "</div></div>");
+				} else if (maxSig == 4) {
+					bldr.appendHtmlConstant("<div><div style=\"color: orange;\"><b>Likely Pathogenic</b></div> <div>" + diseaseName + "</div></div>");
+				} else if (maxSig ==  3) {
+					bldr.appendHtmlConstant("<span style=\"color: blue;\"><b>Likely Benign</b></span>");
+				} else if (maxSig == 2) {
+					bldr.appendHtmlConstant("<span style=\"color: green;\"><b>Benign</b></span>");
+				} else if (maxSig == 255 || maxSig==1 || maxSig==6 || maxSig == 0) {
+					bldr.appendHtmlConstant("<span style=\"color: gray;\">VUS</span>");
+				}
+				
+				return bldr.toSafeHtml();
+			}
+		}, 2.0);
+		addColumn(clinvarAnnotation);
+		
 		VarAnnotation<String> posAnnotation = new VarAnnotation<String>("pos", "Start", new TextColumn<Variant>() {
 			@Override
 			public String getValue(Variant var) {
@@ -130,21 +192,21 @@ public class ColumnStore {
 		
 		
 		//BCR-ABL specific
-		VarAnnotation<String> inVitroAnnotation = new VarAnnotation<String>("InVitro", "In Vitro (BCR-ABL)", new TextColumn<Variant>() {
-			@Override
-			public String getValue(Variant var) {
-				return var.getAnnotationStr("InVitro");
-			}
-		}, 1.0);
-		addColumn(inVitroAnnotation);
-		
-		VarAnnotation<String> bcrAblKnownAnnotation = new VarAnnotation<String>("Known", "Known (BCR-ABL)", new TextColumn<Variant>() {
-			@Override
-			public String getValue(Variant var) {
-				return var.getAnnotationStr("Known");
-			}
-		}, 1.0);
-		addColumn(bcrAblKnownAnnotation);
+//		VarAnnotation<String> inVitroAnnotation = new VarAnnotation<String>("InVitro", "In Vitro (BCR-ABL)", new TextColumn<Variant>() {
+//			@Override
+//			public String getValue(Variant var) {
+//				return var.getAnnotationStr("InVitro");
+//			}
+//		}, 1.0);
+//		addColumn(inVitroAnnotation);
+//		
+//		VarAnnotation<String> bcrAblKnownAnnotation = new VarAnnotation<String>("Known", "Known (BCR-ABL)", new TextColumn<Variant>() {
+//			@Override
+//			public String getValue(Variant var) {
+//				return var.getAnnotationStr("Known");
+//			}
+//		}, 1.0);
+//		addColumn(bcrAblKnownAnnotation);
 		
 		
 		posAnnotation.setComparator(new Comparator<Variant>() {
@@ -390,44 +452,74 @@ public class ColumnStore {
 			}
 		}, 1.0));
 		
-		addColumn(new VarAnnotation<SafeHtml>("varbin.bin", "VarBin", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
+		
+		
+//		addColumn(new VarAnnotation<SafeHtml>("varbin.bin", "VarBin", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
+//
+//			@Override
+//			public SafeHtml getValue(Variant var) {
+//				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
+//				Double val = var.getAnnotationDouble("varbin.bin");
+//				
+//				if (val == null) {
+//					bldr.appendEscaped("-");
+//				}
+//				else {
+//					if (val.equals(1)) {
+//						bldr.appendHtmlConstant("<span style=\"color: #003300;\"><b>1</b></span>");	
+//					}
+//					if (val.equals(2)) {
+//						bldr.appendHtmlConstant("<span style=\"color: #996600;\"><b>2</b></span>");	
+//					}
+//					if (val.equals(3)) {
+//						bldr.appendHtmlConstant("<span style=\"color: #990000;\"><b>3</b></span>");	
+//					}
+//					if (val.equals(4)) {
+//						bldr.appendHtmlConstant("<span style=\"color: #FF0000;\"><b>4</b></span>");	
+//					}
+//					
+//				}
+//				return bldr.toSafeHtml();
+//			}
+//			
+//		}, 1.0));
+
+		VarAnnotation<SafeHtml> exacHetHomCol =new VarAnnotation<SafeHtml>("exac.hethom", "ExAC 63K Het / Hom", new Column<Variant, SafeHtml>(new SafeHtmlCell()) {
 
 			@Override
 			public SafeHtml getValue(Variant var) {
 				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
-				Double val = var.getAnnotationDouble("varbin.bin");
 				
-				if (val == null) {
-					bldr.appendEscaped("-");
+				Double homVal = var.getAnnotationDouble("exomes63K.al.freq.hom");
+				Double hetVal = var.getAnnotationDouble("exomes63K.al.freq.het");
+				
+				if (homVal == null) {
+					homVal = 0.0;
 				}
-				else {
-					if (val.equals(1)) {
-						bldr.appendHtmlConstant("<span style=\"color: #003300;\"><b>1</b></span>");	
-					}
-					if (val.equals(2)) {
-						bldr.appendHtmlConstant("<span style=\"color: #996600;\"><b>2</b></span>");	
-					}
-					if (val.equals(3)) {
-						bldr.appendHtmlConstant("<span style=\"color: #990000;\"><b>3</b></span>");	
-					}
-					if (val.equals(4)) {
-						bldr.appendHtmlConstant("<span style=\"color: #FF0000;\"><b>4</b></span>");	
-					}
-					
+				if (hetVal == null) {
+					hetVal = 0.0;
 				}
+				
+				//Truncating... 
+				homVal = ((int)(homVal * 10000.0))/10000.0;
+				hetVal = ((int)(hetVal * 10000.0))/10000.0;
+				
+				String linkTarget = var.getChrom() + "-" + var.getPos() + "-" + var.getRef() + "-" + var.getAlt();
+				
+				bldr.appendHtmlConstant("<a href=\"http://exac.broadinstitute.org/variant/" + linkTarget + "\" target=\"_blank\"> Het: " + hetVal + " Hom: " + homVal + "</a>" );
+				
 				return bldr.toSafeHtml();
 			}
-			
-		}, 1.0));
-
+		}, 1.5);
+		addColumn(exacHetHomCol);
 		
 		VarAnnotation<String> exacFreqCol =new VarAnnotation<String>("exac.freq", "ExAC 63K Exomes", new TextColumn<Variant>() {
-
 			@Override
 			public String getValue(Variant var) {
 				Double val = var.getAnnotationDouble("exomes63K.allele.freq");
 				return val != null ? format(val) : "0";
 			}
+			
 		}, 1.0);
 		exacFreqCol.setComparator(new Comparator<Variant>() {
 
@@ -444,6 +536,31 @@ public class ColumnStore {
 		});
 		addColumn(exacFreqCol);
 		
+		VarAnnotation<String> exacHomCountCol = new VarAnnotation<String>("ExAC Hom Count", "ExAC Hom Count", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				Double count = var.getAnnotationDouble("exomes63K.al.count.hom");
+				if (count==null) {
+					return "";
+				}
+				return "" + count.intValue();
+			}
+		}, 1.0);
+		addColumn(exacHomCountCol);
+		exacHomCountCol.setComparator(new Comparator<Variant>() {
+
+			@Override
+			public int compare(Variant arg0, Variant arg1) {
+				Double val0 = arg0.getAnnotationDouble("exomes63K.al.count.hom");
+				Double val1 = arg1.getAnnotationDouble("exomes63K.al.count.hom");
+				if (val0==null)
+					val0 = 0.0;
+				if (val1 == null)
+					val1 = 0.0;
+				return val0.compareTo(val1);
+			}
+		});
 		
 		VarAnnotation<String> uk10KFreqCol =new VarAnnotation<String>("uk10k.frequency", "UK10K Frequency", new TextColumn<Variant>() {
 

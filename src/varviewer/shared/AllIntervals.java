@@ -3,12 +3,14 @@ package varviewer.shared;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Dummy class to signify all possible variants in all intervals
  * @author brendan
  *
  */
-public class AllIntervals extends IntervalList {
+public class AllIntervals extends IntervalList implements IsSerializable {
 	
 	/**
 	 * Create a single new list that contains all intervals

@@ -2,7 +2,9 @@ package varviewer.shared.variant;
 
 import java.io.Serializable;
 
-public class Annotation implements Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Annotation implements Serializable, IsSerializable {
 
 	private String strValue = null;
 	private Double doubleValue = null;

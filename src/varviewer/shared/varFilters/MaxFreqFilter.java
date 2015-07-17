@@ -6,6 +6,8 @@ import varviewer.shared.variant.AnnotationIndex;
 import varviewer.shared.variant.Variant;
 import varviewer.shared.variant.VariantFilter;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * A variant filter that passes variants with a numeric value associated with the given
  * key that is LESS than the given value. For instance, if the key is "pop.freq", and 
@@ -13,7 +15,7 @@ import varviewer.shared.variant.VariantFilter;
  * @author brendan
  *
  */
-public class MaxFreqFilter implements VariantFilter, Serializable {
+public class MaxFreqFilter implements VariantFilter, Serializable, IsSerializable {
 
 	//Maximum allowable pop frequency
 	double maxFreq = Double.MAX_VALUE;
@@ -21,18 +23,21 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	//Max arup value
 	double arupMax = 1.0;
 	
-	double exomesMax = 100.0;
+	double exomesMax = 1.0;
 	
-	double exomesHomMax = 100.0;
+	double exomesHomMax = 1.0;
+	double exacHomCountMax = 100.0; 
 	
 	//VarBin min
 	//int varBinMin = 3;
-	
+
+
 	private AnnotationIndex annoIndex = null;
 	private int popFreqIndex = -1;
 	private int exomesIndex = -1;
 	private int exomesHomIndex = -1;
 	private int arupOverallFreqIndex = -1;
+	private int exacHomCountIndex = -1;
 	
 	public MaxFreqFilter() {
 		//Required no-arg constructor
@@ -46,6 +51,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		
 //		this.arupIndex = index.getIndexForKey("ARUP.freq");
 		this.arupOverallFreqIndex = index.getIndexForKey("ARUP.overall.freq");
+		this.exacHomCountIndex = index.getIndexForKey("exomes63K.al.count.hom");
 //		this.varbinIndex = index.getIndexForKey("varbin.bin");
 	}
 	
@@ -79,6 +85,16 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		return arupMax;
 	}
 
+	
+	
+	public double getExacHomCountMax() {
+		return exacHomCountMax;
+	}
+
+	public int getExacHomCountIndex() {
+		return exacHomCountIndex;
+	}
+	
 	/**
 	 * Set the maximum ARUP frequency allowed by this filter
 	 * @param freq
@@ -103,6 +119,10 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		this.exomesHomMax = exomesHomMax;
 	}
 	
+	public void setExACHomCount(Double exacHomCount) {
+		this.exacHomCountMax = exacHomCount;
+	}
+	
 	@Override
 	public boolean variantPasses(Variant var) {
 		Double freq = var.getAnnotationDouble(popFreqIndex);
@@ -111,7 +131,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		//String arupStr = var.getAnnotationStr(arupIndex);
 		Double arupFreq = var.getAnnotationDouble(arupOverallFreqIndex);
 		//Double varbin = var.getAnnotationDouble(varbinIndex);
-		
+		Double exacHomCount = var.getAnnotationDouble(exacHomCountIndex);
 		
 		if (freq == null)
 			freq = 0.0;
@@ -123,13 +143,9 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 		if (exomesHomFreq == null) {
 			exomesHomFreq = 0.0;
 		}
-		
-//		if (varbin == null) {
-		
-//			varbin = 0.0;
-//		}
-		
-		
+		if (exacHomCount == null) {
+			exacHomCount = 0.0;
+		}
 		
 		if (freq > maxFreq) {
 			return false;
@@ -147,6 +163,10 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 			return false;
 		}
 
+		if (exacHomCount > exacHomCountMax) {
+			return false;
+		}
+		
 //		if (varbin > varBinMin) {
 //			return false;
 //		}
@@ -158,5 +178,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable {
 	public String getUserDescription() {
 		return "Excluding variants with population frequency (from 1000 Genomes) > " + maxFreq + ", ESP Freq > " + exomesMax + " ESP Homs > " + exomesHomMax + ", and ARUP frequency greater than " + arupMax; 
 	}
+
+	
 
 }

@@ -5,7 +5,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SimpleAnnotationIndex implements AnnotationIndex, Serializable {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class SimpleAnnotationIndex implements AnnotationIndex, Serializable, IsSerializable {
 
 	private Map<String, Integer> keyMap = new HashMap<String, Integer>();
 	private Map<String, Boolean> numericMap = new HashMap<String, Boolean>();

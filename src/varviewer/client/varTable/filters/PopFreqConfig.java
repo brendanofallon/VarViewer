@@ -17,17 +17,18 @@ public class PopFreqConfig extends FilterConfig {
 	private TextBox arupBox = new TextBox();
 	private TextBox exomesFreqBox = new TextBox();
 	private TextBox exomesHomFreqBox = new TextBox();
+	private TextBox exacHomCountBox = new TextBox();
 	
 	//private TextBox varBinBox = new TextBox();
 	
-	private MaxFreqFilter filter;
+	private MaxFreqFilter mfFilter;
 	
 	public PopFreqConfig(FilterBox parent) {
 		super(parent);
 		
 		VariantFilter filter = parent.getFilter();
 		if (filter instanceof MaxFreqFilter) {
-			this.filter = (MaxFreqFilter)filter;
+			this.mfFilter = (MaxFreqFilter)filter;
 		}
 		else {
 			throw new IllegalArgumentException("Incorrect filter type given to PopFreqConfig tool");
@@ -41,7 +42,7 @@ public class PopFreqConfig extends FilterConfig {
 		lab.getElement().getStyle().setMarginRight(10, Unit.PX);
 		freqPanel.add(lab);
 		
-		freqBox.setText("0.10");
+		freqBox.setText("" + mfFilter.getMaxFreq());
 		freqBox.setWidth("50px");
 		freqPanel.add(freqBox);
 		panel.add(freqPanel);
@@ -56,7 +57,7 @@ public class PopFreqConfig extends FilterConfig {
 		lab3.setStylePrimaryName("interiortext");
 		lab3.getElement().getStyle().setMarginRight(10, Unit.PX);
 		arupPanel.add(lab3);
-		arupBox.setText("0.20");
+		arupBox.setText("" + mfFilter.getArupMax());
 		arupBox.setWidth("50px");
 		arupPanel.add(arupBox);
 		panel.add(arupPanel);
@@ -70,7 +71,7 @@ public class PopFreqConfig extends FilterConfig {
 		lab4.setStylePrimaryName("interiortext");
 		lab4.getElement().getStyle().setMarginRight(10, Unit.PX);
 		exomesPanel.add(lab4);
-		exomesFreqBox.setText("20");
+		exomesFreqBox.setText("" + mfFilter.getExomesMax());
 		exomesFreqBox.setWidth("50px");
 		exomesPanel.add(exomesFreqBox);
 		panel.add(exomesPanel);
@@ -84,10 +85,25 @@ public class PopFreqConfig extends FilterConfig {
 		lab5.setStylePrimaryName("interiortext");
 		lab5.getElement().getStyle().setMarginRight(10, Unit.PX);
 		exomesHomPanel.add(lab5);
-		exomesHomFreqBox.setText("0.20");
+		exomesHomFreqBox.setText("" + mfFilter.getExomesHomMax());
 		exomesHomFreqBox.setWidth("50px");
 		exomesHomPanel.add(exomesHomFreqBox);
 		panel.add(exomesHomPanel);
+		
+		
+		SimplePanel spacer4 = new SimplePanel();
+		spacer4.setHeight("10px");
+		panel.add(spacer4);
+		
+		HorizontalPanel exACHomPanel = new HorizontalPanel();
+		Label lab6 = new Label("Exclude ExAC homozygous count greater than");
+		lab6.setStylePrimaryName("interiortext");
+		lab6.getElement().getStyle().setMarginRight(10, Unit.PX);
+		exACHomPanel.add(lab6);
+		exacHomCountBox.setText("" + mfFilter.getExacHomCountMax());
+		exacHomCountBox.setWidth("50px");
+		exACHomPanel.add(exacHomCountBox);
+		panel.add(exACHomPanel);
 		
 //		Label lab4 = new Label("Exclude with VarBin greater than (1-4)");
 //		panel.add(lab4);
@@ -97,7 +113,7 @@ public class PopFreqConfig extends FilterConfig {
 		
 		interiorPanel.add(panel);
 		interiorPanel.setWidth("250px");
-		interiorPanel.setHeight("240px");
+		interiorPanel.setHeight("300px");
 		updateInteriorLabelText();
 	}
 
@@ -130,11 +146,18 @@ public class PopFreqConfig extends FilterConfig {
 				return false;
 			}
 			
+			Double exacHomCount = Double.parseDouble(exacHomCountBox.getText());
+			if (exomesHomFreq < 0.0) {
+				Window.alert("Please enter a number greater than 0 for the ExAC homozygous count");
+				return false;
+			}
 			
-			this.filter.setArupMax(arupFreq);
-			this.filter.setExomesMax(exomesFreq);
-			this.filter.setExomesHomMax(exomesHomFreq);
-			this.filter.setMaxFreq(freq);
+			
+			this.mfFilter.setArupMax(arupFreq);
+			this.mfFilter.setExomesMax(exomesFreq);
+			this.mfFilter.setExomesHomMax(exomesHomFreq);
+			this.mfFilter.setMaxFreq(freq);
+			this.mfFilter.setExACHomCount(exacHomCount);
 			//this.filter.setVarBinMin(varBinMin);
 			
 			updateInteriorLabelText();
@@ -149,7 +172,7 @@ public class PopFreqConfig extends FilterConfig {
 
 	@Override
 	public void updateInteriorLabelText() {
-		parentBox.setInteriorText("Pop. freq. > " + this.filter.getMaxFreq() + ", ARUP freq. > " + filter.getArupMax() /* + ", VarBin > " + filter.getVarBinMin() */);
+		parentBox.setInteriorText("Pop. freq. > " + this.mfFilter.getMaxFreq() + ", ARUP freq. > " + mfFilter.getArupMax() /* + ", VarBin > " + filter.getVarBinMin() */);
 	}
 
 }

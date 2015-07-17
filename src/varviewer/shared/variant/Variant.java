@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 
-public class Variant implements Comparable<Variant>, Serializable {
+
+public class Variant implements Comparable<Variant>, Serializable, IsSerializable {
 
 	String chrom = "Z";
 	int pos = -1;

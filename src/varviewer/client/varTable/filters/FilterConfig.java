@@ -89,6 +89,8 @@ public abstract class FilterConfig extends PopupPanel {
 			}
 		});
 		bottomPanel.add(doneButton);
+		bottomPanel.getElement().getStyle().setMargin(5.0, Unit.PX);
+
 		cancelButton.getElement().getStyle().setPadding(2.0, Unit.PX);
 		doneButton.getElement().getStyle().setPadding(2.0, Unit.PX);
 		

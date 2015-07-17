@@ -1,6 +1,8 @@
 package varviewer.shared.varFilters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import varviewer.shared.variant.AnnotationIndex;
 import varviewer.shared.variant.Variant;
@@ -16,10 +18,17 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 	private boolean excludeNonExactHits = false;
 	private boolean excludeNonGeneHits = false;
 	
+	private boolean includeClinvarPathogenic = true;
+	private boolean includeClinvarLikelyPathogenic = true;
+	private boolean includeClinvarVUS = true;
+	private boolean includeClinvarLikelyBenign = true;
+	private boolean includeClinvarBenign = true;
+		
 	private AnnotationIndex annoIndex = null;
 	private int hgmdInfoIndex = -1;
 	private int hgmdExactIndex = -1;
 	private int omimIndex = -1;
+	private int clinvarSigIndex = -1;
 	
 	
 	
@@ -32,6 +41,7 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 		hgmdInfoIndex = index.getIndexForKey("hgmd.info");
 		omimIndex = index.getIndexForKey("omim.disease");
 		hgmdExactIndex = index.getIndexForKey("hgmd.hit");
+		clinvarSigIndex = index.getIndexForKey("clinvar.clnsig");
 	}
 	
 	public boolean isExcludeNonExactHits() {
@@ -54,37 +64,140 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 		this.excludeNonGeneHits = excludeNonGeneHits;
 	}
 
+	public boolean isIncludeClinvarPathogenic() {
+		return includeClinvarPathogenic;
+	}
+
+	public boolean isIncludeClinvarLikelyPathogenic() {
+		return includeClinvarLikelyPathogenic;
+	}
+
+	public boolean isIncludeClinvarVUS() {
+		return includeClinvarVUS;
+	}
+
+	public boolean isIncludeClinvarLikelyBenign() {
+		return includeClinvarLikelyBenign;
+	}
+
+	public boolean isIncludeClinvarBenign() {
+		return includeClinvarBenign;
+	}
+
+
 	@Override
 	public boolean variantPasses(Variant var) {
 		String hgmdExact = var.getAnnotationStr(hgmdExactIndex);
 		String hgmdInfo = var.getAnnotationStr(hgmdInfoIndex);
 		String omim = var.getAnnotationStr(omimIndex);
+		String clinSig = var.getAnnotationStr(clinvarSigIndex);
 		
-		if (excludeNonExactHits) {
-			if (hgmdExact == null || hgmdExact.length()<2) {
-				return false;
+		if (var.getAnnotationStr("rsnum").equals("rs73003348")) {
+			System.err.println("break");
+		}
+		
+		if (clinSig != null && (!clinSig.equals("-"))) {
+			if (includeClinvarPathogenic && clinSig.equals("5")) {
+				return true;
+			}
+			if (includeClinvarLikelyPathogenic && clinSig.equals("4")) {
+				return true;
+			}
+			if (includeClinvarVUS && (clinSig.equals("0") || clinSig.equals("1") || clinSig.equals("6") || clinSig.equals("7") || clinSig.equals("255"))) {
+				return true;
+			}
+			if (includeClinvarLikelyBenign && clinSig.equals("3")) {
+				return true;
+			}
+			if (includeClinvarBenign && clinSig.equals("2")) {
+				return true;
 			}
 		}
-		if (excludeNonGeneHits) {
-			if ( (hgmdInfo == null || hgmdInfo.length()<2) && (omim == null || omim.length()<2)) {
-				return false;
-			}
+		
+		if ((!excludeNonExactHits) && hgmdExact != null && hgmdExact.length()>1) {
+			return true;
 		}
-		return true;
+		
+		
+		if ((!excludeNonGeneHits) && ((hgmdInfo != null && hgmdInfo.length()>1) || (omim != null && omim.length()>1))) {
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
 	public String getUserDescription() {
-		if (excludeNonExactHits==false && excludeNonGeneHits == false) {
-			return "No filtering based on HGMD and OMIM data was performed.";
+		List<String> excludes = new ArrayList<String>();
+		if (! includeClinvarPathogenic) {
+			excludes.add("Pathogenic");
 		}
+		if (! includeClinvarLikelyPathogenic) {
+			excludes.add("Likely pathogenic");
+		}
+		if (! includeClinvarVUS) {
+			excludes.add("VUS & other");
+		}
+		if (! includeClinvarLikelyBenign) {
+			excludes.add("Likely benign");
+		}
+		if (! includeClinvarBenign) {
+			excludes.add("Benign");
+		}
+		
+		
 		if (excludeNonExactHits) {
-			return "Variants not exactly matching a mutation documented in HGMD were excluded."; 
+			excludes.add("HGMD exact matches"); 
 		}
 		if (excludeNonGeneHits) {
-			return "Variants not in genes associated with disease in HGMD or OMIM were excluded.";
+			excludes.add("HGMD & OMIM gene matches");
 		}
-		return "?";
+		
+		if (excludes.size()==0) {
+			return "No ClinVar, OMIM, or HGMD disease filtering was performed";
+		}
+		
+		return "Variants in the following disease classes were excluded: " + join(excludes, ", ");
 	}
 
+	private static String join(List<String> strs, String joiner) {
+		if (strs.size() == 0) {
+			return "";
+		}
+		
+		StringBuilder strb = new StringBuilder();
+		for(int i=0; i< strs.size()-1; i++) {
+			strb.append(strs.get(i));
+			strb.append(joiner);
+		}
+		strb.append(strs.get(strs.size()-1));
+		
+		return strb.toString();
+	}
+	
+
+	public void setIncludeClinvarPathogenic(boolean includeClinvarPathogenic) {
+		this.includeClinvarPathogenic = includeClinvarPathogenic;
+	}
+
+
+	public void setIncludeClinvarLikelyPathogenic(
+			boolean includeClinvarLikelyPathogenic) {
+		this.includeClinvarLikelyPathogenic = includeClinvarLikelyPathogenic;
+	}
+
+
+	public void setIncludeClinvarVUS(boolean includeClinvarVUS) {
+		this.includeClinvarVUS = includeClinvarVUS;
+	}
+
+
+	public void setIncludeClinvarLikelyBenign(boolean includeClinvarLikelyBenign) {
+		this.includeClinvarLikelyBenign = includeClinvarLikelyBenign;
+	}
+
+
+	public void setIncludeClinvarBenign(boolean includeClinvarBenign) {
+		this.includeClinvarBenign = includeClinvarBenign;
+	}
 }

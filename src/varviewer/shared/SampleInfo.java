@@ -6,13 +6,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Information about a particular sample that is available on the server. Various SampleSource
  * classes generate lists of these to represent the samples they have available. 
  * @author brendan
  *
  */
-public class SampleInfo implements Serializable {
+public class SampleInfo implements Serializable, IsSerializable {
  
 	private String sampleID = null; //name of sample, often accession number for clinical samples
 	private String analysisType = null; //exome, aortapathy, etc.
