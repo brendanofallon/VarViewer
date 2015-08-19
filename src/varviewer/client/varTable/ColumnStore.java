@@ -130,8 +130,8 @@ public class ColumnStore {
 				
 				if (clnsig == null || clnsig.equals("null")) {
 					bldr.appendHtmlConstant("<span style=\"color: gray;\"><b>?</b></span>");
-				}
-				
+					return bldr.toSafeHtml();
+				} 				
 				
 				String[] sigs = clnsig.split("|");
 				Integer[] iSigs = new Integer[sigs.length];
@@ -192,21 +192,21 @@ public class ColumnStore {
 		
 		
 		//BCR-ABL specific
-//		VarAnnotation<String> inVitroAnnotation = new VarAnnotation<String>("InVitro", "In Vitro (BCR-ABL)", new TextColumn<Variant>() {
-//			@Override
-//			public String getValue(Variant var) {
-//				return var.getAnnotationStr("InVitro");
-//			}
-//		}, 1.0);
-//		addColumn(inVitroAnnotation);
-//		
-//		VarAnnotation<String> bcrAblKnownAnnotation = new VarAnnotation<String>("Known", "Known (BCR-ABL)", new TextColumn<Variant>() {
-//			@Override
-//			public String getValue(Variant var) {
-//				return var.getAnnotationStr("Known");
-//			}
-//		}, 1.0);
-//		addColumn(bcrAblKnownAnnotation);
+		VarAnnotation<String> inVitroAnnotation = new VarAnnotation<String>("InVitro", "In Vitro (BCR-ABL)", new TextColumn<Variant>() {
+			@Override
+			public String getValue(Variant var) {
+				return var.getAnnotationStr("InVitro");
+			}
+		}, 1.0);
+		addColumn(inVitroAnnotation);
+		
+		VarAnnotation<String> bcrAblKnownAnnotation = new VarAnnotation<String>("Known", "Known (BCR-ABL)", new TextColumn<Variant>() {
+			@Override
+			public String getValue(Variant var) {
+				return var.getAnnotationStr("Known");
+			}
+		}, 1.0);
+		addColumn(bcrAblKnownAnnotation);
 		
 		
 		posAnnotation.setComparator(new Comparator<Variant>() {
@@ -236,6 +236,22 @@ public class ColumnStore {
 //				return val;
 //			}
 //		}, 1.0, false));
+
+		
+		addColumn(new VarAnnotation<ImageResource>("bad.region", "NextSeq Flagged Region", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+
+			@Override
+			public ImageResource getValue(Variant var) {
+				String bad = var.getAnnotationStr("bad.region");
+								
+				if (bad != null && bad.equals("true"))
+					return resources.rainbowImage();
+				
+				return null;
+			}
+			
+		}, 0.5));
+
 		
 		addColumn(new VarAnnotation<ImageResource>("zygosity", "Zygosity", new Column<Variant, ImageResource>(new ImageResourceCell()) {
 

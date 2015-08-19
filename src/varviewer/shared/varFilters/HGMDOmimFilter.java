@@ -91,10 +91,7 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 		String hgmdInfo = var.getAnnotationStr(hgmdInfoIndex);
 		String omim = var.getAnnotationStr(omimIndex);
 		String clinSig = var.getAnnotationStr(clinvarSigIndex);
-		
-		if (var.getAnnotationStr("rsnum").equals("rs73003348")) {
-			System.err.println("break");
-		}
+
 		
 		if (clinSig != null && (!clinSig.equals("-"))) {
 			if (includeClinvarPathogenic && clinSig.equals("5")) {
