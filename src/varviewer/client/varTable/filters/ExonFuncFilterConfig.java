@@ -50,11 +50,16 @@ public class ExonFuncFilterConfig extends FilterConfig {
 		panel.add( addType("Splicing", false) );
 		panel.add( addType("Missense", false) );
 		
+		panel.getElement().addClassName("exonFuncTable");
+		for(int i=0; i<panel.getWidgetCount(); i++) {
+			panel.setCellHeight(panel.getWidget(i), "20px");	
+		}
+		
 		updateInteriorLabelText(); //Set interior text in parental filterbox
 		interiorPanel.add(panel);
-		panel.setHeight("450px");
+		panel.setHeight("350px");
 		interiorPanel.setWidth("300px");
-		interiorPanel.setHeight("450px");
+		interiorPanel.setHeight("400px");
 		
 	}
 
