@@ -23,7 +23,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable, IsSerializabl
 	//Max arup value
 	double arupMax = 1.0;
 	
-	double exomesMax = 1.0;
+	double exomesMax = 5.0;
 	
 	double exomesHomMax = 1.0;
 	double exacHomCountMax = 100.0; 
