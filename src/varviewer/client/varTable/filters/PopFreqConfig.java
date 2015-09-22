@@ -67,7 +67,7 @@ public class PopFreqConfig extends FilterConfig {
 		panel.add(spacer2);
 		
 		HorizontalPanel exomesPanel = new HorizontalPanel();
-		Label lab4 = new Label("Exclude ESP Exomes frequency > (0-100)");
+		Label lab4 = new Label("Exclude 6500 Exomes frequency > (0-100)");
 		lab4.setStylePrimaryName("interiortext");
 		lab4.getElement().getStyle().setMarginRight(10, Unit.PX);
 		exomesPanel.add(lab4);
@@ -81,7 +81,7 @@ public class PopFreqConfig extends FilterConfig {
 		panel.add(spacer3);
 		
 		HorizontalPanel exomesHomPanel = new HorizontalPanel();
-		Label lab5 = new Label("Exclude ESP Exomes HOMOZYGOUS frequency > (0-1)");
+		Label lab5 = new Label("Exclude 6500 Exomes HOMOZYGOUS frequency > (0-1)");
 		lab5.setStylePrimaryName("interiortext");
 		lab5.getElement().getStyle().setMarginRight(10, Unit.PX);
 		exomesHomPanel.add(lab5);
