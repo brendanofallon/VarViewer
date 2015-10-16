@@ -35,7 +35,7 @@ public class CachingSampleSource implements SampleSource {
 	private Date lastRootUpdate = null;
 	private Timer sampleUpdater;
 		
-	private int cacheSize = 20;
+	private int cacheSize = 50;
 	private double reloadFreqInHours = 1.0;
 	
 	public CachingSampleSource(SampleSource sampleSource) {
