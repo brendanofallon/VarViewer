@@ -51,7 +51,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable, IsSerializabl
 		
 //		this.arupIndex = index.getIndexForKey("ARUP.freq");
 		this.arupOverallFreqIndex = index.getIndexForKey("ARUP.overall.freq");
-		this.exacHomCountIndex = index.getIndexForKey("exomes63K.al.count.hom");
+		this.exacHomCountIndex = index.getIndexForKey("exac63K.overall.hom.count");
 //		this.varbinIndex = index.getIndexForKey("varbin.bin");
 	}
 	
