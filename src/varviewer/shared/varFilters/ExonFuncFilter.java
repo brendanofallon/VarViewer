@@ -87,7 +87,7 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 		
 		//The SnpEff annotator doesn't distinguish between exonFunc and varType, and just dumps everything 
 		//into varType, so if we get here and we're doing snpEff, then use varType as exonFunc
-		if (isSnpEff) {
+		if (isSnpEff || exonFunc.equals("-")) { // Snpeff 4.2 always contains '-' in this column
 			exonFunc = varType.toLowerCase();
 		}
 		
@@ -100,7 +100,7 @@ public class ExonFuncFilter implements VariantFilter, Serializable {
 			return false;
 		}
 		
-		if (excludeNonsynonymous && ( exonFunc.contains("nonsynonymous") || exonFunc.contains("non_synonymous"))) {
+		if (excludeNonsynonymous && (exonFunc.contains("missense") || exonFunc.contains("nonsynonymous") || exonFunc.contains("non_synonymous"))) {
 			return false;
 		}
 		
