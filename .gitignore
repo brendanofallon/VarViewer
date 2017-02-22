@@ -2,3 +2,4 @@
 war/
 build/
 bin/
+*props
