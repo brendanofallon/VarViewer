@@ -1,2 +1,0 @@
-serviceClass: varviewer.client.services.AuthService
-path: F742F14A13226EF90F15AE6923501A9B.gwt.rpc

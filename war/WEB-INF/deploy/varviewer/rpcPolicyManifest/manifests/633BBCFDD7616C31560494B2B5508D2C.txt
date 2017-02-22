@@ -1,2 +1,0 @@
-serviceClass: varviewer.client.services.CisTransService
-path: 80D22144908A1BA8E77F86DFE5C45ED2.gwt.rpc

@@ -1,11 +1,11 @@
 # Module varviewer
 # RPC service class, partial path of RPC policy file
-varviewer.client.services.GeneDetailService, 32CF35EE52F049561F07467FF0E91124.gwt.rpc
-varviewer.client.services.SampleListService, 660AC4EB2BCE4F319AFB53827CCFD0B0.gwt.rpc
-varviewer.client.services.CisTransService, 80D22144908A1BA8E77F86DFE5C45ED2.gwt.rpc
-varviewer.client.services.VarRequestService, 010C178ED5618FD1A8876CEA56EA824C.gwt.rpc
-varviewer.client.bcrablReporter.BCRABLReportService, F0F63900AEA9684C2F124697ED272E49.gwt.rpc
-varviewer.client.services.TextFetchService, CEE90E5A7CE5E9BDDD06A9A6317E6D24.gwt.rpc
-varviewer.client.services.AuthService, F742F14A13226EF90F15AE6923501A9B.gwt.rpc
-varviewer.client.services.ExportService, B5451BED0EF07A91E2336AD92F0A7BA2.gwt.rpc
-varviewer.client.services.LogoutService, 03C973BD28EE16C7FB9F03E7D16DF6DD.gwt.rpc
+varviewer.client.services.LogoutService, 52548E0858A4AEAA250F08AB13B18FCE.gwt.rpc
+varviewer.client.services.CisTransService, 46A22D9FF8BFBCF78B840E53A2ECC16E.gwt.rpc
+varviewer.client.services.AuthService, 3C46BADA760E42072E27238A1E04B061.gwt.rpc
+varviewer.client.services.ExportService, 7DE342FB65A05BFF1BB251C6455750BA.gwt.rpc
+varviewer.client.services.VarRequestService, CED9D22C025D5FE7F66796B71DFEB9A8.gwt.rpc
+varviewer.client.services.TextFetchService, 15754EAC960977EAE5142FF404AFF0C8.gwt.rpc
+varviewer.client.services.SampleListService, BCACEA59DC5F05C854F7A33E7F463303.gwt.rpc
+varviewer.client.services.GeneDetailService, A1AEC053B0B8DDDD1E3602A46F482D5E.gwt.rpc
+varviewer.client.bcrablReporter.BCRABLReportService, C836AE9C899431DAD422A84C14820226.gwt.rpc

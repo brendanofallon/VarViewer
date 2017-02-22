@@ -315,16 +315,7 @@ public class ColumnStore {
 				return val != null ? val : "-";
 			}
 		}, 2.0));
-		
-	    addColumn(new VarAnnotation("variant.type", "variant.type", new TextColumn<Variant>()
-	    {
-	      public String getValue(Variant var)
-	      {
-	        String val = var.getAnnotationStr("variant.type");
-	        return val != null ? val : "-";
-	      }
-	    }, 2.0D));
-	    
+
 		addColumn(new VarAnnotation<String>("ref", "Ref.", new TextColumn<Variant>() {
 
 			@Override
