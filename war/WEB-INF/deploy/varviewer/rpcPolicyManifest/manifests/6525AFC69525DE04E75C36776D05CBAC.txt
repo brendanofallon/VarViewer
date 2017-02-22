@@ -1,0 +1,2 @@
+serviceClass: varviewer.client.bcrablReporter.BCRABLReportService
+path: F0F63900AEA9684C2F124697ED272E49.gwt.rpc

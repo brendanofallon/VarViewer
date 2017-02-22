@@ -1,0 +1,11 @@
+Variant list for sample Sample : 16287113005
+Variant filters in use: 
+Excluding variants with population frequency (from 1000 Genomes) > 0.1, ESP Freq > 5 ESP Homs > 1, and ARUP frequency greater than 0.2
+Variants of the following types were excluded: intergenic, intergenic, intronic, non-coding RNA, synonymous SNPs (all regions), UTR
+Variants with quality less than 20, read depth (coverage) less than 4, or allele balance less than 0.1 were excluded.
+No filtering by predicted deleteriousness was performed.
+No filtering based on gene name was performed.
+No ClinVar, OMIM, or HGMD disease filtering was performed
+
+
+Gene,Exon effect,variant.type,Zygosity,c.dot,p.dot,Pop. Freq. MAF,HGMD & OMIM,dbSNP #,IGV,

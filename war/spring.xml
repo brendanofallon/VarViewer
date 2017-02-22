@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!-- Default handler for text-fetching operations -->
+    <bean name="textFetcherHandler" class="varviewer.server.textFetch.FileTextFetcher">
+	</bean>
+    <!--  Object that actually reads variants from a file/url, sampleSources need -->
+    <!-- one of these to do the reading -->
+    <bean name="variantReader" class="varviewer.server.variant.ConcurrentVariantReader">
+    </bean>
+    
+	<!--  Reads information from sample 'reviewdir's and feeds them to the SampleSource -->
+	<!--  This infoParser lets everyone read every sample it parses -->
+	<bean name="infoParser" class="varviewer.server.sampleSource.DefaultSampleInfoParser" />
+	
+	<!-- This infoParser enforces sample level security, only certain samples are allowed to pass -->
+    <!-- bean name="infoParser" class="varviewer.server.sampleSource.SecuredSampleInfoParser" / -->
+    
+    <!--  SampleSource object to maintain a list of samples and deliver variants from them -->    
+	<bean name="dirSampleSource" class="varviewer.server.sampleSource.DirSampleSource">
+	    <property name="rootDir" value="/Users/331-KruegerCLPTP/Desktop/EclipseProjects/VarViewer-resources/" />
+	    <property name="variantReader" ref="variantReader" />
+	    <property name="infoParser" ref="infoParser" />
+	</bean>
+	
+	<bean name="sampleSource" class="varviewer.server.sampleSource.CachingSampleSource">
+		<constructor-arg ref="dirSampleSource"/>
+		<property name="cacheSize" value="10" />
+		<property name="reloadFreqInHours" value="1.25" />
+	</bean>
+	
+	<!--  Variant annotations come from the annotated_vars file, not from a db.  -->
+	<bean name="variantRequestHandler" class="varviewer.server.variant.PreAnnotatedVarReqHandler">
+		<property name="variantSource" ref="sampleSource"/>
+	</bean>
+	
+	
+	<!--  GeneDetails configuration -->
+	<!-- bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/annotations" />
+        <property name="username" value="arup" />
+    </bean -->
+		
+	<!--  Use this bean if you want to read gene details info from a text file -->
+	<bean name="geneDetailHandler" class="varviewer.server.genedb.DBNSFPGeneDB">
+	    <property name="sourceFile" value="geneInfo.csv" />
+	</bean>
+	
+	<!-- Use this bean if you want to read gene details info from a SQL server -->
+    <!--  bean name="geneDetailHandler" class="varviewer.server.geneDetails.SQLGeneDB">
+          <property name="dataSource" ref="dataSource" />
+    </bean -->
+
+    
+    <bean name="cisTransHandler" class="varviewer.server.bcrabl.CisTransClassifier">
+        <property name="sampleSource" ref="sampleSource" />
+        <property name="permittedDist" value="150" />
+        <property name="requiredMappingQual" value="4" />
+        <property name="requiredBaseQual" value="4" />
+    </bean>
+    
+    <bean name="bcrablReportHandler" class="varviewer.server.bcrabl.SimpleReportGenerator">
+        <property name="sampleSource" ref="sampleSource" />
+        <property name="cisTransHandler" ref="cisTransHandler" />
+    </bean>
+    
+	
+	<!--  simple authentication scheme -->
+	<bean id="encoder" class="varviewer.server.auth.PasswordStore" />
+
+  	<security:authentication-manager alias="authManager">
+  	    <security:authentication-provider>
+    	  <security:password-encoder ref="encoder"/>
+    	  <security:user-service id="userService" properties="user.details.props" />
+  		</security:authentication-provider>
+  	</security:authentication-manager>
+		
+</beans>
