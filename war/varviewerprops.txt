@@ -1,5 +1,5 @@
-sample.dir=/Users/331-KruegerCLPTP/Desktop/EclipseProjects/VarViewer-resources/
-export.dir=/Users/331-KruegerCLPTP/git/VarViewer-redo/exportdata/
-genedb.path=geneInfo.csv:../geneInfo.csv
+#sample.dir=/Users/brendanofallon/jobwrangler_samples/
+sample.dir=/home/brendan/jobwrangler_samples/
+genedb.path=geneInfo.csv:../geneInfo.csv:/home/brendan/workspace/VarViewer/war/geneInfo.csv:/home/web/geneInfo.csv
 numeric.annotations=pop.freq:depth:var.depth:quality:varbin.bin:sift.score:mt.score:pp.score:gerp.score:phylop.score:siphy.score:ma.score:lrt.score:exomes.freq:ARUP.overall.freq:exomes5400.frequency:exomes5400.EA.het:exomes5400.AA.het:exomes5400.EA.homalt:exomes5400.AA.homalt:exomes6500.frequency:exomes6500.EA.het:exomes6500.EA.homalt:exomes6500.EA.frequency:exomes6500.AA.het:exomes6500.AA.homalt:exomes6500.AA.frequency:exomes6500.homalt.frequency:scSNV.rf_score:scSNV.ada_score:exomes63K.al.freq.hom:exomes63K.al.freq.het:exomes63K.allele.freq:exomes63K.al.count.hom
 

@@ -1,2 +1,0 @@
-serviceClass: varviewer.client.services.LogoutService
-path: 03C973BD28EE16C7FB9F03E7D16DF6DD.gwt.rpc
