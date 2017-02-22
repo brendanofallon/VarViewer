@@ -1,0 +1,2 @@
+serviceClass: varviewer.client.services.TextFetchService
+path: CEE90E5A7CE5E9BDDD06A9A6317E6D24.gwt.rpc

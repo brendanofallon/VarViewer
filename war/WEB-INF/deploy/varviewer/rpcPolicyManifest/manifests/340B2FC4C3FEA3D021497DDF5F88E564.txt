@@ -1,0 +1,2 @@
+serviceClass: varviewer.client.services.SampleListService
+path: 660AC4EB2BCE4F319AFB53827CCFD0B0.gwt.rpc
