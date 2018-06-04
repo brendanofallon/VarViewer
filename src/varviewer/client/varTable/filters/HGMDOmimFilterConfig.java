@@ -31,12 +31,13 @@ public class HGMDOmimFilterConfig extends FilterConfig {
 
 		
 		
-		panel.add( addType("ClinVar Pathogenic", true) );
-		panel.add( addType("ClinVar Likely Pathogenic", true) );
-		panel.add( addType("ClinVar VUS & Other", true) );
-		panel.add( addType("ClinVar Likely Benign", true) );
-		panel.add( addType("ClinVar Benign", true) );
-		panel.add( addType("HGMD Exact Match", true) );
+		//panel.add( addType("ClinVar Pathogenic", true) );
+		//panel.add( addType("ClinVar Likely Pathogenic", true) );
+		//panel.add( addType("ClinVar VUS & Other", true) );
+		//panel.add( addType("ClinVar Likely Benign", true) );
+		//panel.add( addType("ClinVar Benign", true) );
+		panel.add( addType("HGMD Position Hit", true) );
+		panel.add( addType("HGMD Exact Variant", true) );
 		panel.add( addType("HGMD & OMIM Gene Match", true) );
 
 		
@@ -73,15 +74,15 @@ public class HGMDOmimFilterConfig extends FilterConfig {
 			if (key.equals("ClinVar Benign")) {
 				filter.setIncludeClinvarBenign( box.getValue() );
 			}
-			
-			if (key.equals("HGMD Exact Match")) {
-				filter.setExcludeNonExactHits( !box.getValue() );
+			if (key.equals("HGMD Exact Variant")) { 
+				filter.setExcludeNonExactHGMDHits( !box.getValue() );
 			}
-			
+			if (key.equals("HGMD Position Hit")) {
+				filter.setExcludeNonHGMDHits( !box.getValue() );
+			}
 			if (key.equals("HGMD & OMIM Gene Match")) {
 				filter.setExcludeNonGeneHits( !box.getValue() );
 			}
-			
 		}
 		updateInteriorLabelText();
 		return true;

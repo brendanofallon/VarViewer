@@ -23,7 +23,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable, IsSerializabl
 	//Max arup value
 	double arupMax = 1.0;
 	
-	double exomesMax = 1.0;
+	double exomesMax = 5.0;
 	
 	double exomesHomMax = 1.0;
 	double exacHomCountMax = 100.0; 
@@ -51,7 +51,7 @@ public class MaxFreqFilter implements VariantFilter, Serializable, IsSerializabl
 		
 //		this.arupIndex = index.getIndexForKey("ARUP.freq");
 		this.arupOverallFreqIndex = index.getIndexForKey("ARUP.overall.freq");
-		this.exacHomCountIndex = index.getIndexForKey("exomes63K.al.count.hom");
+		this.exacHomCountIndex = index.getIndexForKey("exac63K.overall.hom.count");
 //		this.varbinIndex = index.getIndexForKey("varbin.bin");
 	}
 	

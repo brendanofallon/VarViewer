@@ -228,7 +228,7 @@ public class FiltersPanel extends FlowPanel {
 		addFilter(geneFilterBox);
 		
 		HGMDOmimFilter diseaseFilter = new HGMDOmimFilter();
-		FilterBox diseaseFilterBox = new FilterBox(this, "ClinVar & HGMD", diseaseFilter);
+		FilterBox diseaseFilterBox = new FilterBox(this, "HGMD & OMIM", diseaseFilter);
 		diseaseFilterBox.setInteriorText("No disease filters set");
 		HGMDOmimFilterConfig disConfig = new HGMDOmimFilterConfig(diseaseFilterBox);
 		diseaseFilterBox.setConfigTool(disConfig);

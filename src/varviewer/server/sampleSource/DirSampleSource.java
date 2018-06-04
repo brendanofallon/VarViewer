@@ -81,7 +81,7 @@ public class DirSampleSource implements SampleSource {
 	
 	private void attachChildrenConcurrently(SampleTreeNode parentNode, File parentDir)  {
 		
-		ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
+		ThreadPoolExecutor pool = (ThreadPoolExecutor) Executors.newFixedThreadPool(8);
 		final File[] subdirs = parentDir.listFiles();
 		for(int i=0; i<subdirs.length; i++) {
 
