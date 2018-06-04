@@ -886,7 +886,34 @@ public class ColumnStore {
 			}
 		}, 2.0));
 		
-		addColumn(new VarAnnotation<ImageResource>("disease.pics", "HGMD & OMIM", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+		
+		addColumn(new VarAnnotation<ImageResource>("disease.2.pics", "HGMD Exact Variant", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+
+			@Override
+			public ImageResource getValue(Variant var) {
+				String hgmdExact = var.getAnnotationStr("hgmd.exact.hit");
+												
+				ImageResource img = null;
+				if (hgmdExact == "true" || hgmdExact == "True" || hgmdExact == "TRUE") {
+						img = resources.hgmdHitImage();
+					}
+
+				return img;
+			}
+			
+		}, 1.0, null));
+		
+		
+		addColumn(new VarAnnotation<String>("hgmd.class", "HGMD Class", new TextColumn<Variant>() {
+
+			@Override
+			public String getValue(Variant var) {
+				String val = var.getAnnotationStr("hgmd.class");
+				return val != null ? val : "0";
+			}
+		}, 2.0));
+		
+		addColumn(new VarAnnotation<ImageResource>("disease.pics", "HGMD Pos & OMIM", new Column<Variant, ImageResource>(new ImageResourceCell()) {
 
 			@Override
 			public ImageResource getValue(Variant var) {

@@ -15,8 +15,9 @@ import varviewer.shared.variant.VariantFilter;
  */
 public class HGMDOmimFilter implements VariantFilter, Serializable {
 
-	private boolean excludeNonExactHits = false;
+	private boolean excludeNonExactHGMDHits = false;
 	private boolean excludeNonGeneHits = false;
+	private boolean excludeNonHGMDHits = false;
 	
 	private boolean includeClinvarPathogenic = true;
 	private boolean includeClinvarLikelyPathogenic = true;
@@ -27,6 +28,7 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 	private AnnotationIndex annoIndex = null;
 	private int hgmdInfoIndex = -1;
 	private int hgmdExactIndex = -1;
+	private int hgmdIndex = -1;
 	private int omimIndex = -1;
 	private int clinvarSigIndex = -1;
 	
@@ -40,25 +42,30 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 		this.annoIndex = index;
 		hgmdInfoIndex = index.getIndexForKey("hgmd.info");
 		omimIndex = index.getIndexForKey("omim.disease");
-		hgmdExactIndex = index.getIndexForKey("hgmd.hit");
+		hgmdIndex = index.getIndexForKey("hgmd.hit");
+		hgmdExactIndex = index.getIndexForKey("hgmd.exact.hit");
 		clinvarSigIndex = index.getIndexForKey("clinvar.clnsig");
 	}
 	
-	public boolean isExcludeNonExactHits() {
-		return excludeNonExactHits;
+	public boolean isExcludeNonExactHGMDHits() {
+		return excludeNonExactHGMDHits;
 	}
 
-	public void setExcludeNonExactHits(boolean excludeNonExactHits) {
-		this.excludeNonExactHits = excludeNonExactHits;
+	public void setExcludeNonExactHGMDHits(boolean excludeNonExactHGMDHits) {
+		this.excludeNonExactHGMDHits = excludeNonExactHGMDHits;
 	}
-
-
+	
+	public boolean isExcludeNonHGMDHits(){
+		return excludeNonHGMDHits;
+	}
+	
+	public void setExcludeNonHGMDHits(boolean excludeNonHGMDHits) {
+		this.excludeNonHGMDHits = excludeNonHGMDHits;
+	}
 
 	public boolean isExcludeNonGeneHits() {
 		return excludeNonGeneHits;
 	}
-
-
 
 	public void setExcludeNonGeneHits(boolean excludeNonGeneHits) {
 		this.excludeNonGeneHits = excludeNonGeneHits;
@@ -88,6 +95,7 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 	@Override
 	public boolean variantPasses(Variant var) {
 		String hgmdExact = var.getAnnotationStr(hgmdExactIndex);
+		String hgmdHit = var.getAnnotationStr(hgmdIndex);
 		String hgmdInfo = var.getAnnotationStr(hgmdInfoIndex);
 		String omim = var.getAnnotationStr(omimIndex);
 		String clinSig = var.getAnnotationStr(clinvarSigIndex);
@@ -111,7 +119,11 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 			}
 		}
 		
-		if ((!excludeNonExactHits) && hgmdExact != null && hgmdExact.length()>1) {
+		if ((!excludeNonExactHGMDHits) && hgmdExact != null && hgmdExact.length()>1) {
+			return true;
+		}
+		
+		if ((!excludeNonHGMDHits) && hgmdHit != null && hgmdHit.length()>1) {
 			return true;
 		}
 		
@@ -142,14 +154,18 @@ public class HGMDOmimFilter implements VariantFilter, Serializable {
 			excludes.add("Benign");
 		}
 		
-		
-		if (excludeNonExactHits) {
-			excludes.add("HGMD exact matches"); 
+		if (excludeNonExactHGMDHits) {
+			excludes.add("HGMD Exact Variant"); 
 		}
+		
+		if (excludeNonHGMDHits) {
+			excludes.add("HGMD Position Hit"); 
+		}
+		
 		if (excludeNonGeneHits) {
-			excludes.add("HGMD & OMIM gene matches");
+			excludes.add("HGMD & OMIM Gene Match");
 		}
-		
+
 		if (excludes.size()==0) {
 			return "No ClinVar, OMIM, or HGMD disease filtering was performed";
 		}
