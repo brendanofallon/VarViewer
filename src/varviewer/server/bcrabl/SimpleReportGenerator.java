@@ -233,11 +233,11 @@ public class SimpleReportGenerator implements ReportHandler {
 			double cisFrac = result.getNewCisFrac();
 			double transFrac = result.getNewTransFrac();
 			
-			if (cisFrac > 0.8) {
+			if (cisFrac > 80) {
 				return "in cis with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
 			}
 			
-			if (transFrac > 0.8) {
+			if (transFrac > 80) {
 				return "in trans with " + otherVar.getAnnotationStr("pdot").replace("p.", "");
 			}
 			

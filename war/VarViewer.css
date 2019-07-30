@@ -81,6 +81,10 @@ body {
 	margin-top: 50px;
 }
 
+.exonFuncTable td {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 10pt;
+}
 
 .footer {
 	font-family: 'Open Sans', sans-serif;

@@ -37,7 +37,7 @@ public class PopFreqConfig extends FilterConfig {
 		
 		VerticalPanel panel = new VerticalPanel();
 		HorizontalPanel freqPanel = new HorizontalPanel();
-		Label lab = new Label("Exclude all variants with minor allele frequency (MAF) > ");
+		Label lab = new Label("Exclude all variants with population frequency > (0-1)");
 		lab.setStylePrimaryName("interiortext");
 		lab.getElement().getStyle().setMarginRight(10, Unit.PX);
 		freqPanel.add(lab);
@@ -53,7 +53,7 @@ public class PopFreqConfig extends FilterConfig {
 		panel.add(spacer);
 		
 		HorizontalPanel arupPanel = new HorizontalPanel();
-		Label lab3 = new Label("Exclude variants with ARUP frequency greater than");
+		Label lab3 = new Label("Exclude variants with ARUP frequency > (0-1) ");
 		lab3.setStylePrimaryName("interiortext");
 		lab3.getElement().getStyle().setMarginRight(10, Unit.PX);
 		arupPanel.add(lab3);
@@ -67,7 +67,7 @@ public class PopFreqConfig extends FilterConfig {
 		panel.add(spacer2);
 		
 		HorizontalPanel exomesPanel = new HorizontalPanel();
-		Label lab4 = new Label("Exclude ESP Exomes frequency greater than");
+		Label lab4 = new Label("Exclude 6500 Exomes frequency > (0-100)");
 		lab4.setStylePrimaryName("interiortext");
 		lab4.getElement().getStyle().setMarginRight(10, Unit.PX);
 		exomesPanel.add(lab4);
@@ -81,7 +81,7 @@ public class PopFreqConfig extends FilterConfig {
 		panel.add(spacer3);
 		
 		HorizontalPanel exomesHomPanel = new HorizontalPanel();
-		Label lab5 = new Label("Exclude ESP Exomes HOMOZYGOUS frequency greater than");
+		Label lab5 = new Label("Exclude 6500 Exomes HOMOZYGOUS frequency > (0-1)");
 		lab5.setStylePrimaryName("interiortext");
 		lab5.getElement().getStyle().setMarginRight(10, Unit.PX);
 		exomesHomPanel.add(lab5);
@@ -96,7 +96,7 @@ public class PopFreqConfig extends FilterConfig {
 		panel.add(spacer4);
 		
 		HorizontalPanel exACHomPanel = new HorizontalPanel();
-		Label lab6 = new Label("Exclude ExAC homozygous count greater than");
+		Label lab6 = new Label("Exclude ExAC homozygous count > (any)");
 		lab6.setStylePrimaryName("interiortext");
 		lab6.getElement().getStyle().setMarginRight(10, Unit.PX);
 		exACHomPanel.add(lab6);

@@ -130,8 +130,8 @@ public class ColumnStore {
 				
 				if (clnsig == null || clnsig.equals("null")) {
 					bldr.appendHtmlConstant("<span style=\"color: gray;\"><b>?</b></span>");
-				}
-				
+					return bldr.toSafeHtml();
+				} 				
 				
 				String[] sigs = clnsig.split("|");
 				Integer[] iSigs = new Integer[sigs.length];
@@ -192,21 +192,21 @@ public class ColumnStore {
 		
 		
 		//BCR-ABL specific
-//		VarAnnotation<String> inVitroAnnotation = new VarAnnotation<String>("InVitro", "In Vitro (BCR-ABL)", new TextColumn<Variant>() {
-//			@Override
-//			public String getValue(Variant var) {
-//				return var.getAnnotationStr("InVitro");
-//			}
-//		}, 1.0);
-//		addColumn(inVitroAnnotation);
-//		
-//		VarAnnotation<String> bcrAblKnownAnnotation = new VarAnnotation<String>("Known", "Known (BCR-ABL)", new TextColumn<Variant>() {
-//			@Override
-//			public String getValue(Variant var) {
-//				return var.getAnnotationStr("Known");
-//			}
-//		}, 1.0);
-//		addColumn(bcrAblKnownAnnotation);
+		VarAnnotation<String> inVitroAnnotation = new VarAnnotation<String>("InVitro", "In Vitro (BCR-ABL)", new TextColumn<Variant>() {
+			@Override
+			public String getValue(Variant var) {
+				return var.getAnnotationStr("InVitro");
+			}
+		}, 1.0);
+		addColumn(inVitroAnnotation);
+		
+		VarAnnotation<String> bcrAblKnownAnnotation = new VarAnnotation<String>("Known", "Known (BCR-ABL)", new TextColumn<Variant>() {
+			@Override
+			public String getValue(Variant var) {
+				return var.getAnnotationStr("Known");
+			}
+		}, 1.0);
+		addColumn(bcrAblKnownAnnotation);
 		
 		
 		posAnnotation.setComparator(new Comparator<Variant>() {
@@ -236,6 +236,22 @@ public class ColumnStore {
 //				return val;
 //			}
 //		}, 1.0, false));
+
+		
+		addColumn(new VarAnnotation<ImageResource>("bad.region", "NextSeq Flagged Region", new Column<Variant, ImageResource>(new ImageResourceCell()) {
+
+			@Override
+			public ImageResource getValue(Variant var) {
+				String bad = var.getAnnotationStr("bad.region");
+								
+				if (bad != null && bad.equals("true"))
+					return resources.rainbowImage();
+				
+				return null;
+			}
+			
+		}, 0.5));
+
 		
 		addColumn(new VarAnnotation<ImageResource>("zygosity", "Zygosity", new Column<Variant, ImageResource>(new ImageResourceCell()) {
 
@@ -299,7 +315,16 @@ public class ColumnStore {
 				return val != null ? val : "-";
 			}
 		}, 2.0));
-
+		
+	    addColumn(new VarAnnotation("variant.type", "variant.type", new TextColumn<Variant>()
+	    {
+	      public String getValue(Variant var)
+	      {
+	        String val = var.getAnnotationStr("variant.type");
+	        return val != null ? val : "-";
+	      }
+	    }, 2.0D));
+	    
 		addColumn(new VarAnnotation<String>("ref", "Ref.", new TextColumn<Variant>() {
 
 			@Override
@@ -490,8 +515,8 @@ public class ColumnStore {
 			public SafeHtml getValue(Variant var) {
 				SafeHtmlBuilder bldr = new SafeHtmlBuilder();
 				
-				Double homVal = var.getAnnotationDouble("exomes63K.al.freq.hom");
-				Double hetVal = var.getAnnotationDouble("exomes63K.al.freq.het");
+				Double homVal = var.getAnnotationDouble("exac63K.overall.hom.freq");
+				Double hetVal = var.getAnnotationDouble("exac63K.overall.het.freq");
 				
 				if (homVal == null) {
 					homVal = 0.0;
@@ -516,7 +541,7 @@ public class ColumnStore {
 		VarAnnotation<String> exacFreqCol =new VarAnnotation<String>("exac.freq", "ExAC 63K Exomes", new TextColumn<Variant>() {
 			@Override
 			public String getValue(Variant var) {
-				Double val = var.getAnnotationDouble("exomes63K.allele.freq");
+				Double val = var.getAnnotationDouble("exac63K.overall.allele.freq");
 				return val != null ? format(val) : "0";
 			}
 			
@@ -525,8 +550,8 @@ public class ColumnStore {
 
 			@Override
 			public int compare(Variant arg0, Variant arg1) {
-				Double val0 = arg0.getAnnotationDouble("exomes63K.allele.freq");
-				Double val1 = arg1.getAnnotationDouble("exomes63K.allele.freq");
+				Double val0 = arg0.getAnnotationDouble("exac63K.overall.allele.freq");
+				Double val1 = arg1.getAnnotationDouble("exac63K.overall.allele.freq");
 				if (val0==null)
 					val0 = 0.0;
 				if (val1 == null)
@@ -540,7 +565,7 @@ public class ColumnStore {
 
 			@Override
 			public String getValue(Variant var) {
-				Double count = var.getAnnotationDouble("exomes63K.al.count.hom");
+				Double count = var.getAnnotationDouble("exac63K.overall.hom.count");
 				if (count==null) {
 					return "";
 				}
@@ -552,8 +577,8 @@ public class ColumnStore {
 
 			@Override
 			public int compare(Variant arg0, Variant arg1) {
-				Double val0 = arg0.getAnnotationDouble("exomes63K.al.count.hom");
-				Double val1 = arg1.getAnnotationDouble("exomes63K.al.count.hom");
+				Double val0 = arg0.getAnnotationDouble("exac63K.overall.hom.count");
+				Double val1 = arg1.getAnnotationDouble("exac63K.overall.hom.count");
 				if (val0==null)
 					val0 = 0.0;
 				if (val1 == null)

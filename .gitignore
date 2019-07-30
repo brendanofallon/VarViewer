@@ -1,2 +1,4 @@
 *.class
-
+war/
+build/
+bin/

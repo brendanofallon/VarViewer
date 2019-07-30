@@ -109,7 +109,6 @@ public class Home implements EntryPoint, LoginListener {
 
 			@Override
 			public void onSuccess(ServiceListResult result) {
-				System.out.println("Services OK for user : " + username);
 				for(ServiceDescription desc : result.getServices()) {
 					System.out.println(desc.getServiceID() + " :" + desc.getServiceUserText() + "\t" + desc.getClassName());
 				}
